@@ -1,0 +1,95 @@
+
+.btn {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.row-col-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+image {
+    vertical-align: middle;
+}
+
+.relative,
+.rela {
+    position: relative;
+}
+
+.absolute,
+.abso {
+    position: absolute;
+}
+
+div,
+span,
+ul,
+li {
+    list-style: none;
+    box-sizing: border-box;
+  list-style: none;
+}
+.flex {
+  display: flex;
+  align-items: center;
+}
+.flex-1 {
+  flex: 1;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.flex-nowrap {
+    flex-wrap: nowrap;
+}
+
+.col-center {
+    align-items: center;
+}
+
+.col-top {
+    align-items: flex-start;
+}
+
+.col-bottom {
+    align-items: flex-end;
+}
+
+.row-center {
+    justify-content: center;
+}
+
+.row-left {
+    justify-content: flex-start;
+}
+
+.row-right {
+    justify-content: flex-end;
+}
+
+.row-between {
+    justify-content: space-between;
+}
+
+.row-around {
+    justify-content: space-around;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
