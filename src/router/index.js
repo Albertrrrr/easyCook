@@ -3,6 +3,7 @@ import VueRouter from "vue-router"
 import HomeView from "../views/HomeView.vue"
 import ShoppingCart from '../views/ShoppingCart.vue'
 import Account from "@/views/Account.vue";
+import Login from "@/views/Login.vue";
 
 Vue.use(VueRouter)
 const routes = [
@@ -24,6 +25,11 @@ const routes = [
     path: "/shoppingCart",
     name: "ShoppingCart",
     component: ShoppingCart,
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: Login,
   }
 ]
 const router = new VueRouter({
