@@ -15,7 +15,13 @@
         <input type="password" id="password" class="form-control" placeholder="Password" required v-model="password">
       </div>
       <button type="submit" class="btn">Login</button>
-      <a href="#">Don't have an account? Sign up</a>
+       <div class="text-center" style="margin-top: 30px">
+          Already have an account?
+          <router-link to="/register" >
+              <span> Sign up </span>
+          </router-link>
+        </div>
+
     </form>
   </div>
 </template>
