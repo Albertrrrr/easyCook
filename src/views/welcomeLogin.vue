@@ -7,14 +7,14 @@
 
             </el-carousel-item>
             <div class="btns flex">
-                <div class="btn">
+                <router-link to="/login" class="btn">
                     <span>Log In</span>
                     <i class="el-icon-right"></i>
-                </div>
-                <div class="btn">
+                </router-link>
+                <router-link to="/signup" class="btn">
                     <span>Sign Up</span>
                     <i class="el-icon-right"></i>
-                </div>
+                </router-link>
             </div>
             <!-- <div class="dotBox flex">
                 <div class="dot" :class="{ 'isActive': i == current }" v-for="(item, i) in 4" :key="item"></div>
