@@ -58,11 +58,11 @@ export default {
               // 设置一个 3 秒的倒计时后跳转
               setTimeout(() => {
                 if(this.role === 'user'){
-                  this.$router.push('/');
+                  this.$router.push('/index');
                 }else {
                   //管理员后台主页
                 }
-              }, 1500);
+              }, 1000);
             }
           });
         }

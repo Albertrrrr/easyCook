@@ -11,7 +11,7 @@
                     <span>Log In</span>
                     <i class="el-icon-right"></i>
                 </router-link>
-                <router-link to="/signup" class="btn">
+                <router-link to="/register" class="btn">
                     <span>Sign Up</span>
                     <i class="el-icon-right"></i>
                 </router-link>
