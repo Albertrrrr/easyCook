@@ -39,7 +39,7 @@ const routes = [
     component: Register
   },
   {
-     path: '/index',
+    path: '/index',
     name: 'Index',
     component: HomeView
   }
