@@ -93,7 +93,6 @@ export default {
     },
       async registerAccount() {
         try {
-          console.log(this.form)
           const response = await axios.post('http://35.197.196.50:8000/api/register/', {
             user_type: this.form.userType,
             v_code: this.form.code,
@@ -101,7 +100,6 @@ export default {
             password: this.form.password,
             username: this.form.username
           });
-
 
           // 如果注册成功
           if (response.status === 201) {
