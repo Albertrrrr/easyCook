@@ -23,6 +23,7 @@
 <script>
 import axios from 'axios';
 import { MessageBox, Message } from 'element-ui';
+
 export default {
   data() {
     return {
@@ -50,7 +51,11 @@ export default {
             callback: () => {
               // 设置一个 3 秒的倒计时后跳转
               setTimeout(() => {
-                this.$router.push('/');
+                if(this.role === 'user'){
+                  this.$router.push('/');
+                }else {
+                  //管理员后台主页
+                }
               }, 1500);
             }
           });
