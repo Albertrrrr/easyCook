@@ -13,15 +13,19 @@
       <div class="categoriesBox">
         <div class="categories products"> Popular Products </div>
         <div class="productsList categoriesList">
-          <div v-for="(item, i) in 10" :key="i" @click="clickGoods" class="productsItem categoriesItem">
+          <!-- 修改 v-for 来遍历 products 数组 -->
+          <div v-for="(product, index) in products" :key="index" @click="selectProduct(product.id)" class="productsItem categoriesItem">
             <div class="imgBox">
-              <img src="@/assets/image/goods.png" class="cover">
+              <!-- 使用 product.url 作为图片源，如果没有则使用默认图片 -->
+              <img :src="product.url || 'https://via.placeholder.com/300'" class="cover">
             </div>
             <div class="content">
-              <div class="title">Spanish Garlic & Chilli Jumbo</div>
+              <!-- 使用 product.name 作为标题 -->
+              <div class="title">{{ product.name }}</div>
               <div class="center flex row-between">
                 <div class="priceBox flex">
-                  <div class="price">$9.00</div>
+                  <!-- 显示产品价格 -->
+                  <div class="price">${{ product.price }}</div>
                 </div>
                 <div class="shopping row-col-center">
                   <i class="el-icon-goods"></i>
@@ -36,40 +40,58 @@
           </div>
         </div>
       </div>
+
       <indexFooter></indexFooter>
     </div>
 
     <!-- 详情 -->
     <el-dialog :visible.sync="goodsDetails" width="1200px" custom-class="goodsDetailsDialog">
-      <goodsDetails></goodsDetails>
+      <goodsDetails :selectedProductId="selectedProductId"></goodsDetails>
     </el-dialog>
   </div>
 </template>
 
 <script>
-
 // 底部
 import indexFooter from '@/components/indexFooter.vue';
 // 购物车
 import shopCar from '@/components/shopCar.vue';
 // 商品详情
 import goodsDetails from '@/components/goodsDetails.vue';
+
+import axios from "axios";
 export default {
   components: { indexFooter, shopCar, goodsDetails },
   data() {
     return {
-      value: 4,// 星级
-      goodsDetails: false,// 商品详情
+      value: 4, // 星级
+      goodsDetails: false, // 商品详情对话框显示控制
+      products: [],
+      selectedProductId: null, // 选中的商品ID
     }
   },
-  created() { },
+  created() {
+    this.fetchProducts();
+  },
   methods: {
-
-    /**
-     * @description: 点击商品
-     */
-    clickGoods() {
-      this.goodsDetails = true;
+    async fetchProducts() {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('Token not found');
+        return;
+      }
+      try {
+        const response = await axios.get('http://35.197.196.50:8000/api/products/', {
+          headers: { 'Authorization': `Token ${token}` },
+        });
+        this.products = response.data.results;
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    },
+    selectProduct(productId) {
+      this.selectedProductId = productId;
+      this.goodsDetails = true; // 显示详情对话框
     },
   }
 }

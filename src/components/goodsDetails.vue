@@ -1,27 +1,25 @@
 <template>
-    <div class="goods">
-        <img src="@/assets/image/goods.png" class="cover">
+    <div class="goods" v-if="productDetails">
+        <img :src="productDetails.url || '@/assets/image/goods.png'" class="cover">
         <div class="right">
             <div class="nameBox flex">
-                <div class="name">Chinese Cabbage</div>
-                <div class="nameTag">In Stock</div>
+                <div class="name">{{ productDetails.name }}</div>
+                <div class="nameTag" v-if="productDetails.stock > 0"> Stock: {{productDetails.stock}} </div>
+                <div class="nameTag" v-else>Out of Stock</div>
             </div>
             <div class="priceBox flex">
-                <!--<div class="original">$48.00 </div>-->
-                <div class="price"> $8.00</div>
-                <!--<div class="priceTag">64% Off</div>-->
+                <div class="price"> ${{ productDetails.price }}</div>
             </div>
             <div class="msg">
-                Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nulla nibh diam,
-                blandit vel consequat nec, ultrices et ipsum. Nulla varius magna a consequat pulvinar.
+                {{productDetails.description}}
             </div>
             <div class="numberBox flex">
                 <div class="inputNumber flex">
                     <div class="btn" @click="reduce"> <i class="el-icon-minus"></i> </div>
-                    <div class="input">{{ value }}</div>
+                    <div class="input">{{ quantity }}</div>
                     <div class="btn" @click="add"> <i class="el-icon-plus"></i> </div>
                 </div>
-                <el-button type="success" class="flex-1" round>
+                <el-button type="success" class="flex-1" round @click="addToCart">
                     <span>Add to Cart</span>
                     <i class="el-icon-goods"></i>
                 </el-button>
@@ -29,60 +27,102 @@
 
             <div class="cell">
                 <div class="label">Category:</div>
-                <div class="value">Vegetables</div>
+                <div class="value">{{ productDetails.category_name }}</div> <!-- Assuming the API response includes category_name -->
             </div>
 
-            <div class="cell">
-                <div class="label">Tag:</div>
-                <div class="value flex flex-wrap">
-                    <div v-for="(item, i) in tags" :key="i" :class="{ link: item.type == 'link' }">
-                        {{ item.text }}
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </template>
 
 <script>
+import axios from 'axios';
+import { MessageBox, Message } from 'element-ui';
 export default {
+    props: {
+        selectedProductId: Number,
+    },
     data() {
         return {
-            value: 10,
-            tags: [
-                {
-                    text: 'Vegetables',
-                    type: 'text'
-                },
-                {
-                    text: 'Healthy',
-                    type: 'text'
-                },
-                {
-                    text: 'Chinese',
-                    type: 'link'
-                },
-                {
-                    text: 'Healthy',
-                    type: 'text'
-                }
-            ]
+            productDetails: null,
+            quantity: 1, // Initialized quantity
+        }
+    },
+    watch: {
+        selectedProductId: {
+            immediate: true,
+            handler(newVal) {
+                this.fetchProductDetails(newVal);
+            }
         }
     },
     methods: {
-        /**
-         * @description: 减少商品
-         */
-        reduce() {
-            if (this.value == 1) return
-            this.value--;
+        async fetchProductDetails(productId) {
+            const token = localStorage.getItem('token');
+            if (!token || !productId) {
+                console.error('Token or Product ID not found');
+                return;
+            }
+            try {
+                const response = await axios.get(`http://35.197.196.50:8000/api/products/${productId}/`, {
+                    headers: { 'Authorization': `Token ${token}` },
+                });
+                this.productDetails = response.data;
+            } catch (error) {
+                console.error('Error fetching product details:', error);
+            }
         },
-        /**
-         * @description: 添加商品
-         */
+        reduce() {
+            if (this.quantity > 1) this.quantity--;
+        },
         add() {
-            this.value += 1;
-        }
+            this.quantity++;
+        },
+      async addToCart() {
+          const cartID = localStorage.getItem('shoppingCartID');
+          const token = localStorage.getItem('token');
+          if (!cartID || !this.selectedProductId || !token) {
+              this.$message.error('Missing necessary information.');
+              return;
+          }
+          try {
+              const response = await axios.post(`http://35.197.196.50:8000/api/shopping-cart-items/cart/${cartID}/`, {
+                  cartID: cartID,
+                  productID: this.selectedProductId.toString(),
+                  quantity: this.quantity.toString()
+              }, {
+                  headers: { 'Authorization': `Token ${token}` },
+              });
+
+              if (response.status === 201) {
+                  this.$message({
+                      message: 'Add to shopping cart successfully!',
+                      type: 'success',
+                      duration: 5000
+                  });
+              }
+          } catch (error) {
+              if (!error.response) {
+                  this.$message.error('An unexpected error occurred.');
+                  return;
+              }
+              // 根据不同的状态码显示不同的错误消息
+              const { status, data } = error.response;
+              let errorMessage = 'Failed to add the product to the cart.';
+              if (status === 400 && data.quantity) {
+                  errorMessage = data.quantity; // "Requested quantity exceeds available stock of {product.stock}."
+              } else if (status === 404) {
+                  errorMessage = 'Product not found.';
+              } else if (status === 400 && data.non_field_errors) {
+                  errorMessage = data.non_field_errors.join(' '); // 假设这是序列化错误的一种情况
+              } else if (status === 400) {
+                  // 处理其他400错误情况，假设后端返回的错误信息格式是固定的
+                  errorMessage = Object.values(data).join(' ');
+              }
+
+              this.$message.error(errorMessage);
+          }
+      }
+
     }
 }
 </script>

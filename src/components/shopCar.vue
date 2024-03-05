@@ -2,29 +2,34 @@
   <div class="shopCar">
     <div class="content">
       <div class="title flex row-between">
-        <div class="text">Shopping Card (2)</div>
+        <div class="text">Shopping Card </div>
         <i class="el-icon-close btn" @click="$emit('update', false)"></i>
       </div>
-      <div class="carList">
-        <div class="item flex" v-for="(item, i) in 2" :key="i">
-          <img src="@/assets/image/img.png" alt="">
-          <div class="goods flex">
-            <div class="left">
-              <div class="goodsName">Fresh Indian Orange</div>
-              <div class="num">
-                <span>1 kg x </span>
-                <span class="big">12.00</span>
+        <div class="carList">
+            <!-- 使用 v-for 循环遍历 items 数组，并使用 item 作为每次循环的变量 -->
+            <div class="item flex" v-for="(item, index) in items" :key="index">
+              <!-- 使用 item.product_detail.url 作为图片源 -->
+              <img :src="item.product_detail.url" alt="">
+              <div class="goods flex">
+                <div class="left">
+                  <!-- 显示商品名称 item.product_detail.name -->
+                  <div class="goodsName">{{ item.product_detail.name }}</div>
+                  <div class="num">
+                    <!-- 显示数量 item.quantity 以及价格 item.product_detail.price -->
+                    <span>{{ item.quantity }} x </span>
+                    <span class="big">{{ item.product_detail.price }}</span>
+                    <span class="big"> = $ {{ item.final_price }} </span>
+                  </div>
+                </div>
+                <i class="el-icon-circle-close close btn"></i>
               </div>
             </div>
-            <i class="el-icon-circle-close close btn"></i>
           </div>
-        </div>
-      </div>
 
       <div class="bottom">
         <div class="total flex row-between">
-          <div>2 Product</div>
-          <div class="price">$26.00</div>
+          <div>{{items.length}} Product</div>
+          <div class="price">$ {{totalFinalPrice }}</div>
         </div>
         <el-button type="success" class="w100" round>Checkout</el-button>
         <el-button type="success" class="w100 successBtn" plain round @click="onGoCart">Go To Cart</el-button>
@@ -34,20 +39,40 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'shopCar',
   data() {
-    return {}
+    return {
+      items: [], // Stores individual cart items
+      totalFinalPrice: 0, // Stores total final price
+    }
   },
   created() {
-  },
-  mounted() {
+    this.fetchShoppingCartItems();
   },
   methods: {
+    async fetchShoppingCartItems() {
+      const shoppingCartID = localStorage.getItem('shoppingCartID');
+      if (!shoppingCartID) {
+        console.error('Shopping Cart ID not found');
+        return;
+      }
+
+      try {
+        const response = await axios.get(`http://35.197.196.50:8000/api/shopping-cart-items/cart/${shoppingCartID}/`, {
+          headers: { 'Authorization': `Token ${localStorage.getItem('token')}` },
+        });
+        this.items = response.data.items;
+        this.totalFinalPrice = response.data.total_final_price;
+      } catch (error) {
+        console.error('Error fetching shopping cart items:', error);
+      }
+    },
     onGoCart() {
-      //this.$router.push('/account')
-      this.$router.push('/shoppingcart')
-      this.$emit('update', false)
+      this.$router.push('/shoppingcart');
+      this.$emit('update', false);
     }
   }
 }
