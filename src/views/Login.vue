@@ -40,37 +40,54 @@ export default {
   },
   methods: {
     async login(){
-       try {
-        const response = await axios.post('http://35.197.196.50:8000/api/login/', {
-          email: this.email,
-          password: this.password,
-          user_type: this.role,
+  try {
+    const loginResponse = await axios.post('http://35.197.196.50:8000/api/login/', {
+      email: this.email,
+      password: this.password,
+      user_type: this.role,
+    });
+
+    if (loginResponse.status === 200) {
+      localStorage.setItem('token', loginResponse.data.token);
+      localStorage.setItem('id', loginResponse.data.id);
+      localStorage.setItem('username', loginResponse.data.username);
+
+      // 在跳转前获取 shoppingCartID
+      try {
+        const shoppingCartResponse = await axios.get(`http://35.197.196.50:8000/api/shopping-cart/${loginResponse.data.id}/`, {
+          headers: {
+            'Authorization': `Token ${loginResponse.data.token}` // 假设需要登录令牌进行认证
+          }
         });
-
-        if (response.status === 200) {
-          localStorage.setItem('token', response.data.token);
-          localStorage.setItem('id', response.data.id);
-          localStorage.setItem('username', response.data.username);
-
-          MessageBox.alert('Successful login, 2 seconds to jump...', 'Successful', {
-            confirmButtonText: 'ok',
-            callback: () => {
-              // 设置一个 3 秒的倒计时后跳转
-              setTimeout(() => {
-                if(this.role === 'user'){
-                  this.$router.push('/index');
-                }else {
-                  //管理员后台主页
-                }
-              }, 1000);
-            }
-          });
+        // 假设API返回了一个JSON对象，其中包含shoppingCartID
+        if (shoppingCartResponse.status === 200) {
+          localStorage.setItem('shoppingCartID', shoppingCartResponse.data.shoppingCartID);
         }
-      } catch (error) {
-        // 使用 Element UI 的 Message 组件显示错误消息
-        Message.error('Unsuccessful：' + error.response.data.detail);
+      } catch (shoppingCartError) {
+        console.error('Failed to fetch shoppingCartID:', shoppingCartError);
+        // 这里可以根据需要处理错误，例如显示消息给用户
       }
+
+      MessageBox.alert('Successful login, 2 seconds to jump...', 'Successful', {
+        confirmButtonText: 'ok',
+        callback: () => {
+          // 设置一个 2 秒的倒计时后跳转
+          setTimeout(() => {
+            if(this.role === 'user'){
+              this.$router.push('/index');
+            } else {
+              // 管理员后台主页
+              // 这里需要添加相应的路由跳转逻辑
+            }
+          }, 2000);
+        }
+      });
     }
+  } catch (error) {
+    // 使用 Element UI 的 Message 组件显示错误消息
+    Message.error('Unsuccessful：' + error.response.data.detail);
+  }
+}
   }
 };
 </script>
