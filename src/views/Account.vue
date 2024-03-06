@@ -1,45 +1,4 @@
-<script>
-import SecondaryMenu from '@/components/SecondaryMenu.vue'
 
-export default {
-  data() {
-    return {
-      formData: {
-        firstName: ''
-
-      },
-      radio: '1',
-      value: [],
-      value1: [],
-      options: [
-        {
-          value: 'zhinan',
-          label: 'United Kindom',
-
-        }],
-      options1: [
-        {
-          value: 'zhinan',
-          label: 'Scotland',
-
-        },
-        {
-          value: 'zujian',
-          label: 'England',
-        }],
-      checked: false
-    }
-  },
-  methods: {
-    onGoPlayOrder() {
-      this.$router.push('/shoppingCart')
-    }
-  },
-  components: {
-    SecondaryMenu
-  }
-}
-</script>
 
 <template>
   <div>
@@ -47,105 +6,20 @@ export default {
     <div class="account-container">
       <div class="account-area">
         <div class="account-left">
-          <p class="acc-left-title">Billing Information</p>
-          <el-form>
-            <el-row :gutter="16" style="margin-bottom: 19px">
-              <el-col :span="8">
-                <div class="input-container">
-                  <p class="input-label">First name</p>
-                  <el-form-item>
-                    <el-input v-model="formData.firstName" placeholder="Your first name"></el-input>
-                  </el-form-item>
-                </div>
-
-              </el-col>
-              <el-col :span="8">
-                <div class="input-container">
-                  <p class="input-label">Last name</p>
-                  <el-form-item>
-                    <el-input placeholder="Your last name"></el-input>
-                  </el-form-item>
-                </div>
-              </el-col>
-              <el-col :span="8"></el-col>
-            </el-row>
-
-            <el-row style="margin-bottom: 19px">
-              <div class="input-container">
-                <p class="input-label">Street Address</p>
-                <el-form-item>
-                  <el-input placeholder="Email"></el-input>
-                </el-form-item>
-              </div>
-            </el-row>
-
-            <el-row :gutter="16" style="margin-bottom: 19px">
-              <el-col :span="8">
-                <div class="input-container">
-                  <p class="input-label">Country / Region</p>
-                  <el-form-item>
-                    <el-select v-model="value" placeholder="Select">
-                      <el-option
-                          v-for="item in options"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value">
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
-                </div>
-              </el-col>
-              <el-col :span="8">
-                <div class="input-container">
-                  <p class="input-label">States</p>
-                  <el-form-item>
-                    <el-select v-model="value1" placeholder="Selects">
-                      <el-option
-                          v-for="item in options1"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value">
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
-                </div>
-              </el-col>
-              <el-col :span="8">
-                <div class="input-container">
-                  <p class="input-label">Zip Code</p>
-                  <el-form-item>
-                    <el-input placeholder="Zip Code"></el-input>
-                  </el-form-item>
-                </div>
-              </el-col>
-            </el-row>
-
-            <el-row :gutter="16" style="margin-bottom: 24px">
-              <el-col :span="12">
-                <div class="input-container">
-                  <p class="input-label">Email</p>
-                  <el-form-item>
-                    <el-input placeholder="Email Address"></el-input>
-
-                  </el-form-item>
-                </div>
-              </el-col>
-              <el-col :span="12">
-                <div class="input-container">
-                  <p class="input-label">Phone</p>
-                  <el-form-item>
-                    <el-input placeholder="Phone number"></el-input>
-                  </el-form-item>
-                </div>
-              </el-col>
-            </el-row>
-
-            <el-row>
-              <el-col :span="24">
-                <el-checkbox v-model="checked">Ship to a different address</el-checkbox>
-              </el-col>
-            </el-row>
-          </el-form>
+          <p class="acc-left-title">Address Information</p>
+          <div>
+          <el-row :gutter="20">
+            <el-col :span="8" v-for="address in addresses" :key="address.id">
+              <address-card :address="address" :isSelected="selectedAddressId === address.id" @click.native="selectAddress(address.id)"></address-card>
+            </el-col>
+            <el-col :span="8">
+            <el-card class="add-new-card">
+              <i class="el-icon-plus add-icon"  @click="showAddModal"></i>
+            </el-card>
+          </el-col>
+          </el-row>
+          <add-address-modal :visible.sync="showModal" @add="addNewAddress"></add-address-modal>
+        </div>
 
           <div class="line-container"></div>
 
@@ -155,31 +29,27 @@ export default {
         </div>
         <div class="account-right">
           <div class="account-right-main">
-            <p class="right-title">Order Summery</p>
+            <p class="right-title">Order Summary</p>
 
             <ul class="product-list">
-              <li class="list-item">
-                <div class="product-msg">
-                  <img class="pro-img" src="../assets/images/qj.png">
-                  <p class="pro-el" style="margin-right: 8px;">Green Capsicum</p>
-                  <p>X5</p>
-                </div>
-                <div class="product-price">$70.00</div>
-              </li>
-              <li class="list-item">
-                <div class="product-msg">
-                  <img class="pro-img" src="../assets/images/hj.png">
-                  <p class="pro-el" style="margin-right: 8px;">Red Capsicum</p>
-                  <p>X5</p>
-                </div>
-                <div class="product-price">$14.00</div>
-              </li>
+              <div class="item " v-for="(item, index) in items" :key="index">
+                  <li class="list-item">
+                    <div class="product-msg">
+                      <img class="pro-img" :src="item.product_detail.url">
+                      <p class="pro-el" style="margin-right: 8px;">{{ item.product_detail.name }}</p>
+                      <p>{{ item.quantity }}</p>
+                      <div class="product-price">x ${{ item.product_detail.price }}</div>
+                    </div>
+
+                    <div class="product-price">${{ item.final_price }}</div>
+                  </li>
+              </div>
 
             </ul>
 
             <div class="opts-item">
               <div class="opts-label">Subtotal:</div>
-              <div class="opts-container">$84.00</div>
+              <div class="opts-container">${{totalFinalPrice}}</div>
             </div>
             <div class="opts-item">
               <div class="opts-label">Shipping:</div>
@@ -187,28 +57,29 @@ export default {
             </div>
             <div class="opts-item" style="border-bottom: none;margin-bottom: 13.8px">
               <div class="opts-label">Total:</div>
-              <div class="opts-container" style="font-weight: 600;font-size: 20px;">$84.00</div>
+              <div class="opts-container" style="font-weight: 600;font-size: 20px;">${{totalFinalPrice}} </div>
             </div>
 
             <p class="right-title">Payment Method</p>
             <ul class="radio-list">
               <li class="radio-item">
-                <el-radio v-model="radio" label="1">Cash on Delivery
+                <el-radio v-model="radio" label="1">Alipay
                 </el-radio>
-              </li>
-              <li class="radio-item">
-                <el-radio v-model="radio" label="2">Paypal</el-radio>
-              </li>
-              <li class="radio-item">
-                <el-radio v-model="radio" label="3">Amazon Pay</el-radio>
               </li>
             </ul>
 
-            <div class="place-btn">
-              <!--@click="onGoPlayOrder"-->
+            <div class="place-btn" @click="createOrder">
               Place Order
             </div>
           </div>
+
+           <el-dialog :visible.sync="showModalOrder" title="订单状态">
+            <p v-if="orderCreated">订单已生成</p>
+            <div>
+              <el-button @click="showModalOrder = false">Return</el-button>
+              <el-button type="primary" @click="payOrder" v-if="orderCreated">Pay</el-button>
+            </div>
+          </el-dialog>
 
         </div>
       </div>
@@ -216,9 +87,197 @@ export default {
   </div>
 </template>
 
+<script>
+import SecondaryMenu from '@/components/SecondaryMenu.vue'
+import AddressCard from '@/components/AddressCard.vue';
+import AddAddressModal from '@/components/AddAddressModal.vue';
+import axios from "axios";
+
+export default {
+  data() {
+    return{
+      addresses: [],
+      showModal: false,
+      showModalOrder: false,
+      selectedAddressId: null, // 新增
+      radio:null,
+      items: [], // Stores individual cart items
+      totalFinalPrice: 0, // Stores total final price
+
+      userId: localStorage.getItem('id'),
+      token: localStorage.getItem('token'),
+      orderCreated: false,
+      payID: null,
+      paymentUrl: '',
+    }
+  },
+  methods: {
+    selectAddress(id) {
+    this.selectedAddressId = id;
+    },
+    showAddModal() {
+    this.showModal = true;
+    },
+    async fetchAddresses() {
+      const userId = localStorage.getItem('id');
+      const token = localStorage.getItem('token');
+      try {
+        const response = await axios.get(`http://35.197.196.50:8000/api/users/${userId}/addresses/`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
+        this.addresses = response.data;
+      } catch (error) {
+        console.error('There was an error fetching the addresses:', error);
+      }
+    },
+    async addNewAddress(newAddress) {
+        const userId = localStorage.getItem('id');
+        const token = localStorage.getItem('token');
+        const addressWithUserId = {
+          ...newAddress, // 展开原有的 newAddress 对象
+          user: userId, // 添加 userID 字段
+        };
+
+        try {
+          const response = await axios.post(`http://35.197.196.50:8000/api/users/${userId}/addresses/`, addressWithUserId, {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          });
+          // 假设响应中包含了新添加的地址对象，你可以直接将其添加到列表中
+          this.addresses.push(response.data);
+          this.showModal = false;
+        } catch (error) {
+          console.error('There was an error adding the address:', error);
+        }
+    }, // close
+    async fetchShoppingCartItems() {
+      const shoppingCartID = localStorage.getItem('shoppingCartID');
+      if (!shoppingCartID) {
+        console.error('Shopping Cart ID not found');
+        return;
+      }
+
+      try {
+        const response = await axios.get(`http://35.197.196.50:8000/api/shopping-cart-items/cart/${shoppingCartID}/`, {
+          headers: { 'Authorization': `Token ${localStorage.getItem('token')}` },
+        });
+        this.items = response.data.items;
+        this.totalFinalPrice = response.data.total_final_price;
+      } catch (error) {
+        console.error('Error fetching shopping cart items:', error);
+      }
+    },// close
+    async createOrder() {
+    try {
+      const response = await axios.post(`http://35.197.196.50:8000/api/users/create/${this.userId}/orders/`, {
+        address_id: this.selectedAddressId
+      }, {
+        headers: {
+          Authorization: `Token ${this.token}`,
+        }
+      });
+
+      if (response.status === 201) {
+        this.orderCreated = true;
+        this.payID = response.data.id; // 假设返回的数据中包含 payID
+        this.showModalOrder = true; // 显示模态框
+
+      } else {
+        this.$message.error('Failed to generate order，Please check address options');
+      }
+    } catch (error) {
+      console.error('Error creating order:', error);
+      this.$message.error('Failed to generate order，Please check address options');
+    }
+  },
+  async payOrder() {
+    if (!this.payID) return;
+
+    try {
+      const response = await axios.get(`http://35.197.196.50:8000/api/alipay/${this.userId}/${this.payID}/`, {
+         headers: {
+          Authorization: `Token ${this.token}`,
+        }
+      });
+      if (response.status === 200) {
+        this.paymentUrl = response.data.pay_url;
+        window.open(this.paymentUrl, '_blank'); // 打开支付页面
+        this.checkPaymentStatus();
+      }
+    } catch (error) {
+      console.error('Error initiating payment:', error);
+    }
+  },// close
+      async checkPaymentStatus() {
+      let attempts = 0; // 初始化尝试次数
+      const maxAttempts = 30; // 最大尝试次数
+
+      const checkInterval = setInterval(async () => {
+        attempts++; // 每次检查时尝试次数加1
+
+        // 如果达到最大尝试次数，清除定时器并停止检查
+        if (attempts > maxAttempts) {
+          clearInterval(checkInterval);
+          this.$message.error('Check payment status timeout, please confirm payment result manually.');
+          return;
+        }
+
+        try {
+          const response = await axios.get(`http://35.197.196.50:8000/api/users/${this.userId}/orders/${this.payID}/`, {
+            headers: {
+              Authorization: `Token ${this.token}`,
+            }
+          });
+
+          // 如果支付成功
+          if (response.data.isPaid) {
+            clearInterval(checkInterval); // 停止检查
+            this.$message.success('Payment Successful');
+            this.showModalOrder = false; // 关闭模态框
+          }
+          // 如果还未支付成功，定时器将继续，直到达到最大尝试次数
+        } catch (error) {
+          console.error('Error checking payment status:', error);
+          clearInterval(checkInterval);
+          this.$message.error('Error checking payment status.');
+        }
+      }, 3000); // 设置为每3秒检查一次
+    },// close
+
+  },
+  components: {
+    SecondaryMenu,
+    AddressCard,
+    AddAddressModal,
+  },
+  created() {
+    this.fetchAddresses();
+    this.fetchShoppingCartItems();
+  },
+
+}
+</script>
+
 <style scoped lang="scss">
+.add-new-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
+.add-new-card:hover {
+  background-color: #f2f2f2; /* 鼠标悬停时的背景色变化 */
+}
 
+.add-icon {
+  font-size: 24px; /* 调整图标大小 */
+  color: #409EFF; /* 图标颜色 */
+}
 .account-container {
   padding: 60px 0 40px calc((100% - 1520px) / 8 * 5);
 

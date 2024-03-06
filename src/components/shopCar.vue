@@ -3,7 +3,10 @@
     <div class="content">
       <div class="title flex row-between">
         <div class="text">Shopping Card </div>
-        <i class="el-icon-close btn" @click="$emit('update', false)"></i>
+         <div class="icons-container">
+            <i class="el-icon-refresh btn" @click="fetchShoppingCartItems"></i>
+            <i class="el-icon-close btn" @click="$emit('update', false)"></i>
+          </div>
       </div>
         <div class="carList">
             <!-- 使用 v-for 循环遍历 items 数组，并使用 item 作为每次循环的变量 -->
@@ -29,7 +32,7 @@
       <div class="bottom">
         <div class="total flex row-between">
           <div>{{items.length}} Product</div>
-          <div class="price">$ {{totalFinalPrice }}</div>
+          <div class="price">${{totalFinalPrice }}</div>
         </div>
         <el-button type="success" class="w100" round>Checkout</el-button>
         <el-button type="success" class="w100 successBtn" plain round @click="onGoCart">Go To Cart</el-button>
@@ -182,6 +185,17 @@ export default {
       font-weight: 600;
     }
   }
+  .icons-container {
+  display: flex; /* 设置父容器为flex布局 */
+  align-items: center; /* 垂直居中图标 */
+}
 
+.icons-container .btn {
+  margin-right: 5px; /* 控制图标之间的间距 */
+}
+
+.icons-container .btn:last-child {
+  margin-right: 0; /* 最后一个图标不需要右边距 */
+}
 }
 </style>

@@ -5,7 +5,6 @@
     <div class="account-container">
       <div class="account-area">
         <div class="account-left">
-
           <div class="card-con">
             <ul class="Cart-title">
               <li class="title-item t1">PRODUCT</li>
@@ -14,71 +13,32 @@
               <li class="title-item t5">SUBTOTAL</li>
               <li class="t2"></li>
             </ul>
+            <div class="item" v-for="(item, index) in items" :key="index">
             <ul class="cart-list">
               <li class="cart-list-item">
-                <img src="../assets/images/a.png">
-                <p class="product-name">Fish Chip Burger Curry Sauce</p>
-                <p class="product-price">$14.00</p>
-                <div class="counter-container">
-                  <div class="counter-item">
-                    <span class="el-icon-minus"></span>
-                  </div>
-                  <div class="counter-item counter-center">
-                    1
-                  </div>
-                  <div class="counter-item">
-                    <span class="el-icon-plus"></span>
-                  </div>
-                </div>
-                <p class="product-price all-price" style="font-weight: 500;">$14.00</p>
-                <span class="del-produce">
-                <i class="el-icon-minus" color="rgb(102, 102, 102)"></i>
-              </span>
-              </li>
-              <li class="cart-list-item">
-                <img src="../assets/images/b.png">
-                <p class="product-name">Fish Chip Burger Curry Sauce</p>
-                <p class="product-price">$28.00</p>
-                <div class="counter-container">
-                  <div class="counter-item">
-                    <span class="el-icon-minus"></span>
-                  </div>
-                  <div class="counter-item counter-center">
-                    2
-                  </div>
-                  <div class="counter-item">
-                    <span class="el-icon-plus"></span>
-                  </div>
-                </div>
-                <p class="product-price all-price" style="font-weight: 500;">$14.00</p>
-                <span class="del-produce">
-                <i class="el-icon-minus" color="rgb(102, 102, 102)"></i>
-              </span>
-              </li>
-              <li class="cart-list-item">
-                <img src="../assets/images/c.png">
-                <p class="product-name">Fish Chip Burger Curry Sauce</p>
-                <p class="product-price">$14.00</p>
-                <div class="counter-container">
-                  <div class="counter-item">
-                    <span class="el-icon-minus"></span>
-                  </div>
-                  <div class="counter-item counter-center">
-                    1
-                  </div>
-                  <div class="counter-item">
-                    <span class="el-icon-plus"></span>
-                  </div>
-                </div>
-                <p class="product-price all-price" style="font-weight: 500;">$14.00</p>
-                <span class="del-produce">
-                <i class="el-icon-minus" color="rgb(102, 102, 102)"></i>
-              </span>
+                    <img :src="item.product_detail.url" alt="">
+                    <p class="product-name">{{ item.product_detail.name }}</p>
+                    <p class="product-price">{{ item.product_detail.price }}</p>
+                      <div class="counter-container">
+                        <div class="counter-item" @click="updateQuantity(item, item.quantity - 1)">
+                          <span class="el-icon-minus"></span>
+                        </div>
+                        <div class="counter-item counter-center">
+                          {{ item.quantity }}
+                        </div>
+                        <div class="counter-item" @click="updateQuantity(item, item.quantity + 1)">
+                          <span class="el-icon-plus"></span>
+                        </div>
+                      </div>
+                    <p class="product-price all-price" style="font-weight: 500;">{{ item.final_price }}</p>
+                    <span class="del-produce" @click="deleteItem(item.id)">
+                    <i class="el-icon-minus" color="rgb(102, 102, 102)"></i>
+                  </span>
               </li>
             </ul>
+            </div>
             <div class="btn-container">
-              <div class="btn-item">Return to shop</div>
-              <div class="btn-item">Update Cart</div>
+              <div class="btn-item" @click="goIndex">Return to shop</div>
             </div>
           </div>
           <div class="code-con">
@@ -96,7 +56,7 @@
             <ul class="card-total-list">
               <li class="cart-item">
                 <span>Subtotal:</span>
-                <span>$56.00</span>
+                <span>${{totalFinalPrice }}</span>
               </li>
               <li class="cart-item">
                 <span>Shipping:</span>
@@ -104,7 +64,7 @@
               </li>
               <li class="cart-item">
                 <span>Total:</span>
-                <span style="font-size: 18.42px;font-weight: 600;">$56.00</span>
+                <span style="font-size: 18.42px;font-weight: 600;">${{totalFinalPrice }}</span>
               </li>
             </ul>
             <div class="btn-cart-total btn" @click="goAccount">Proceed to checkout</div>
@@ -116,17 +76,86 @@
 </template>
 <script>
 import SecondaryMenu from '@/components/SecondaryMenu.vue'
+import axios from "axios";
 
 export default {
   components: {
     SecondaryMenu
   },
-  methods:{
-    goAccount(){
-      this.$router.push('/account')
+  data() {
+    return {
+      items: [], // Stores individual cart items
+      totalFinalPrice: 0, // Stores total final price
+    };
+  },
+  created() {
+    this.fetchShoppingCartItems();
+  },
+  methods: {
+    goAccount() {
+      this.$router.push('/account');
+    },
+    goIndex() {
+      this.$router.push('/index');
+    },
+    async fetchShoppingCartItems() {
+      const shoppingCartID = localStorage.getItem('shoppingCartID');
+      if (!shoppingCartID) {
+        console.error('Shopping Cart ID not found');
+        return;
+      }
+
+      try {
+        const response = await axios.get(`http://35.197.196.50:8000/api/shopping-cart-items/cart/${shoppingCartID}/`, {
+          headers: { 'Authorization': `Token ${localStorage.getItem('token')}` },
+        });
+        this.items = response.data.items;
+        this.totalFinalPrice = response.data.total_final_price;
+      } catch (error) {
+        console.error('Error fetching shopping cart items:', error);
+      }
+    },
+    async updateQuantity(item, newQuantity) {
+      if (newQuantity < 1) {
+        // Optionally handle case where quantity is less than 1
+         newQuantity = 1;
+         this.$message.error('Quantity at least 1');
+        return;
+      }
+      try {
+        const response = await axios.put(`http://35.197.196.50:8000/api/shopping-cart-items/item/${item.id}/`, {
+          quantity: newQuantity
+        }, {
+          headers: { 'Authorization': `Token ${localStorage.getItem('token')}` },
+        });
+
+        if (response.data.message === 'Update successfully!') {
+          // Optionally you can show a success message to the user
+          await this.fetchShoppingCartItems(); // Refresh the cart items after successful update
+        }
+      } catch (error) {
+        console.error('Error updating the quantity:', error);
+        // Optionally handle error, e.g. show error message to user
+      }
+    },
+    async deleteItem(id) {
+      try {
+        const response = await axios.delete(`http://35.197.196.50:8000/api/shopping-cart-items/item/${id}/`, {
+          headers: { 'Authorization': `Token ${localStorage.getItem('token')}` },
+        });
+
+        if (response.status === 204 || response.data.message === 'Deleted successfully!') {
+          // 删除成功后重新获取购物车数据以更新界面
+          this.$message.success('Delete Successful!');
+          await this.fetchShoppingCartItems();
+        }
+      } catch (error) {
+        console.error('error:', error);
+        // 可以选择处理错误，例如向用户显示错误信息
+      }
     }
-  }
-}
+  },
+};
 </script>
 
 <style scoped lang="scss">
