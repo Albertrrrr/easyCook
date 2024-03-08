@@ -6,6 +6,8 @@ import Account from "@/views/Account.vue";
 import Login from "@/views/Login.vue";
 import Register from "@/views/Register.vue";
 import welcomeLogin from "@/views/welcomeLogin.vue";
+import Search from "@/views/Search.vue";
+import CategorySearch from "@/views/CategorySearch.vue";
 
 Vue.use(VueRouter)
 const routes = [
@@ -42,7 +44,20 @@ const routes = [
     path: '/index',
     name: 'Index',
     component: HomeView
-  }
+  },
+  {
+      path: '/search/:query', // 动态路由
+      name: 'search',
+      component: Search,
+      props: true // 允许将路由参数作为props传递给组件
+  },
+  {
+      path: '/category/:CategoryID', // 动态路由
+      name: 'category',
+      component: CategorySearch,
+      props: true
+  },
+
 ]
 const router = new VueRouter({
   routes,

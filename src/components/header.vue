@@ -5,7 +5,7 @@
         <img src="../assets/image/logo.png" class="logo" @click="goIndex">
         <div class="search flex" v-if="isShowSearch">
           <el-input prefix-icon="el-icon-search" v-model="keyWords" placeholder="search"></el-input>
-          <div class="btn seachBtn">search</div>
+          <div class="btn seachBtn" @click="searchProduct">search</div>
         </div>
         <div class="shopping flex btn" @click="clickShop" v-if="isShowCar">
           <el-badge :value="2" type="primary">
@@ -30,6 +30,7 @@
 
 <script>
 import shopCar from "@/components/shopCar.vue";
+import { Message } from 'element-ui';
 
 export default {
   components: {shopCar},
@@ -60,7 +61,38 @@ export default {
     },
     goLogin() {
       this.$router.push('/welcomeLogin')
-    }
+    },
+    searchProduct() {
+            const trimmedKeyWords = this.keyWords.trim();
+            if (trimmedKeyWords === '') {
+              // 如果搜索关键词为空，显示提示消息
+              Message({
+                type: 'warning',
+                message: 'Please enter a search term.'
+              });
+              return;
+            }
+
+            if (this.lastSearch === trimmedKeyWords) {
+              // 如果搜索关键词与上一次相同，而且已经在搜索结果页，则不需要重新导航
+              if (this.$route.path === `/search/${trimmedKeyWords}`) {
+                // 可以选择刷新数据或其他逻辑
+                this.refreshData();
+                return;
+              }
+            }
+
+            // 更新lastSearch为当前搜索词
+            this.lastSearch = trimmedKeyWords;
+
+            // 如果当前已经在该搜索页面，使用replace来避免报错和无效的历史记录堆栈
+            // 否则，正常使用push进行导航
+            if (this.$route.path === `/search/${trimmedKeyWords}`) {
+              this.$router.replace({ path: `/search/${trimmedKeyWords}` });
+            } else {
+              this.$router.push({ path: `/search/${trimmedKeyWords}` });
+            }
+          }, //close
   }
 }
 </script>

@@ -1,17 +1,9 @@
+
 <template>
-  <div class="home">
     <div class="w">
-      <div class="categoriesBox">
-        <div class="categories"> Popular Categories </div>
-        <div class="categoriesList">
-          <div v-for="(item, index) in categories" :key="index" class="categoriesItem" @click="selectCategory(item.id)">
-            <img :src="item.description || 'https://via.placeholder.com/300' " class="cover">
-            <div class="text">{{ item.name}}</div>
-          </div>
-        </div>
-      </div>
-      <div class="categoriesBox" >
-        <div class="categories products"> Popular Products </div>
+      <h2 style="margin-bottom: 20px; margin-top: 20px">Search Results：</h2>
+      <el-button style="margin-bottom: 50px; color: green" @click="goback">back</el-button>
+      <div class="categoriesBoxList">
         <div class="productsList categoriesList">
           <!-- 修改 v-for 来遍历 products 数组 -->
           <div v-for="(product, index) in products" :key="index" @click="selectProduct(product.id)" class="productsItem categoriesItem">
@@ -39,44 +31,46 @@
             </div>
           </div>
         </div>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page.sync="currentPage"
+            :page-sizes="[10, 20, 30, 50]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalItems">
+          </el-pagination>
       </div>
 
-
-      <indexFooter></indexFooter>
+      <el-dialog :visible.sync="goodsDetails" width="1200px" custom-class="goodsDetailsDialog">
+      <goodsDetails :selectedProductId="selectedProductId"></goodsDetails>
+     </el-dialog>
     </div>
 
-    <!-- 详情 -->
-    <el-dialog :visible.sync="goodsDetails" width="1200px" custom-class="goodsDetailsDialog">
-      <goodsDetails :selectedProductId="selectedProductId"></goodsDetails>
-    </el-dialog>
-  </div>
+
 </template>
 
 <script>
-// 底部
-import indexFooter from '@/components/indexFooter.vue';
-// 购物车
-import shopCar from '@/components/shopCar.vue';
-// 商品详情
-import goodsDetails from '@/components/goodsDetails.vue';
-
+import goodsDetails from "@/components/goodsDetails.vue";
 import axios from "axios";
+
 export default {
-  components: { indexFooter, shopCar, goodsDetails },
+  components: { goodsDetails },
+  props: ['CategoryID'],
   data() {
     return {
+      goodsDetails: false,
       value: 4, // 星级
-      goodsDetails: false, // 商品详情对话框显示控制
       products: [],
-      selectedProductId: null, // 选中的商品ID
-      categories: [], // 分类
-      selectedCategoryId:null,
-
-    }
+      selectedProductId: null,
+      totalItems: 0, // 后端返回的总商品数
+      currentPage: 1, // 当前页码
+      pageSize: 10, // 每页显示的商品数量
+    };
   },
   created() {
+    console.log(this.CategoryID);
     this.fetchProducts();
-    this.fetchCategories();
   },
   methods: {
     async fetchProducts() {
@@ -86,10 +80,12 @@ export default {
         return;
       }
       try {
-        const response = await axios.get('http://35.197.196.50:8000/api/products/', {
+        const response = await axios.get('http://35.197.196.50:8000/api/search/products/', {
+          params: { category: this.CategoryID },
           headers: { 'Authorization': `Token ${token}` },
         });
         this.products = response.data.results;
+        this.totalItems = response.data.count;
       } catch (error) {
         console.error('Error fetching products:', error);
       }
@@ -98,49 +94,37 @@ export default {
       this.selectedProductId = productId;
       this.goodsDetails = true; // 显示详情对话框
     },
-
-    selectCategory(CategoryId) {
-      this.selectedCategoryId = CategoryId;
-      this.$router.replace({ path: `/category/${this.selectedCategoryId}` });
+    handleCurrentChange(newPage) {
+      this.currentPage = newPage;
+      this.fetchProducts();
     },
-
-    async fetchCategories() {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.error('Token not found');
-        return;
-      }
-      try {
-        const response = await axios.get('http://35.197.196.50:8000/api/categories/', {
-          headers: { 'Authorization': `Token ${token}` },
-        });
-        this.categories = response.data;
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      }
+    handleSizeChange(newSize) {
+      this.pageSize = newSize;
+      this.fetchProducts();
     },
-
-
-  }
+    goback(){
+      this.$router.push('/index')
+    }
+  },
 }
 </script>
 
-<style scoped lang="scss">
-::v-deep .el-dialog__body {
-  padding: 0;
+<style>
+.el-pagination {
+  margin-top: 50px; /* 与上方元素保持20px的距离 */
 }
 
-::v-deep .el-dialog__header {
-  padding: 0;
-}
-
-.categoriesBox {
+.categoriesBoxList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   .categories {
     color: rgb(26, 26, 26);
     font-family: Poppins;
     font-size: 32px;
     font-weight: 600;
     padding: 23px 0 40px;
+
   }
 
   .categoriesList {
@@ -182,6 +166,7 @@ export default {
     }
 
   }
+
 
   .products {
     padding: 40px 0;
@@ -254,47 +239,8 @@ export default {
             text-decoration-line: line-through;
           }
         }
-
-        .shopping {
-          width: 40px;
-          height: 40px;
-          border-radius: 40px;
-          background: rgb(242, 242, 242);
-          color: rgb(26, 26, 26);
-          font-size: 20px;
-          transition: all .3s;
-        }
-
-        .shopping:active {
-          background: rgb(44, 116, 47);
-          color: #fff;
-        }
-
-
       }
-
-      &:hover {
-        border: 1px solid rgb(44, 116, 47);
-        box-shadow: 0px 0px 12px 0px rgba(32, 181, 38, 0.32);
-
-        .title {
-          color: rgb(44, 116, 47) !important;
-        }
-
-        // .shopping {
-        //   background: rgb(44, 116, 47);
-        //   color: #fff;
-        // }
-
-        .heart {
-          opacity: 1;
-        }
-
       }
-
-
-    }
-
 
   }
 }
