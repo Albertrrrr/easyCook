@@ -69,6 +69,7 @@ export default {
         });
         this.items = response.data.items;
         this.totalFinalPrice = response.data.total_final_price;
+        localStorage.setItem('cartItemCount', this.items.length);
       } catch (error) {
         console.error('Error fetching shopping cart items:', error);
       }
@@ -89,6 +90,7 @@ export default {
         if (response.status === 204 || response.data.message === 'Deleted successfully!') {
           // 删除成功后重新获取购物车数据以更新界面
           this.$message.success('Delete Successful!');
+          localStorage.setItem('cartItemCount', this.items.length);
           await this.fetchShoppingCartItems();
         }
       } catch (error) {

@@ -8,9 +8,9 @@
           <div class="btn seachBtn" @click="searchProduct">search</div>
         </div>
         <div class="shopping flex btn" @click="clickShop" v-if="isShowCar">
-          <el-badge :value="2" type="primary">
-            <img src="@/assets/image/Bag.png" alt="">
-          </el-badge>
+            <el-badge :value="cartItemCount" type="primary">
+              <img src="@/assets/image/Bag.png" alt="">
+            </el-badge>
           <span>Shopping cart:</span>
         </div>
         <div class="login btn" @click="goLogin">
@@ -22,8 +22,8 @@
     </header>
 
     <!-- 购物车 -->
-    <el-drawer :visible.sync="shopDrawer" :with-header="false" :size="456">
-      <shopCar @update="shopDrawer = false"></shopCar>
+      <el-drawer :visible.sync="shopDrawer" :with-header="false" :size="456">
+      <shopCar ref="shopCar" @update:cartItemCount="cartItemCount = $event" @update="shopDrawer = false"></shopCar>
     </el-drawer>
   </div>
 </template>
@@ -47,11 +47,26 @@ export default {
   data() {
     return {
       keyWords: '',
+      cartItemCount: 0,
       shopDrawer: false,// 购物车弹窗
 
     }
   },
+  mounted() {
+    this.updateCartCountFromLocalStorage();
+ },
+  watch: {
+  shopDrawer(newVal) {
+    if (!newVal) { // 当shopDrawer变为false，即el-drawer关闭时
+      this.updateCartCountFromLocalStorage();
+    }
+  }
+},
   methods: {
+    updateCartCountFromLocalStorage() {
+    const count = localStorage.getItem('cartItemCount');
+    this.cartItemCount = count ? parseInt(count, 10) : 0;
+    },
     clickShop() {
       this.shopDrawer = true
       // this.$emit('clickShop')
