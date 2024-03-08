@@ -1,0 +1,40 @@
+<template>
+  <div id="main-view">
+    <!-- Header Section -->
+    <header-component></header-component>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Navigation Sidebar -->
+   <navigation-component></navigation-component>
+      <!-- Dashboard Content -->
+      <detail2-component></detail2-component>
+    </div>
+  </div>
+</template>
+
+<script>
+// 引入子組件
+import HeaderComponent from '../components/header.vue';
+
+import Detail2Component from '../components/detail2.vue';
+import NavigationComponent from '../components/navigation.vue'
+export default {
+  components: {
+    'header-component': HeaderComponent,
+    'navigation-component':NavigationComponent,
+    'detail2-component': Detail2Component
+  }
+}
+</script>
+
+<style>
+#main-view {
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  display: flex;
+}
+</style>

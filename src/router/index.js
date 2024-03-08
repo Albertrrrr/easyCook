@@ -6,10 +6,35 @@ import Account from "@/views/Account.vue";
 import Login from "@/views/Login.vue";
 import Register from "@/views/Register.vue";
 import welcomeLogin from "@/views/welcomeLogin.vue";
+import dash from "@/views/Dash.vue";
+import detailpage from "@/views/detailpage.vue";
+import orderpage from "@/views/orderpage.vue";
+import detail2page from "@/views/detail2page.vue";
+import settingpage from "@/views/settingpage.vue";
 
 Vue.use(VueRouter)
 const routes = [
-  {
+     {
+    path: "/settingpage",
+    name: "settingpage",
+    component: settingpage
+   }, {
+    path: "/orderpage",
+    name: "orderpage",
+    component: orderpage
+   },{
+    path: "/detailpage",
+    name: "detailpage",
+    component: detailpage
+   }, {
+    path: "/detail2page",
+    name: "detail2page",
+    component: detail2page
+   },{
+    path: "/dash",
+    name: "dash",
+    component: dash,
+  }, {
     path: "/",
     name: "home",
     component: welcomeLogin,
