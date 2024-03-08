@@ -115,4 +115,8 @@ list-style: none;
   margin: 4px 2px;
   cursor: pointer;
   }
+
+  .navigation li:hover {
+  background-color: #009c0e; /* 把 #绿色代码 替换成你想要的绿色色码 */
+}
 </style>

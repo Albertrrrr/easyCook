@@ -18,7 +18,7 @@
               <td>{{ order.createTime }}</td>
               <td>{{ order.totalCost }}</td>
               <td>{{ order.status }}</td>
-              <td><a :href="`detail.html?orderId=${order.id}`" class="view-details">View Details</a></td>
+              <td class="view-details"> View Details</td>
             </tr>
           </tbody>
     </table>

@@ -29,7 +29,7 @@
       </div>
       <button @click="addAddress">Add</button>
     </div>
-<!--  billing addresss list -->
+<!--  billing addresss list -->  會報錯
 <!--    <div class="billing-address">-->
 <!--      <h2>Billing Address</h2>-->
 <!--      <label for="street">Street Address 1</label>-->
