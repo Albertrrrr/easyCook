@@ -1,5 +1,6 @@
 <template>
   <el-container>
+    <myHeader :isShowCar="false" :isShowSearch="false"></myHeader>
     <el-main>
       <el-card class="box-card">
         <div class="header">
@@ -48,7 +49,9 @@
 <script>
 import axios from 'axios';
 import { Message } from 'element-ui';
+import myHeader from "@/components/header.vue";
 export default {
+  components: {myHeader},
   data() {
     return {
       form: {

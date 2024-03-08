@@ -1,5 +1,6 @@
 <template>
   <div class="login-container">
+    <myHeader :isShowCar="false" :isShowSearch="false"></myHeader>
     <h2>Please Login</h2>
     <form @submit.prevent="login">
       <div class="form-radio">
@@ -29,8 +30,10 @@
 <script>
 import axios from 'axios';
 import {MessageBox, Message} from 'element-ui';
+import myHeader from "@/components/header.vue";
 
 export default {
+  components: { myHeader },
   data() {
     return {
       email: '',
