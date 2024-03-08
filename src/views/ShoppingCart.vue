@@ -153,7 +153,7 @@ export default {
         console.error('error:', error);
         // 可以选择处理错误，例如向用户显示错误信息
       }
-    }
+    }, // close
   },
 };
 </script>

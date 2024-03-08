@@ -24,7 +24,7 @@
                     <span class="big"> = $ {{ item.final_price }} </span>
                   </div>
                 </div>
-                <i class="el-icon-circle-close close btn"></i>
+                <i class="el-icon-circle-close close btn" @click="deleteItem(item.id)"></i>
               </div>
             </div>
           </div>
@@ -34,7 +34,7 @@
           <div>{{items.length}} Product</div>
           <div class="price">${{totalFinalPrice }}</div>
         </div>
-        <el-button type="success" class="w100" round>Checkout</el-button>
+        <el-button type="success" class="w100" round @click="onGoCheckOut">Checkout </el-button>
         <el-button type="success" class="w100 successBtn" plain round @click="onGoCart">Go To Cart</el-button>
       </div>
     </div>
@@ -76,7 +76,27 @@ export default {
     onGoCart() {
       this.$router.push('/shoppingcart');
       this.$emit('update', false);
-    }
+    },
+    onGoCheckOut() {
+      this.$router.push('/account');
+    },
+    async deleteItem(id) {
+      try {
+        const response = await axios.delete(`http://35.197.196.50:8000/api/shopping-cart-items/item/${id}/`, {
+          headers: { 'Authorization': `Token ${localStorage.getItem('token')}` },
+        });
+
+        if (response.status === 204 || response.data.message === 'Deleted successfully!') {
+          // 删除成功后重新获取购物车数据以更新界面
+          this.$message.success('Delete Successful!');
+          await this.fetchShoppingCartItems();
+        }
+      } catch (error) {
+        console.error('error:', error);
+        // 可以选择处理错误，例如向用户显示错误信息
+      }
+    }, // close
+
   }
 }
 </script>
