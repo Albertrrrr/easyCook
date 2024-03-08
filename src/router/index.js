@@ -8,6 +8,11 @@ import Register from "@/views/Register.vue";
 import welcomeLogin from "@/views/welcomeLogin.vue";
 import Search from "@/views/Search.vue";
 import CategorySearch from "@/views/CategorySearch.vue";
+import User from "@/views/User.vue"
+import CustomerOrder from "@/views/CustomerOrder.vue"
+import MyProdcut from "@/views/MyProdcut.vue"
+import Category from "@/views/Category.vue"
+
 
 Vue.use(VueRouter)
 const routes = [
@@ -57,6 +62,27 @@ const routes = [
       component: CategorySearch,
       props: true
   },
+
+{
+  path: '/user',
+      name: 'user',
+    component: User
+},
+{
+  path: '/customerOrder',
+      name: 'CustomerOrder',
+    component: CustomerOrder
+},
+{
+  path: '/myprodcut',
+      name: 'MyProdcut',
+    component: MyProdcut
+},
+  {
+    path: '/category',
+    name: 'Category',
+    component: Category
+  }
 
 ]
 const router = new VueRouter({
