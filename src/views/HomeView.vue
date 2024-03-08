@@ -65,7 +65,7 @@ export default {
   components: { indexFooter, shopCar, goodsDetails },
   data() {
     return {
-      value: 4, // 星级
+      value: 4,
       goodsDetails: false, // 商品详情对话框显示控制
       products: [],
       selectedProductId: null, // 选中的商品ID

@@ -82,7 +82,6 @@ export default {
               }
             }
 
-            // 更新lastSearch为当前搜索词
             this.lastSearch = trimmedKeyWords;
 
             // 如果当前已经在该搜索页面，使用replace来避免报错和无效的历史记录堆栈

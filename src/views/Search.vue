@@ -60,7 +60,7 @@ export default {
   data() {
     return {
       goodsDetails: false,
-      value: 4, // 星级
+      value: 4,
       products: [],
       selectedProductId: null,
       totalItems: 0, // 后端返回的总商品数

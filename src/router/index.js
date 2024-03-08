@@ -46,13 +46,13 @@ const routes = [
     component: HomeView
   },
   {
-      path: '/search/:query', // 动态路由
+      path: '/search/:query',
       name: 'search',
       component: Search,
-      props: true // 允许将路由参数作为props传递给组件
+      props: true
   },
   {
-      path: '/category/:CategoryID', // 动态路由
+      path: '/category/:CategoryID',
       name: 'category',
       component: CategorySearch,
       props: true
