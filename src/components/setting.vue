@@ -29,26 +29,37 @@
       </div>
       <button @click="addAddress">Add</button>
     </div>
+
+     <tbody>
+            <!-- 使用 v-for 来循环 orders 数组中的每个订单对象 -->
+            <tr v-for="order in orders" :key="order.id">
+              <td>{{ order.id }}</td>
+              <td>{{ order.createTime }}</td>
+              <td>{{ order.totalCost }}</td>
+              <td>{{ order.status }}</td>
+              <td class="view-details"> View Details</td>
+            </tr>
+          </tbody>
 <!--  billing addresss list -->  會報錯
 <!--    <div class="billing-address">-->
-<!--      <h2>Billing Address</h2>-->
-<!--      <label for="street">Street Address 1</label>-->
+<!--    <h2>Billing Address</h2>-->
+<!--     <label for="street">Street Address 1</label>&ndash;&gt;-->
 <!--      <input type="address" v-model="item.house_number_and_street" placeholder="House Number and Street" />-->
-<!--      <div>-->
-<!--        <div class="city-post">-->
-<!--          <div class="post">-->
-<!--            <label for="city">Town / City</label>-->
-<!--            <input type="text" id="city" v-model="item.town" placeholder="Town" />-->
+<!--   <div>&ndash;&gt;-->
+<!--       <div class="city-post">&ndash;&gt;-->
+<!--        <div class="post">&ndash;&gt;-->
+<!--           <label for="city">Town / City</label>&ndash;&gt;-->
+<!--           <input type="text" id="city" v-model="item.town" placeholder="Town" />-->
 <!--          </div>-->
-<!--          <div class="post">-->
-<!--            <label for="postcode">Post Code</label>-->
-<!--            <input type="text" id="postcode" v-model="item.postcode" placeholder="Postcode" />-->
-<!--          </div>-->
-<!--        </div>-->
-<!--          <button @click="updateAddress(item)">Update Address</button>-->
+<!--         <div class="post">&ndash;&gt;-->
+<!--       <label for="postcode">Post Code</label>&ndash;&gt;-->
+<!--           <input type="text" id="postcode" v-model="item.postcode" placeholder="Postcode" -->
+<!--         </div>-->
+<!--       </div>-->
+<!--        <button @click="updateAddress(item)">Update Address</button>-->
 <!--        </div>-->
 
-<!--    </div>-->
+<!--   </div>-->
 
     <!-- Change Password -->
   <div class="change-password">

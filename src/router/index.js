@@ -67,7 +67,12 @@ const routes = [
     path: '/index',
     name: 'Index',
     component: HomeView
-  }
+  },{
+    path:'/orderDetails/:orderId',
+    name: 'orderdetail',
+    component: detailpage,
+        props: true
+}
 ]
 const router = new VueRouter({
   routes,

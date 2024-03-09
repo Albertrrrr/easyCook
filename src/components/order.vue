@@ -13,12 +13,12 @@
         </thead>
         <tbody>
             <!-- 使用 v-for 来循环 orders 数组中的每个订单对象 -->
-            <tr v-for="order in orders" :key="order.id">
+            <tr v-for="order in orders" :key="order.id" @click="selectOrderId(order.id)">
               <td>{{ order.id }}</td>
               <td>{{ order.createTime }}</td>
               <td>{{ order.totalCost }}</td>
               <td>{{ order.status }}</td>
-              <td class="view-details"> View Details</td>
+              <td class="view-details" > View Details</td>
             </tr>
           </tbody>
     </table>
@@ -31,13 +31,20 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      orders: [] // 存储从 API 获取的订单数据
+      orders: [], // 存储从 API 获取的订单数据
+      orderId: null
     };
   },
   created() {
     this.fetchOrders();
   },
   methods: {
+    selectOrderId(p){
+      this.orderId = p
+      console.log(this.orderId)
+      this.$router.push({path:`orderDetails/${this.orderId}`})
+    },
+
     fetchOrders() {
       const userId = localStorage.getItem('id');
       const token = localStorage.getItem('token');
