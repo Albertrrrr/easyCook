@@ -2,23 +2,23 @@
   <div class="order-details-container">
   <header class="title">
       <h1>Order Details</h1>
-      <span>{{ orderDate }} - {{ productCount }} Products</span>
-      <a href="order.html" class="back-to-list">Back to List</a>
+      <span>{{ orderDetails.createTime }}</span>
+      <p class="back-to-list">Back to List</p>
   </header>
 
   <div class="billing-and-summary">
       <div class="billing-address">
           <h2>Billing Address</h2>
-          <p>{{ username}}</p>
-          <p>{{houseNumberAndStreet}}</p>
-          <p>{{ email }}</p>
+          <p>{{orderDetails.name}}</p>
+          <p>{{orderDetails.house_number_and_street}}</p>
+          <p>{{orderDetails.country }}</p>
       </div>
 
       <div class="order-summary">
-        <p>Order ID: {{ orderId }}</p>
-        <p>Order State: {{ orderState }}</p>
+        <p>Order ID: {{orderDetails.cardID }}</p>
+        <p>Order State: {{ orderDetails.status }}</p>
         <h2>Total</h2>
-        <p>${{ totalAmount }}</p>
+        <p>${{orderDetails.totalCost}}</p>
       </div>
   </div>
      </div>
@@ -30,65 +30,50 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      orderId: '',
-      orderState: '',
-      totalAmount: "",
-      orderDate: '',
-      productCount: "",
-      orderDetails: {},
+   orderDetails: {}
 
-      houseNumberAndStreet: ''
     };
   },
 
   created() {
-    this.fetchOrderDetail();
     this.fetchOrderDetails();
-    this.fetchAddress();
   },
-  props: ['orderId', 'orderState', 'totalAmount', 'orderDate', 'productCount'],
-
   methods: {
-    fetchOrderDetail() {
-      axios.get('http://35.197.196.50:8000//api/users/{user_id}/orders/{id}')
-      .then(response => {
-        this.orderId = response.data.id;
-        this.orderState = response.data.state;
-        this.totalAmount = response.data.total;
-
-    })
-    },
-
- fetchOrderDetails() {
-      // 替换为实际的 API URL
-      axios.get('http://35.197.196.50:8000/api/users/10/orders/1')
-        .then(response => {
-          this.orderDetails = response.data;
+fetchOrderDetails() {
+        const userId = localStorage.getItem('id');
+        const token = localStorage.getItem('token');
+        // Replace with actual API URL
+        axios.get(`http://35.197.196.50:8000/api/users/${userId}/orders/26`,{
+          headers: {
+                Authorization: `Token ${token}`,
+              },
         })
-        .catch(error => {
-          console.error("There was an error fetching the order details:", error);
-        });
-    },
-    fetchAddress() {
-      // Make the API call to fetch the house number and street
-      axios.get('http://35.197.196.50:8000/api/users/10/addresses/')
-        .then(response => {
-          // Assuming the response data has the address in the expected format
-          this.houseNumberAndStreet = response.data.house_number_and_street;
-        })
-        .catch(error => {
-          console.error("There was an error fetching the address details:", error);
-        });
+          .then(response => {
+                 const firstItem = response.data.item[0];
+        this.orderDetails = {
+
+           name: firstItem.product_detail.name,
+           house_number_and_street: response.data.address.house_number_and_street,
+          country: response.data.address.country,
+          cardID: firstItem.cartID,
+          createTime: response.data.createTime,
+          status: response.data.status,
+          totalCost: firstItem.final_price,
+        };
+      })
+          .catch(error => {
+            console.error("There was an error fetching the order details:", error);
+          });
+      }
     }
   }
-};
 </script>
 
     <style scoped lang="scss">
 
   .order-details-container {
     width: 90%;
-    max-width: 900px;
+    max-width: 1000px;
 
     float:left;
     background-color: #ffffff;

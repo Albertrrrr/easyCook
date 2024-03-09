@@ -39,28 +39,28 @@ export default {
   },
   methods: {
     fetchOrders() {
-      const requestData = {
-        statuses: ["unpaid", "processing", "Done"],
-        start_date: "2024-01-01",
-        end_date: "2024-02-28"
-      };
-
+      const userId = localStorage.getItem('id');
+      const token = localStorage.getItem('token');
       // 发送 POST 请求到 API
-      axios.get('http://35.197.196.50:8000/api/users/10/orders/', requestData)
-        .then(response => {
-          // 假设返回的数据是一个对象，其中包含一个名为 "results" 的数组
-          const results = response.data.results;
-          this.orders = results.map(order => ({
-            id: order.id,
-            createTime: order.createTime,
-            totalCost: order.totalCost,
-            status: order.status
-          }));
+        axios.get(`http://35.197.196.50:8000/api/users/${userId}/orders/`,{
+          headers: {
+                Authorization: `Token ${token}`,
+              },
         })
-        .catch(error => {
-          console.error('Error fetching orders:', error);
-        });
-    }
+          .then(response => {
+            // 假设返回的数据是一个对象，其中包含一个名为 "results" 的数组
+            const results = response.data.results;
+            this.orders = results.map(order => ({
+              id: order.id,
+              createTime: order.createTime,
+              totalCost: order.totalCost,
+              status: order.status
+            }));
+          })
+          .catch(error => {
+            console.error('Error fetching orders:', error);
+          });
+      }
   }
 };
 
