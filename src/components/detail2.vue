@@ -24,11 +24,12 @@ import axios from 'axios';
 export default {
     data() {
       return {
-          orders: [], // Assuming this will be the structure based on your JSON
-          // other order related data ...
+        orders: [], // Assuming this will be the structure based on your JSON
+        ID:null
       };
     },
     created() {
+     this.ID = this.$route.params.orderId
       this.fetchOrderDetails();
     },
     methods: {
@@ -36,7 +37,7 @@ export default {
         const userId = localStorage.getItem('id');
         const token = localStorage.getItem('token');
         // Replace with actual API URL
-        axios.get(`http://35.197.196.50:8000/api/users/${userId}/orders/26`,{
+        axios.get(`http://35.197.196.50:8000/api/users/${userId}/orders/${this.ID}`,{
           headers: {
                 Authorization: `Token ${token}`,
               },

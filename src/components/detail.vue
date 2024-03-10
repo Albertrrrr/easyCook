@@ -37,7 +37,6 @@ export default {
     ID:null
     };
   },
-
   created() {
    this.ID = this.$route.params.orderId
     this.fetchOrderDetails();
@@ -55,7 +54,6 @@ fetchOrderDetails() {
           .then(response => {
                  const firstItem = response.data.item[0];
         this.orderDetails = {
-
            name: firstItem.product_detail.name,
            house_number_and_street: response.data.address.house_number_and_street,
           country: response.data.address.country,
