@@ -81,7 +81,7 @@ export default {
                 } else {
                   // 管理员后台主页
                   // 这里需要添加相应的路由跳转逻辑
-                  this.$router.push('/user');
+                  this.$router.push('/Welcome');
                 }
               }, 2000);
             }

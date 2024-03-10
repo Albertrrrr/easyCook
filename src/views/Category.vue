@@ -5,6 +5,12 @@
         <div style="display: flex; flex-direction: column">
           <div class="displayflex" style="font-size: 23px; font-weight: 700; height: 40px; margin-top: 10px">Navigation</div>
           <div class="displayflex" style="margin-top: 12px">
+            <router-link to="/Welcome">
+              <div><img src="../assets/image/order.png" /></div>
+              <div class="navtext">Welcome</div>
+            </router-link>
+          </div>
+          <div class="displayflex" style="margin-top: 12px">
             <router-link to="/user">
               <div><img src="../assets/image/order.png" /></div>
               <div class="navtext">User</div>

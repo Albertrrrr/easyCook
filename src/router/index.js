@@ -8,6 +8,7 @@ import Register from "@/views/Register.vue";
 import welcomeLogin from "@/views/welcomeLogin.vue";
 import Search from "@/views/Search.vue";
 import CategorySearch from "@/views/CategorySearch.vue";
+import Welcome from "@/views/Welcome.vue";
 import User from "@/views/User.vue"
 import CustomerOrder from "@/views/CustomerOrder.vue"
 import MyProdcut from "@/views/MyProdcut.vue"
@@ -61,6 +62,12 @@ const routes = [
       name: 'category',
       component: CategorySearch,
       props: true
+  },
+
+  {
+    path: '/Welcome',
+    name: 'Welcome',
+    component: Welcome
   },
 
 {
