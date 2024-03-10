@@ -3,10 +3,10 @@
     <aside class="navigation">
       <h2>Navigation</h2>
       <ul>
-        <li><router-link to="/path" tag="a">Dashboard</router-link></li>
-        <li><router-link to="/path" tag="a">Order History</router-link></li>
-        <li><router-link to="/path" tag="a">Shopping Cart</router-link></li>
-        <li><router-link to="/path" tag="a">Settings</router-link></li>
+        <li><router-link to="/dash" tag="a">Dashboard</router-link></li>
+        <li><router-link to="/orderpage" tag="a">Order History</router-link></li>
+        <li><router-link to="/ShoppingCart" tag="a">Shopping Cart</router-link></li>
+        <li><router-link to="/settingpage" tag="a">Settings</router-link></li>
         <li><p to="/path" tag="a" @click="showModal">Log-out</p></li>
       </ul>
     </aside>

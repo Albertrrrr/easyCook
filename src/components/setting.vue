@@ -8,48 +8,11 @@
 
       <label for="email">Email</label>
       <input type="email" id="email" v-model="email">
-      <button @click="updateUser">Save Changes</button>
-    </div>
-
-    <!-- add Billing Address -->
-    <div class="billing-address">
-      <h2>Billing Address Add</h2>
-      <label for="street">Street Address</label>
-      <input type="address" id="street" v-model="house_number_and_street" placeholder="Street Address">
-
-      <div class="city-post">
-        <div class="post">
-          <label for="city">Town / City</label>
-          <input type="text" id="city" v-model="town">
-        </div>
-        <div class="post">
-          <label for="postcode">Post Code</label>
-          <input type="text" id="postcode" v-model="postcode">
-        </div>
+      <div>
+              <button @click="updateUser">Save Changes</button>
       </div>
-      <button @click="addAddress">Add</button>
+
     </div>
-
-<!--  billing addresss list -->  會報錯
-<!--    <div class="billing-address">-->
-<!--    <h2>Billing Address</h2>-->
-<!--     <label for="street">Street Address 1</label>&ndash;&gt;-->
-<!--      <input type="address" v-model="item.house_number_and_street" placeholder="House Number and Street" />-->
-<!--   <div>&ndash;&gt;-->
-<!--       <div class="city-post">&ndash;&gt;-->
-<!--        <div class="post">&ndash;&gt;-->
-<!--           <label for="city">Town / City</label>&ndash;&gt;-->
-<!--           <input type="text" id="city" v-model="item.town" placeholder="Town" />-->
-<!--          </div>-->
-<!--         <div class="post">&ndash;&gt;-->
-<!--        <label for="postcode">Post Code</label>&ndash;&gt;-->
-<!--           <input type="text" id="postcode" v-model="item.postcode" placeholder="Postcode"-->
-<!--         </div>-->
-<!--         </div>-->
-<!--        <button @click="updateAddress(item)">Update Address</button>-->
-<!--        </div>-->
-
-<!--   </div>-->
 
     <!-- Change Password -->
   <div class="change-password">
@@ -75,19 +38,10 @@ export default {
         username: '',
         email: '',
 
-        house_number_and_street: '',
-        town: '',
-        postcode: '',
-
-        addresses: [],
-
         old_password: '',
-        new_password: ''
+        new_password: '',
       };
     },
-    mounted() {
-    this.fetchAddresses();
-  },
   methods: {
     updateUser() {
       // Make sure to use `http://` and include the port if necessary
@@ -101,57 +55,18 @@ export default {
       })
       .catch(error => {
         console.error('Error updating user details:', error);
+        alert('User details updated fails.');
       });
     },
-//---------------------------------------
-     addAddress() {
-        const addressData = {
-          user: "",
-          house_number_and_street: this.house_number_and_street,
-          area: "",
-          town: this.town,
-          county: "",
-          postcode: this.postcode
-        };
-        axios.put("35.197.196.50:8000/api/users/10/addresses", addressData)
-        .then(response => {
-          alert('Address updated successfully.');
-        })
-        .catch(error => {
-                console.error('Error updating address:', error);
-          alert('Failed to update address.');
-        });
-      },
-// --------------------------------------------
-       fetchAddresses() {
-          axios.get('http://35.197.196.50:8000/api/users/10/addresses/')
-            .then(response => {
-              this.addresses = response.data;
-            })
-            .catch(error => {
-              console.error("Error fetching addresses:", error);
-            });
-        },
-        updateAddress(address) {
-          const updateData = {
-            house_number_and_street: address.house_number_and_street,
-            town: address.town,
-            postcode: address.postcode
-          };
-
-          axios.put(`http://35.197.196.50:8000/api/users/10/addresses/${address.id}/`, updateData)
-            .then(response => {
-              console.log("Address updated:", response.data);
-              // Optionally do something in the UI to reflect the update
-            })
-            .catch(error => {
-              console.error("Error updating address:", error);
-            });
-        },
       //---------------------------------
       changePassword() {
-         axios.put("35.197.196.50:8000/api/user/11/change-password", {
-          old_password: this.old_password,
+      const userId = localStorage.getItem('id');
+      const token = localStorage.getItem('token');
+         axios.put(`35.197.196.50:8000/api/user/${userId}/change-password`, {
+             headers: {
+                Authorization: `Token ${token}`,
+              },
+           old_password: this.old_password,
           new_password: this.new_password
         })
         .then(response => {

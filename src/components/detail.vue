@@ -3,7 +3,7 @@
   <header class="title">
       <h1>Order Details</h1>
       <span>{{ orderDetails.createTime }}</span>
-      <p class="back-to-list">Back to List</p>
+      <p class="back-to-list"><router-link to="/orderpage" tag="a">Back to List</router-link></p>
   </header>
 
   <div class="billing-and-summary">

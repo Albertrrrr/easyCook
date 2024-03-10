@@ -11,9 +11,15 @@ import detailpage from "@/views/detailpage.vue";
 import orderpage from "@/views/orderpage.vue";
 import detail2page from "@/views/detail2page.vue";
 import settingpage from "@/views/settingpage.vue";
+import address from "@/components/address.vue";
 
 Vue.use(VueRouter)
 const routes = [
+     {
+    path: "/address",
+    name: "address",
+    component: address
+   },
      {
     path: "/settingpage",
     name: "settingpage",

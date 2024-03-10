@@ -1,8 +1,6 @@
-
-
 <template>
   <div>
-    <SecondaryMenu/>
+
     <div class="account-container">
       <div class="account-area">
         <div class="account-left">
@@ -20,71 +18,11 @@
           </el-row>
           <add-address-modal :visible.sync="showModal" @add="addNewAddress"></add-address-modal>
         </div>
-
-          <div class="line-container"></div>
-
-          <p class="acc-left-title">Additional Info</p>
-          <p class="se-title">Order Notes (Optional)</p>
-          <el-input type="textarea" placeholder="Notes about your order, e.g. special notes for delivery"></el-input>
-        </div>
-        <div class="account-right">
-          <div class="account-right-main">
-            <p class="right-title">Order Summary</p>
-
-            <ul class="product-list">
-              <div class="item " v-for="(item, index) in items" :key="index">
-                  <li class="list-item">
-                    <div class="product-msg">
-                      <img class="pro-img" :src="item.product_detail.url">
-                      <p class="pro-el" style="margin-right: 8px;">{{ item.product_detail.name }}</p>
-                      <p>{{ item.quantity }}</p>
-                      <div class="product-price">x ${{ item.product_detail.price }}</div>
-                    </div>
-
-                    <div class="product-price">${{ item.final_price }}</div>
-                  </li>
-              </div>
-
-            </ul>
-
-            <div class="opts-item">
-              <div class="opts-label">Subtotal:</div>
-              <div class="opts-container">${{totalFinalPrice}}</div>
-            </div>
-            <div class="opts-item">
-              <div class="opts-label">Shipping:</div>
-              <div class="opts-container">Free</div>
-            </div>
-            <div class="opts-item" style="border-bottom: none;margin-bottom: 13.8px">
-              <div class="opts-label">Total:</div>
-              <div class="opts-container" style="font-weight: 600;font-size: 20px;">${{totalFinalPrice}} </div>
-            </div>
-
-            <p class="right-title">Payment Method</p>
-            <ul class="radio-list">
-              <li class="radio-item">
-                <el-radio v-model="radio" label="1">Alipay
-                </el-radio>
-              </li>
-            </ul>
-
-            <div class="place-btn" @click="createOrder">
-              Place Order
-            </div>
-          </div>
-
-           <el-dialog :visible.sync="showModalOrder" title="订单状态">
-            <p v-if="orderCreated">订单已生成</p>
-            <div>
-              <el-button @click="showModalOrder = false">Return</el-button>
-              <el-button type="primary" @click="payOrder" v-if="orderCreated">Pay</el-button>
-            </div>
-          </el-dialog>
-
-        </div>
-      </div>
     </div>
   </div>
+      </div>
+  </div>
+
 </template>
 
 <script>
@@ -249,7 +187,6 @@ export default {
 
   },
   components: {
-    SecondaryMenu,
     AddressCard,
     AddAddressModal,
   },
@@ -282,10 +219,9 @@ export default {
   padding: 60px 0 40px calc((100% - 1520px) / 8 * 5);
 
   .account-area {
-    width: 70%;
+    width: 1520px;
     display: flex;
     justify-content: space-between;
-
 
 
     .account-left {
@@ -297,7 +233,7 @@ export default {
       }
 
       ::v-deep .el-textarea__inner {
-        height:50px;
+        height: 115px;
         font-size: 18px;
         padding: 16px 18px;
       }
