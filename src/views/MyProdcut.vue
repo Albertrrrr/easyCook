@@ -1,5 +1,6 @@
 <template>
   <div class="page">
+     <myHeader :isShowCar="false" :isShowSearch="false"></myHeader>
     <div class="page-container" style="margin-top: 40px">
       <div class="left-container">
         <div style="display: flex; flex-direction: column">
@@ -118,8 +119,10 @@
 
 <script>
   import axios from "axios";
+  import myHeader from "@/components/header.vue";
 
   export default {
+    components: {myHeader},
     data() {
       return {
         showModal: false, // 控制弹出窗口显示和隐藏

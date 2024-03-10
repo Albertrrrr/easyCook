@@ -1,5 +1,6 @@
 <template>
   <div class="user">
+    <myHeader :isShowCar="false" :isShowSearch="false"></myHeader>
     <div class="user-container">
       <div class="left-container">
         <div style="display: flex; flex-direction: column">
@@ -141,8 +142,10 @@
 
 <script>
   import axios from "axios";
+  import myHeader from "@/components/header.vue";
 
   export default {
+    components: {myHeader},
     data() {
       return {
         Email: "",
