@@ -72,34 +72,67 @@
             </el-table-column>
           </el-table>
 
-          <div class="pagination">
-            <a href="#" v-for="page in totalPages" :key="page" :class="{ active: page === currentPage }" @click="changePage(page)">{{ page }}</a>
-          </div>
+         <div class="pagination">
+            <a
+              href="#"
+              v-for="page in totalPages"
+              :key="page"
+              :class="{ active: page === currentPage }"
+              @click="changePage(page, $event)">
+              {{ page }}
+            </a>
+        </div>
         </div>
       </div>
     </div>
-    <el-dialog :visible="show" title="SeeMore" width="40%" @close="show = false">
-      <el-form :model="currentRow" label-width="100px">
-        <el-form-item label="OrderID">
-          <el-input v-model="currentRow.id" disabled size="small"></el-input>
-        </el-form-item>
-        <el-form-item label="UserID">
-          <el-input v-model="currentRow.user" disabled size="small"></el-input>
-        </el-form-item>
-        <el-form-item label="TotalCost">
-          <el-input v-model="currentRow.totalCost" disabled size="small"></el-input>
-        </el-form-item>
-        <el-form-item label="CreateTime">
-          <el-date-picker v-model="currentRow.createTime" type="datetime" disabled style="width: 100%"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="Status">
-          <el-input v-model="currentRow.status" disabled size="small"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer">
-        <el-button type="warning" v-if="currentRow.isPaid">delivery</el-button>
-        <el-button type="primary" @click="show = false">close</el-button>
+    <el-dialog :visible="show" title="SeeMore" width="80%" @close="show = false">
+        <el-form :model="currentDetails" label-width="120px">
+    <el-form-item label="OrderID">
+      <el-input v-model="currentDetails.id" disabled size="small"></el-input>
+    </el-form-item>
+    <el-form-item label="UserID">
+      <el-input v-model="currentDetails.user" disabled size="small"></el-input>
+    </el-form-item>
+    <el-form-item label="TotalCost">
+      <el-input v-model="currentDetails.totalCost" disabled size="small"></el-input>
+    </el-form-item>
+    <el-form-item label="CreateTime">
+      <el-input v-model="currentDetails.createTime" disabled size="small"></el-input>
+    </el-form-item>
+    <el-form-item label="Status">
+      <el-input v-model="currentDetails.status" disabled size="small"></el-input>
+    </el-form-item>
+    <el-form-item label="Items" class="order-items-list">
+    <div class="order-item" v-for="item in currentDetails.item" :key="item.id">
+      <img :src="item.product_detail.url || 'default_image_placeholder.png'" class="order-item-image" />
+      <div class="order-item-description">
+        <h3>{{ item.product_detail.name }}</h3>
+        <p>Price: {{ item.product_detail.price }}</p>
+        <p>Subtotal: {{ item.final_price }}</p>
       </div>
+    </div>
+  </el-form-item>
+
+  <el-form-item label="Address">
+    <el-card class="address-card">
+      <div v-if="currentDetails.address" class="address-content">
+        <h3>{{ currentDetails.address.town }}, {{ currentDetails.address.country }}</h3>
+        <p>{{ currentDetails.address.postcode }}, {{ currentDetails.address.house_number_and_street }}</p>
+      </div>
+    </el-card>
+  </el-form-item>
+  </el-form>
+  <div slot="footer">
+      <el-button
+    type="warning"
+    v-if="currentDetails.isPaid && currentDetails.status === 'processing'"
+    @click="handleDelivery(currentDetails.id)">
+    Delivery
+    </el-button>
+    <el-button type="primary" @click="show = false">Close</el-button>
+  </div>
+
+
     </el-dialog>
   </div>
 </template>
@@ -116,6 +149,7 @@ export default {
       pageSize: 5, // 每页显示的订单数量
       currentRow: {},
       show: false,
+      currentDetails:{},
     };
   },
   mounted() {
@@ -146,10 +180,11 @@ export default {
     },
   },
   methods: {
-    changePage(page) {
-      // 切换页码
-      this.currentPage = page;
-    },
+    changePage(page, event) {
+    event.preventDefault(); // 阻止链接默认跳转行为
+    this.currentPage = page;
+    this.fetchOrders(); // 可能需要重新获取当前页的订单
+  },
     fetchOrders() {
       //访问数据库
 
@@ -173,16 +208,304 @@ export default {
           console.error(error);
         });
     },
-    handleSeeMore(row) {
-      console.log(row);
+   handleSeeMore(row) {
+      // Update the method to handle fetching details
       this.currentRow = row;
       this.show = true;
-    },
+
+      const userId = row.user; // Assuming 'user' contains the userId
+      const orderId = row.id;
+
+      // Adjust the URL to include the actual userId and orderId
+      fetch(`http://35.197.196.50:8000/api/users/${userId}/orders/${orderId}/`, {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${localStorage.getItem("token")}`,
+          // Include any other headers your API requires
+        },
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Assuming 'data' is the list to be assigned to 'currentDetails'
+        this.currentDetails = data;
+      })
+      .catch(error => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+    }, // close
+
+    handleDelivery() {
+    const orderId = this.currentDetails.id;// 从当前订单详情获取id
+    fetch("http://35.197.196.50:8000/api/manager/orders/", {
+      method: "PUT",
+      headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${localStorage.getItem("token")}`,
+          // Include any other headers your API requires
+      },
+      body: JSON.stringify({ id: orderId }), // 发送订单id作为请求体
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then(() => {
+      this.$message({
+        message: 'Delivery Successful',
+        type: 'success'
+      });
+    })
+    .catch(error => {
+      this.$message.error(`Error: ${error.message}`);
+    });
   },
+}
+
 };
 </script>
 
 <style lang="scss" scoped>
+.order-items-list {
+  width: 100%;
+  margin: 20px 0;
+}
+.order-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+.order-item-image {
+  width: 100px; /* 调整为适当的大小 */
+  height: auto;
+  margin-right: 20px;
+}
+.order-item-description {
+  flex-grow: 1;
+}
+.order-item-quantity {
+  margin: 10px 0;
+}
+.address-card {
+  margin-top: 20px;
+}
+.address-content {
+  padding: 15px;
+}
+  .carList {
+    flex: 1;
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+    }
+
+    .item {
+      border-bottom: 1px solid rgb(230, 230, 230);
+      padding: 12px 0;
+      cursor: pointer;
+
+      &:last-child {
+        border: none;
+      }
+
+      img {
+        width: 120px;
+        height: 100px;
+        object-fit: contain;
+      }
+
+      .goods {
+        width: calc(100% - 120px);
+
+        .goodsName {
+          font-size: 14px;
+          font-weight: 400;
+        }
+
+        .num {
+          color: rgb(128, 128, 128);
+          font-size: 14px;
+          font-weight: 400;
+
+          .big {
+            color: rgb(26, 26, 26);
+            font-size: 14px;
+            font-weight: 600;
+          }
+
+        }
+
+        .left {
+          flex: 1;
+        }
+      }
+
+      .close {
+        font-size: 30px;
+        color: rgb(204, 204, 204);
+      }
+
+
+    }
+  }
+.card-con {
+        width: 100%;
+        border: 1.15px solid rgb(230, 230, 230);
+        border-radius: 10px;
+        margin-bottom: 39px;
+      }
+
+      .code-con {
+        border: 1.15px solid rgb(230, 230, 230);
+        border-radius: 10px;
+        padding: 23px;
+        display: flex;
+        align-items: center;
+
+        .code-left {
+          color: rgb(26, 26, 26);
+          font-size: 23px;
+          font-weight: 500;
+          margin-right: 27.6px;
+        }
+
+        .code-right {
+          flex: 1;
+          position: relative;
+
+          .code-input {
+            width: 100%;
+            height: 70px;
+            border-radius: 80px;
+            border: 1px solid rgb(230, 230, 230);
+            font-size: 18px;
+            padding: 23px 240px 23px 23px;
+            box-sizing: border-box;
+          }
+
+          .input-btn {
+            position: absolute;
+            width: 226px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgb(51, 51, 51);
+            color: #ffffff;
+            font-size: 18.4px;
+            font-weight: 600;
+            border-radius: 70px;
+            right: 0;
+            top: 0;
+            cursor: pointer;
+          }
+        }
+      }
+
+      .Cart-title {
+        color: rgb(128, 128, 128);
+        font-size: 16px;
+        font-weight: 500;
+        height: 34px;
+        border-bottom: 1px solid rgb(230, 230, 230);
+        padding-left: 23px;
+        display: flex;
+        align-items: center;
+
+      }
+
+      .title-item {
+        text-align: center;
+      }
+
+      .cart-list {
+        padding: 0 23px;
+
+        .cart-list-item {
+          padding: 14px 0;
+          display: flex;
+          align-items: center;
+          border-bottom: 1.15px solid rgb(230, 230, 230);
+
+          &:last-child {
+            border-bottom: unset;
+          }
+
+          img {
+            width: 115px;
+            height: 115px;
+            margin-right: 14px;
+          }
+
+          .product-name, .product-price {
+            color: rgb(26, 26, 26);
+            font-size: 18.4px;
+            width: calc(100% - 689px);
+          }
+
+          .product-price {
+            width: 90px;
+            text-align: center;
+          }
+
+          .all-price {
+            margin-right: 70px;
+          }
+
+          .counter-container {
+            width: 142px;
+            height: 58px;
+            border: 1.15px solid rgb(230, 230, 230);
+            border-radius: 195.5px;
+            padding: 9.2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 70px;
+
+            .counter-item {
+              width: 40px;
+              height: 40px;
+              background: rgb(242, 242, 242);
+              border-radius: 100%;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+
+            .counter-center {
+              background-color: unset;
+              color: rgb(26, 26, 26);
+              font-size: 18.4px;
+            }
+          }
+
+
+          .del-produce {
+            width: 28px;
+            height: 28px;
+            border: 1px solid rgb(230, 230, 230);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 100%;
+
+            background-color: white;
+          }
+        }
+      }
 .page-container {
   display: flex;
   box-sizing: border-box;

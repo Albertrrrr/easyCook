@@ -88,8 +88,15 @@
           </el-dialog>
 
           <div class="pagination">
-            <a href="#" v-for="page in totalPages" :key="page" :class="{ active: page === currentPage }" @click="changePage(page)">{{ page }}</a>
-          </div>
+            <a
+              href="#"
+              v-for="page in totalPages"
+              :key="page"
+              :class="{ active: page === currentPage }"
+              @click="changePage(page, $event)">
+              {{ page }}
+            </a>
+        </div>
         </div>
       </div>
     </div>
@@ -228,10 +235,11 @@
             this.displayedcategory;
           });
       },
-      changePage(page) {
-        // 切换页码
-        this.currentPage = page;
-      },
+      changePage(page, event) {
+      event.preventDefault(); // 阻止链接默认跳转行为
+      this.currentPage = page;
+      this.fetchOrders(); // 可能需要重新获取当前页的订单
+    },
       fetchcategory(id) {
         // alert(id)
         const numericId = parseInt(id);
