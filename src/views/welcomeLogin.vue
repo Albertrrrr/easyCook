@@ -30,7 +30,7 @@
     data() {
       return {
         current: 0,
-        swiperData: [require("@/assets/images/a.png"), require("@/assets/images/b.png"), require("@/assets/images/c.png"), require("@/assets/images/hj.png")]
+        swiperData: ["https://storage.googleapis.com/ithcs/lunbo-01.png", "https://storage.googleapis.com/ithcs/lunbo-02.png", "https://storage.googleapis.com/ithcs/lunbo-03.png"]
       };
     },
     methods: {
@@ -45,7 +45,7 @@
   .swiper {
     width: 1320px;
     height: 70vh;
-    margin: 0 auto;
+    margin: -80px auto auto auto;
     position: relative;
 
     ::v-deep .el-carousel__indicators--horizontal {

@@ -72,7 +72,14 @@ export default {
       // this.$emit('clickShop')
     },
     goIndex() {
-      this.$router.push('/')
+      const currentID = localStorage.getItem('id');
+      console.log("__",currentID)
+      if(currentID === null){
+        this.$router.push('/')
+      }else {
+        this.$router.push('/index')
+      }
+
     },
     goLogin() {
       this.$router.push('/welcomeLogin')
