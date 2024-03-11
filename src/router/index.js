@@ -14,6 +14,12 @@ import CustomerOrder from "@/views/CustomerOrder.vue"
 import MyProdcut from "@/views/MyProdcut.vue"
 import Category from "@/views/Category.vue"
 import {Message} from "element-ui";
+import dash from "@/views/Dash.vue";
+import detailpage from "@/views/detailpage.vue";
+import orderpage from "@/views/orderpage.vue";
+import settingpage from "@/views/settingpage.vue";
+import address from "@/components/address.vue";
+
 
 Vue.use(VueRouter);
 
@@ -96,6 +102,33 @@ const routes = [
     component: Welcome,
         meta: { requiredType: 'manager' },
   },
+  {
+    path: "/address",
+    name: "address",
+    component: address
+   },
+     {
+    path: "/settingpage",
+    name: "settingpage",
+    component: settingpage
+   }, {
+    path: "/orderpage",
+    name: "orderpage",
+    component: orderpage
+   },{
+    path: "/detailpage",
+    name: "detailpage",
+    component: detailpage
+   }, {
+    path: "/dash",
+    name: "dash",
+    component: dash,
+  },{
+    path:'/orderDetails/:orderId',
+    name: 'orderdetail',
+    component: detailpage,
+        props: true
+}
   // 添加任何其他不需要身份验证的路由
 ];
 
