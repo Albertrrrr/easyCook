@@ -111,8 +111,6 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   const requiredType = to.meta.requiredType;
   const userType = localStorage.getItem('type'); // 从localStorage获取用户类型
-  console.log("11",requiredType)
-  console.log("22",userType)
   if (requiredType && userType !== requiredType) {
     next('/login'); // 如果用户类型不匹配，重定向到登录页面
     Message.error('Unsuccessful：' + "Users have not yet logged in, please log in first and then operate.");
