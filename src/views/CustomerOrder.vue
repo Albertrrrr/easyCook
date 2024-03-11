@@ -8,14 +8,38 @@
           <div style="font-size: 23px; font-weight: 700">Cumstomers Order</div>
         </div>
         <div>
-          <!--          <div style="padding-top:10px">-->
-          <!--            <input type="text" id="searchInput" placeholder="搜索" style="height: 20px">-->
-          <!--            <button onclick="search()">搜索</button>-->
-          <!--          </div>-->
+          <div style="padding-top: 10px; display: flex; align-items: center">
+              <el-checkbox-group v-model="checkList">
+                <el-checkbox label="unpaid"></el-checkbox>
+                <el-checkbox label="cancel"></el-checkbox>
+                <el-checkbox label="processing"></el-checkbox>
+                <el-checkbox label="delivered"></el-checkbox>
+                <el-checkbox label="done"></el-checkbox>
+              </el-checkbox-group>
+            </div>
+            <div style="padding-top: 10px; display: flex; align-items: center">
+              <div class="block">
+                <span class="demonstration">From</span>
+                <el-date-picker
+                    v-model="value1"
+                    type="daterange"
+                    range-separator="to"
+                    start-placeholder="StartDate"
+                    end-placeholder="EndDate">
+                </el-date-picker>
+              </div>
+            </div>
+            <el-button @click="submitSearch">Search</el-button>
+          </div>
+        <div>
           <!--这个表能够直接调用API接口从服务器接受数据，然后通过See More 前往发货页面-->
           <el-table :data="displayedOrders" border stripe style="margin-top: 10px">
             <el-table-column label="Order ID" align="center" width="120" prop="id"></el-table-column>
-            <el-table-column label="User ID" align="center" min-width="120" prop="user"></el-table-column>
+            <el-table-column label="User ID" align="center" min-width="120" prop="user">
+              <template slot-scope="scope">
+                {{ scope.row.user || searchId }}
+              </template>
+            </el-table-column>
             <el-table-column label="Total Cost" align="center" min-width="120" prop="totalCost"></el-table-column>
             <el-table-column label="Create Time" align="center" min-width="120" prop="createTime">
               <template slot-scope="scope">
@@ -97,6 +121,7 @@
 <script>
 import myHeader from "@/components/header.vue";
 import managerNavigation from "@/components/managerNavigation.vue"
+import axios from "axios";
 
 export default {
   name: 'CustomerOrder',
@@ -105,6 +130,37 @@ export default {
   },
   data() {
     return {
+      pickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近三个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+            picker.$emit('pick', [start, end]);
+          }
+        }]
+      },
+      value1: '',
+      value2: '',
+      checkList: ['unpaid', 'cancel', 'processing','delivered','done'],
+      searchId:'',
       orders: [], // 原始订单数据
       currentPage: 1, // 当前页码
       pageSize: 5, // 每页显示的订单数量
@@ -146,10 +202,26 @@ export default {
     this.currentPage = page;
     this.fetchOrders(); // 可能需要重新获取当前页的订单
   },
-    fetchOrders() {
+    fetchOrders(id) {
       //访问数据库
+      let url;
+      console.log(id)
+      if (id == '' || id == undefined){
+        url = "http://35.197.196.50:8000/api/manager/orders/";
+      }else {
+        const numericId = parseInt(id);
+        if (!isNaN(numericId) || id === null || id === undefined || id === "") {
+           url = "http://35.197.196.50:8000/api/users/";
+          if (id) {
+            url += `${id}`;
+          }
+          url += '/orders'
+        }else{
 
-      fetch("http://35.197.196.50:8000/api/manager/orders/", {
+        }
+      }
+
+      fetch(url, {
         method: "Get",
         headers: {
           Authorization: `Token ${localStorage.getItem("token")}`,
@@ -199,6 +271,46 @@ export default {
         console.error("There was a problem with the fetch operation:", error);
       });
     }, // close
+
+    formatDates(GMT) {
+      console.log('xx',GMT)
+      const date = new Date(GMT);
+
+      const year = date.getFullYear();
+
+      const month = ('0'+(date.getMonth()+1)).slice(-2);
+
+      const day = ('0'+(date.getDate()+1)).slice(-2);
+
+      return `${year}-${month}-${day}`;
+    },
+
+    submitSearch() {
+      const kk = this.checkList
+      const dataop0 = this.formatDates(this.value1[0])
+      const dataop1 = this.formatDates(this.value1[1])
+      axios.post('http://35.197.196.50:8000/api/manager/orders/', {
+        statuses: kk,
+        start_date: dataop0,
+        end_date: dataop1,
+      },{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${localStorage.getItem("token")}`,
+          // Include any other headers your API requires
+        }
+      })
+          .then(response => {
+            this.orders = response.data.results;
+
+          })
+          .catch(error => {
+            console.log("Error:", error);
+          });
+    },
+
+
+
 
     handleDelivery() {
     const orderId = this.currentDetails.id;// 从当前订单详情获取id
