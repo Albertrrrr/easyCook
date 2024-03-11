@@ -14,8 +14,7 @@
           <span>Shopping cart:</span>
         </div>
         <div class="login btn" @click="goLogin">
-          <span>Sign In</span>/
-          <span>Sign Up</span>
+          <span>User Account</span>
         </div>
       </div>
 
@@ -82,7 +81,7 @@ export default {
 
     },
     goLogin() {
-      this.$router.push('/welcomeLogin')
+      this.$router.push('/dash')
     },
     searchProduct() {
             const trimmedKeyWords = this.keyWords.trim();

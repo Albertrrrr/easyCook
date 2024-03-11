@@ -38,7 +38,9 @@ export default {
     },
     logout() {
       // Implement logout logic here
-      alert('Logged out');
+      localStorage.removeItem('token');
+      localStorage.removeItem('type');
+      this.$router.push('/login');
       this.hideModal();
     }
   }
@@ -48,7 +50,7 @@ export default {
 <style scoped lang="scss">
 .navigation {
 
-  margin-left: 50px;
+  margin-left: 300px;
   margin-right:25px;
   width: 200px;
   height: 280px;

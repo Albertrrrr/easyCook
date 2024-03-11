@@ -100,34 +100,40 @@ const routes = [
     path: '/Welcome',
     name: 'Welcome',
     component: Welcome,
-        meta: { requiredType: 'manager' },
+    meta: { requiredType: 'manager' },
   },
   {
     path: "/address",
     name: "address",
-    component: address
+    component: address,
+    meta: { requiredType: 'user' },
    },
      {
     path: "/settingpage",
     name: "settingpage",
-    component: settingpage
+    component: settingpage,
+    meta: { requiredType: 'user' },
    }, {
     path: "/orderpage",
     name: "orderpage",
-    component: orderpage
+    component: orderpage,
+    meta: { requiredType: 'user' },
    },{
     path: "/detailpage",
     name: "detailpage",
-    component: detailpage
+    component: detailpage,
+    meta: { requiredType: 'user' },
    }, {
     path: "/dash",
     name: "dash",
     component: dash,
+    meta: { requiredType: 'user' },
   },{
     path:'/orderDetails/:orderId',
     name: 'orderdetail',
     component: detailpage,
-        props: true
+    meta: { requiredType: 'user' },
+    props: true
 }
   // 添加任何其他不需要身份验证的路由
 ];

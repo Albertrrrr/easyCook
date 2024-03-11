@@ -6,7 +6,7 @@
     <!-- Main Content -->
     <div class="main-content">
       <!-- Navigation Sidebar -->
-  <navigation-component></navigation-component>
+    <navigation-component></navigation-component>
       <!-- Dashboard Content -->
       <setting-component></setting-component>
 
@@ -44,7 +44,7 @@ export default {
 }
 
 .hi{
-  margin-left: 308px;
+  margin-left: 550px;
   background-color: #ffffff;
   border: 1px solid rgb(230, 230, 230);
   border-radius: 8px;
