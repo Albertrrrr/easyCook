@@ -44,11 +44,15 @@ export default {
     },
   methods: {
     updateUser() {
+        const token = localStorage.getItem('token');
       // Make sure to use `http://` and include the port if necessary
       axios.patch("http://35.197.196.50:8000/api/user/update/", {
+
         username: this.username,
         email: this.email
-      })
+      },{headers: {
+                Authorization: `Token ${token}`,
+              }},)
       .then(response => {
         console.log('User details updated:', response);
         alert('User details updated successfully.');
@@ -60,15 +64,17 @@ export default {
     },
       //---------------------------------
       changePassword() {
+      console.log("toke catch")
       const userId = localStorage.getItem('id');
       const token = localStorage.getItem('token');
+      console.log("pass",this.old_password)
+        console.log("pass",this.new_password)
          axios.put(`35.197.196.50:8000/api/user/${userId}/change-password`, {
-             headers: {
-                Authorization: `Token ${token}`,
-              },
            old_password: this.old_password,
           new_password: this.new_password
-        })
+        },{headers: {
+                Authorization: `Token ${token}`,
+              },})
         .then(response => {
           // 密码更新成功后的操作
           alert("Password changed successfully!");
@@ -90,10 +96,11 @@ export default {
 <style scoped lang="scss">
 
  .container {
-    width: 70%;
+    width: 1075px;
     margin: 30px;
     background-color: #fff;
     float:left;
+
 }
 
 .container .account-settings {
@@ -128,17 +135,18 @@ input[type="email"]{
 }
 
 button {
-    background-color: #4CAF50;
+    background-color: #2c742f;
     color: white;
     padding: 10px 20px;
     border: none;
-    border-radius: 5px;
+    border-radius: 30px;
     cursor: pointer;
     margin-top: 10px;
     margin-bottom: 10px;
 }
 button:hover {
-  background-color: #45a049;
+  background-color: #2c742f;
+
 }
 /*================================= */
 .container .billing-address {
@@ -151,7 +159,7 @@ button:hover {
 }
 
 input[type=address]{
-  width: 80%;
+  width: 50%;
     padding: 10px;
     margin-bottom: 10px;
     margin-right: 30px;
@@ -159,30 +167,6 @@ input[type=address]{
     border-radius: 5px;
 }
 
-.city-post {
-  display: flex;
-
-}
-.post{
-  flex: 1;
-  margin-right: 20px;
-}
-.city label{
-  display: block;
-}
-
-input[type=post]{
-  width: 60%;
-  padding: 10px;
-  margin-bottom: 10px;
-  margin-right: 30px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.bbuttom{
-  margin-bottom: 10px;
-}
 
 /* Specific styles for the 'Change Password' section */
 .container .change-password {
@@ -196,7 +180,7 @@ input[type=post]{
 
 
 input[type="password"] {
-  width: 60%;
+  width: 50%;
   padding: 10px;
   margin-bottom: 10px;
   margin-right: 30px;

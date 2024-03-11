@@ -3,22 +3,25 @@
   <header class="title">
       <h1>Order Details</h1>
       <span>{{ orderDetails.createTime }}</span>
-      <p class="back-to-list"><router-link to="/orderpage" tag="a">Back to List</router-link></p>
+      <p class="back-to-list" ><router-link to="/orderpage" tag="a">Back to List</router-link></p>
   </header>
 
   <div class="billing-and-summary">
       <div class="billing-address">
           <h2>Billing Address</h2>
-          <p>{{orderDetails.name}}</p>
-          <p>{{orderDetails.house_number_and_street}}</p>
-          <p>{{orderDetails.country }}</p>
+          <p class="name">{{orderDetails.name}}</p>
+          <p class="first">{{orderDetails.house_number_and_street}}</p>
+          <p class="first">{{orderDetails.country }}</p>
       </div>
 
       <div class="order-summary">
-        <p>Order ID: {{orderDetails.cardID }}</p>
-        <p>Order State: {{ orderDetails.status }}</p>
-        <h2>Total</h2>
-        <p>${{orderDetails.totalCost}}</p>
+        <p class="order">Order ID: </p>
+        <p> {{orderDetails.cardID }} </p>
+        <p class="order">Order State:</p>
+        <p>      {{ orderDetails.status }}      </p>
+        <button  v-if="orderDetails.status === 'unpaid'" id="cancelOrder">Cancel Order</button>
+        <h2 class="total1">Total</h2>
+        <p class="total">${{orderDetails.totalCost}}</p>
       </div>
   </div>
      </div>
@@ -66,7 +69,23 @@ fetchOrderDetails() {
           .catch(error => {
             console.error("There was an error fetching the order details:", error);
           });
+      },
+      cancelOrder() {
+      try {
+        const token = localStorage.getItem('token');
+        const userId = localStorage.getItem('id');
+           axios.put(`http://35.197.196.50:8000/api/users/${userId}/orders/${this.ID}`,{
+          headers: {
+                Authorization: `Token ${token}`,
+              },
+        })
+        console.log('Order cancelled successfully on the server.');
+           alert("successful")
+      } catch (error) {
+        console.error('Failed to cancel the order on the server.', error);
+        alert("fails")
       }
+    }
     }
   }
 </script>
@@ -94,42 +113,85 @@ fetchOrderDetails() {
 h1 {
     color: #333;
     font-size: 1.5em;
-    margin-bottom: 10px;
+    padding: 10px;
 }
 h2 {
-  color: #333;
+padding: 3px;
+  color: #4CAF50;
+
   font-size: 1.5em;
+  border-bottom: 1px solid rgb(230, 230, 230);
+   border-top: 1px solid rgb(230, 230, 230);
+  color: #666666;
 }
+
 span{
   font-size: 12px;
+    text-align: left;
+  color: #4CAF50;
 }
 
 .back-to-list {
     background: none;
     border: none;
-    color: #2a9d52;
+   color: #4CAF50;
     cursor: pointer;
     text-decoration: none;
 }
 
+.order{
+  color: #666666;
+}
+
+
 .billing-and-summary {
     display: flex;
   //  justify-content: 100px;
-
 }
 
 .billing-address{
-  margin: 20px 0px 0px 20px;
+  margin: 10px 0px 0px 10px;
   border: 1px solid #ddd;
-    padding: 10px;
     border-radius: 8px;
+      line-height: 40px;
+  margin-bottom: 20px;
+  margin-right: 30px;
 }
 
  .order-summary {
     border: 1px solid #ddd;
     padding: 10px;
     border-radius: 8px;
-    margin: 20px 0px 0px 20px;
+    margin: 10px 0px 0px 10px;
     text-align: left;
+     line-height: 35px;
+   margin-bottom: 20px;
+   width: 200px;
+
 }
+
+ button{
+   margin-left: 80px;
+   padding: 5px;
+   background-color: darkgrey;
+ }
+
+ .name{
+     font-size: 20px;
+   margin-top: 10px;
+   padding-left: 10px;
+ }
+ .first{
+      color:#666666;
+     font-size: 13px;
+   padding-left: 10px;
+ }
+ .total{
+  text-align: center;
+ }
+ .total1{
+   text-align: center;
+   color: #4CAF50;
+ }
+
     </style>
