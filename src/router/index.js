@@ -13,29 +13,74 @@ import User from "@/views/User.vue"
 import CustomerOrder from "@/views/CustomerOrder.vue"
 import MyProdcut from "@/views/MyProdcut.vue"
 import Category from "@/views/Category.vue"
+import {Message} from "element-ui";
 
+Vue.use(VueRouter);
 
-Vue.use(VueRouter)
 const routes = [
   {
     path: "/",
     name: "home",
     component: welcomeLogin,
-  }, {
+    meta: { requiredType: 'user' },
+  },
+  {
     path: "/account",
     name: "account",
     component: Account,
-  },
-  {
-    path: "/welcomeLogin",
-    name: "welcomeLogin",
-    component: () => import("@/views/welcomeLogin.vue"),
+    meta: { requiredType: 'user' },
   },
   {
     path: "/shoppingCart",
     name: "ShoppingCart",
     component: ShoppingCart,
+    meta: { requiredType: 'user' },
   },
+  {
+    path: "/index",
+    name: "Index",
+    component: HomeView,
+    meta: { requiredType: 'user' },
+  },
+  {
+    path: '/search/:query',
+    name: 'search',
+    component: Search,
+    props: true,
+    meta: { requiredType: 'user' },
+  },
+  {
+    path: '/category/:CategoryID',
+    name: 'categorySearch', // 注意这里的命名要保持唯一性
+    component: CategorySearch,
+    props: true,
+    meta: { requiredType: 'user' },
+  },
+  {
+    path: '/user',
+    name: 'user',
+    component: User,
+    meta: { requiredType: 'manager' },
+  },
+  {
+    path: '/customerOrder',
+    name: 'CustomerOrder',
+    component: CustomerOrder,
+    meta: { requiredType: 'manager' },
+  },
+  {
+    path: '/myProduct', // 路径小写，保持一致性
+    name: 'MyProduct',
+    component: MyProdcut,
+    meta: { requiredType: 'manager' },
+  },
+  {
+    path: '/category',
+    name: 'Category',
+    component: Category,
+    meta: { requiredType: 'manager' },
+  },
+  // 登录和注册路由不需要限制
   {
     path: "/login",
     name: "Login",
@@ -46,59 +91,34 @@ const routes = [
     name: 'Register',
     component: Register
   },
-  {
-    path: '/index',
-    name: 'Index',
-    component: HomeView
-  },
-  {
-      path: '/search/:query',
-      name: 'search',
-      component: Search,
-      props: true
-  },
-  {
-      path: '/category/:CategoryID',
-      name: 'category',
-      component: CategorySearch,
-      props: true
-  },
-
-  {
+      {
     path: '/Welcome',
     name: 'Welcome',
-    component: Welcome
+    component: Welcome,
+        meta: { requiredType: 'manager' },
   },
+  // 添加任何其他不需要身份验证的路由
+];
 
-{
-  path: '/user',
-      name: 'user',
-    component: User
-},
-{
-  path: '/customerOrder',
-      name: 'CustomerOrder',
-    component: CustomerOrder
-},
-{
-  path: '/myprodcut',
-      name: 'MyProdcut',
-    component: MyProdcut
-},
-  {
-    path: '/category',
-    name: 'Category',
-    component: Category
-  }
-
-]
 const router = new VueRouter({
   routes,
   scrollBehavior() {
-    return {
-      x: 0,
-      y: 0,
-    };
+    return { x: 0, y: 0 };
   },
-})
-export default router
+});
+
+// 添加全局前置守卫进行身份验证
+router.beforeEach((to, from, next) => {
+  const requiredType = to.meta.requiredType;
+  const userType = localStorage.getItem('type'); // 从localStorage获取用户类型
+  console.log("11",requiredType)
+  console.log("22",userType)
+  if (requiredType && userType !== requiredType) {
+    next('/login'); // 如果用户类型不匹配，重定向到登录页面
+    Message.error('Unsuccessful：' + "Users have not yet logged in, please log in first and then operate.");
+  } else {
+    next(); // 用户类型匹配，允许访问
+  }
+});
+
+export default router;

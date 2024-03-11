@@ -54,6 +54,8 @@ export default {
           localStorage.setItem('token', loginResponse.data.token);
           localStorage.setItem('id', loginResponse.data.id);
           localStorage.setItem('username', loginResponse.data.username);
+          localStorage.setItem('type', loginResponse.data.user_type);
+          console.log(localStorage.getItem('type'))
 
           // 在跳转前获取 shoppingCartID
           try {

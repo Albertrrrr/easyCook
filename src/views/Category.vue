@@ -2,49 +2,7 @@
   <div class="page">
     <myHeader :isShowCar="false" :isShowSearch="false"></myHeader>
     <div class="page-container">
-      <div class="left-container">
-        <div style="display: flex; flex-direction: column">
-          <div class="displayflex" style="font-size: 23px; font-weight: 700; height: 40px; margin-top: 10px">Navigation</div>
-          <div class="displayflex" style="margin-top: 12px">
-            <router-link to="/Welcome">
-              <div><img src="../assets/image/order.png" /></div>
-              <div class="navtext">Welcome</div>
-            </router-link>
-          </div>
-          <div class="displayflex" style="margin-top: 12px">
-            <router-link to="/user">
-              <div><img src="../assets/image/order.png" /></div>
-              <div class="navtext">User</div>
-            </router-link>
-          </div>
-          <div class="displayflex">
-            <router-link to="/CustomerOrder">
-              <div><img src="../assets/image/reflush.png" /></div>
-              <div class="navtext">Cumstomers Order</div>
-            </router-link>
-          </div>
-
-          <div class="displayflex">
-            <router-link to="/myprodcut">
-              <div><img src="../assets/image/shop.png" /></div>
-              <div class="navtext">My Product</div>
-            </router-link>
-          </div>
-
-          <div class="displayflex active">
-            <router-link to="/category">
-              <div><img src="../assets/image/system.png" /></div>
-              <div class="navtext">Category</div>
-            </router-link>
-          </div>
-          <div class="displayflex">
-            <router-link to="/Login">
-              <div><img src="../assets/image/outlogin.png" /></div>
-              <div class="navtext">Log-out</div>
-            </router-link>
-          </div>
-        </div>
-      </div>
+      <manager-navigation></manager-navigation>
       <div class="right-container">
         <div style="display: flex; align-items: center; border-bottom: 1px solid #ccc; padding-bottom: 8px">
           <div style="font-size: 23px; font-weight: 700">Category</div>
@@ -106,9 +64,10 @@
 <script>
   import axios from "axios";
   import myHeader from "@/components/header.vue";
+  import managerNavigation from "@/components/managerNavigation.vue";
 
   export default {
-    components: {myHeader},
+    components: {managerNavigation, myHeader},
     data() {
       return {
         showModal: false, // 控制弹出窗口显示和隐藏
@@ -311,6 +270,7 @@
     display: flex;
     box-sizing: border-box;
     padding: 0 0 0 240px;
+    margin-top: -50px;
     .left-container {
       width: 220px;
       border: 1px solid #ccc;
