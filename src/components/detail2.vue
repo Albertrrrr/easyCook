@@ -76,7 +76,6 @@ export default {
 .productname{
   margin-left: 107px;
 }
-
 .price{
 margin-left: 100px;
 }
