@@ -30,7 +30,7 @@
                 </el-date-picker>
               </div>
             </div>
-            <el-button style="margin-bottom: 30px" @click="submitSearch">Search</el-button>
+            <el-button style="color:green; margin-bottom: 30px" @click="submitSearch">Search</el-button>
           </div>
         <div>
           <!--这个表能够直接调用API接口从服务器接受数据，然后通过See More 前往发货页面-->

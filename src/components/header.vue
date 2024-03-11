@@ -13,7 +13,7 @@
             </el-badge>
           <span>Shopping cart:</span>
         </div>
-        <div class="login btn" @click="goLogin">
+        <div class="login btn" @click="goLogin" v-if="!isManager">
           <span>User Account</span>
         </div>
       </div>
@@ -61,6 +61,11 @@ export default {
     }
   }
 },
+   computed: {
+    isManager() {
+      return localStorage.getItem('type') === 'manager';
+    }
+  },
   methods: {
     updateCartCountFromLocalStorage() {
     const count = localStorage.getItem('cartItemCount');
