@@ -8,6 +8,7 @@
           <div style="font-size: 23px; font-weight: 700">Cumstomers Order</div>
         </div>
         <div>
+          <h3>Search </h3>
           <div style="padding-top: 10px; display: flex; align-items: center">
               <el-checkbox-group v-model="checkList">
                 <el-checkbox label="unpaid"></el-checkbox>
@@ -19,7 +20,7 @@
             </div>
             <div style="padding-top: 10px; display: flex; align-items: center">
               <div class="block">
-                <span class="demonstration">From</span>
+                <span class="demonstration">Time select from &nbsp </span>
                 <el-date-picker
                     v-model="value1"
                     type="daterange"
@@ -29,7 +30,7 @@
                 </el-date-picker>
               </div>
             </div>
-            <el-button @click="submitSearch">Search</el-button>
+            <el-button style="margin-bottom: 30px" @click="submitSearch">Search</el-button>
           </div>
         <div>
           <!--这个表能够直接调用API接口从服务器接受数据，然后通过See More 前往发货页面-->
