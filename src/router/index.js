@@ -22,7 +22,6 @@ const routes = [
     path: "/",
     name: "home",
     component: welcomeLogin,
-    meta: { requiredType: 'user' },
   },
   {
     path: "/account",
