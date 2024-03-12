@@ -8,33 +8,28 @@
           <div style="font-size: 23px; font-weight: 700">Cumstomers Order</div>
         </div>
         <div>
-          <h3>Search </h3>
+          <h3>Search</h3>
           <div style="padding-top: 10px; display: flex; align-items: center">
-              <el-checkbox-group v-model="checkList">
-                <el-checkbox label="unpaid"></el-checkbox>
-                <el-checkbox label="cancel"></el-checkbox>
-                <el-checkbox label="processing"></el-checkbox>
-                <el-checkbox label="delivered"></el-checkbox>
-                <el-checkbox label="done"></el-checkbox>
-              </el-checkbox-group>
-            </div>
-            <div style="padding-top: 10px; display: flex; align-items: center">
-              <div class="block">
-                <span class="demonstration">Time select from &nbsp </span>
-                <el-date-picker
-                    v-model="value1"
-                    type="daterange"
-                    range-separator="to"
-                    start-placeholder="StartDate"
-                    end-placeholder="EndDate">
-                </el-date-picker>
-              </div>
-            </div>
-            <el-button style="color:green; margin-bottom: 30px" @click="submitSearch">Search</el-button>
+            <el-checkbox-group v-model="checkList">
+              <el-checkbox label="unpaid"></el-checkbox>
+              <el-checkbox label="cancel"></el-checkbox>
+              <el-checkbox label="processing"></el-checkbox>
+              <el-checkbox label="delivered"></el-checkbox>
+              <el-checkbox label="done"></el-checkbox>
+            </el-checkbox-group>
           </div>
+          <div style="padding-top: 10px; display: flex; align-items: center">
+            <div class="block">
+              <span class="demonstration">Time select from </span>
+              <el-date-picker v-model="value1" type="daterange" range-separator="to" start-placeholder="StartDate" end-placeholder="EndDate" value-format="yyyy-MM-dd">
+              </el-date-picker>
+            </div>
+          </div>
+          <el-button style="color: green; margin-bottom: 30px" @click="submitSearch">Search</el-button>
+        </div>
         <div>
           <!--这个表能够直接调用API接口从服务器接受数据，然后通过See More 前往发货页面-->
-          <el-table :data="displayedOrders" border stripe style="margin-top: 10px">
+          <el-table :data="orders" border stripe style="margin-top: 10px">
             <el-table-column label="Order ID" align="center" width="120" prop="id"></el-table-column>
             <el-table-column label="User ID" align="center" min-width="120" prop="user">
               <template slot-scope="scope">
@@ -55,135 +50,116 @@
             </el-table-column>
           </el-table>
 
-         <div class="pagination">
-            <a
-              href="#"
-              v-for="page in totalPages"
-              :key="page"
-              :class="{ active: page === currentPage }"
-              @click="changePage(page, $event)">
-              {{ page }}
-            </a>
-        </div>
+          <el-pagination :current-page="currentPage" background layout="prev, pager, next" :total="total" style="text-align: center" @current-change="handleCurrentChange">
+          </el-pagination>
         </div>
       </div>
     </div>
+
     <el-dialog :visible="show" title="SeeMore" width="80%" @close="show = false">
-        <el-form :model="currentDetails" label-width="120px">
-    <el-form-item label="OrderID">
-      <el-input v-model="currentDetails.id" disabled size="small"></el-input>
-    </el-form-item>
-    <el-form-item label="UserID">
-      <el-input v-model="currentDetails.user" disabled size="small"></el-input>
-    </el-form-item>
-    <el-form-item label="TotalCost">
-      <el-input v-model="currentDetails.totalCost" disabled size="small"></el-input>
-    </el-form-item>
-    <el-form-item label="CreateTime">
-      <el-input v-model="currentDetails.createTime" disabled size="small"></el-input>
-    </el-form-item>
-    <el-form-item label="Status">
-      <el-input v-model="currentDetails.status" disabled size="small"></el-input>
-    </el-form-item>
-    <el-form-item label="Items" class="order-items-list">
-    <div class="order-item" v-for="item in currentDetails.item" :key="item.id">
-      <img :src="item.product_detail.url || 'default_image_placeholder.png'" class="order-item-image" />
-      <div class="order-item-description">
-        <h3>{{ item.product_detail.name }}</h3>
-        <p>Price: {{ item.product_detail.price }}</p>
-        <p>Subtotal: {{ item.final_price }}</p>
-      </div>
-    </div>
-  </el-form-item>
+      <el-form :model="currentDetails" label-width="120px">
+        <el-form-item label="OrderID">
+          <el-input v-model="currentDetails.id" disabled size="small"></el-input>
+        </el-form-item>
+        <el-form-item label="UserID">
+          <el-input v-model="currentDetails.user" disabled size="small"></el-input>
+        </el-form-item>
+        <el-form-item label="TotalCost">
+          <el-input v-model="currentDetails.totalCost" disabled size="small"></el-input>
+        </el-form-item>
+        <el-form-item label="CreateTime">
+          <el-input v-model="currentDetails.createTime" disabled size="small"></el-input>
+        </el-form-item>
+        <el-form-item label="Status">
+          <el-input v-model="currentDetails.status" disabled size="small"></el-input>
+        </el-form-item>
+        <el-form-item label="Items" class="order-items-list">
+          <div class="order-item" v-for="item in currentDetails.item" :key="item.id">
+            <img :src="item.product_detail.url || 'default_image_placeholder.png'" class="order-item-image" />
+            <div class="order-item-description">
+              <h3>{{ item.product_detail.name }}</h3>
+              <p>Price: {{ item.product_detail.price }}</p>
+              <p>Subtotal: {{ item.final_price }}</p>
+            </div>
+          </div>
+        </el-form-item>
 
-  <el-form-item label="Address">
-    <el-card class="address-card">
-      <div v-if="currentDetails.address" class="address-content">
-        <h3>{{ currentDetails.address.town }}, {{ currentDetails.address.country }}</h3>
-        <p>{{ currentDetails.address.postcode }}, {{ currentDetails.address.house_number_and_street }}</p>
+        <el-form-item label="Address">
+          <el-card class="address-card">
+            <div v-if="currentDetails.address" class="address-content">
+              <h3>{{ currentDetails.address.town }}, {{ currentDetails.address.country }}</h3>
+              <p>{{ currentDetails.address.postcode }}, {{ currentDetails.address.house_number_and_street }}</p>
+            </div>
+          </el-card>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button type="warning" v-if="currentDetails.isPaid && currentDetails.status === 'processing'" @click="handleDelivery(currentDetails.id)"> Delivery </el-button>
+        <el-button type="primary" @click="show = false">Close</el-button>
       </div>
-    </el-card>
-  </el-form-item>
-  </el-form>
-  <div slot="footer">
-      <el-button
-    type="warning"
-    v-if="currentDetails.isPaid && currentDetails.status === 'processing'"
-    @click="handleDelivery(currentDetails.id)">
-    Delivery
-    </el-button>
-    <el-button type="primary" @click="show = false">Close</el-button>
-  </div>
-
     </el-dialog>
   </div>
 </template>
 
 <script>
 import myHeader from "@/components/header.vue";
-import managerNavigation from "@/components/managerNavigation.vue"
+import managerNavigation from "@/components/managerNavigation.vue";
 import axios from "axios";
 
 export default {
-  name: 'CustomerOrder',
+  name: "CustomerOrder",
   components: {
-    myHeader,managerNavigation
+    myHeader,
+    managerNavigation,
   },
   data() {
     return {
       pickerOptions: {
-        shortcuts: [{
-          text: '最近一周',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-            picker.$emit('pick', [start, end]);
-          }
-        }, {
-          text: '最近一个月',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-            picker.$emit('pick', [start, end]);
-          }
-        }, {
-          text: '最近三个月',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-            picker.$emit('pick', [start, end]);
-          }
-        }]
+        shortcuts: [
+          {
+            text: "最近一周",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "最近一个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "最近三个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+        ],
       },
-      value1: '',
-      value2: '',
-      checkList: ['unpaid', 'cancel', 'processing','delivered','done'],
-      searchId:'',
+      value1: "",
+      value2: "",
+      checkList: ["unpaid", "cancel", "processing", "delivered", "done"],
+      searchId: "",
       orders: [], // 原始订单数据
       currentPage: 1, // 当前页码
-      pageSize: 5, // 每页显示的订单数量
+      pageSize: 10, // 每页显示的订单数量
       currentRow: {},
       show: false,
-      currentDetails:{},
+      currentDetails: {},
+      total: 0,
     };
   },
   mounted() {
     this.fetchOrders();
-  },
-  computed: {
-    displayedOrders() {
-      // 根据当前页码和每页数量计算显示的订单
-      const startIndex = (this.currentPage - 1) * this.pageSize;
-      const endIndex = startIndex + this.pageSize;
-      return this.orders.slice(startIndex, endIndex);
-    },
-    totalPages() {
-      // 计算总页数
-      return Math.ceil(this.orders.length / this.pageSize);
-    },
   },
   filters: {
     formatDate: function (value) {
@@ -198,51 +174,34 @@ export default {
     },
   },
   methods: {
-    changePage(page, event) {
-    event.preventDefault(); // 阻止链接默认跳转行为
-    this.currentPage = page;
-    this.fetchOrders(); // 可能需要重新获取当前页的订单
-  },
-    fetchOrders(id) {
-      //访问数据库
-      let url;
-      console.log(id)
-      if (id == '' || id == undefined){
-        url = "http://35.197.196.50:8000/api/manager/orders/";
-      }else {
-        const numericId = parseInt(id);
-        if (!isNaN(numericId) || id === null || id === undefined || id === "") {
-           url = "http://35.197.196.50:8000/api/users/";
-          if (id) {
-            url += `${id}`;
-          }
-          url += '/orders'
-        }else{
-
-        }
+    handleCurrentChange(val) {
+      this.currentPage = val;
+      if (this.checkList.length > 0 || this.value1) {
+        this.submitSearch();
+      } else {
+        this.fetchOrders();
       }
-
-      fetch(url, {
-        method: "Get",
-        headers: {
-          Authorization: `Token ${localStorage.getItem("token")}`,
-        },
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response Error"); //如果请求失败，抛出错误
-          }
-          return response.json();
+    },
+    handleSearch() {
+      this.currentPage = 1;
+      this.fetchOrders();
+    },
+    fetchOrders() {
+      axios
+        .get("http://35.197.196.50:8000/api/manager/orders/", {
+          params: {
+            page: this.currentPage,
+          },
+          headers: {
+            Authorization: `Token ${localStorage.getItem("token")}`,
+          },
         })
-        .then((data) => {
-          // this.orders = data;
-          this.orders = data.results;
-        })
-        .catch((error) => {
-          console.error(error);
+        .then((res) => {
+          this.orders = res.data.results;
+          this.total = res.data.count;
         });
     },
-   handleSeeMore(row) {
+    handleSeeMore(row) {
       // Update the method to handle fetching details
       this.currentRow = row;
       this.show = true;
@@ -258,90 +217,87 @@ export default {
           // Include any other headers your API requires
         },
       })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then(data => {
-        // Assuming 'data' is the list to be assigned to 'currentDetails'
-        this.currentDetails = data;
-      })
-      .catch(error => {
-        console.error("There was a problem with the fetch operation:", error);
-      });
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // Assuming 'data' is the list to be assigned to 'currentDetails'
+          this.currentDetails = data;
+        })
+        .catch((error) => {
+          console.error("There was a problem with the fetch operation:", error);
+        });
     }, // close
 
     formatDates(GMT) {
-      console.log('xx',GMT)
+      console.log("xx", GMT);
       const date = new Date(GMT);
 
       const year = date.getFullYear();
 
-      const month = ('0'+(date.getMonth()+1)).slice(-2);
+      const month = ("0" + (date.getMonth() + 1)).slice(-2);
 
-      const day = ('0'+(date.getDate()+1)).slice(-2);
+      const day = ("0" + (date.getDate() + 1)).slice(-2);
 
       return `${year}-${month}-${day}`;
     },
 
     submitSearch() {
-      const kk = this.checkList
-      const dataop0 = this.formatDates(this.value1[0])
-      const dataop1 = this.formatDates(this.value1[1])
-      axios.post('http://35.197.196.50:8000/api/manager/orders/', {
-        statuses: kk,
-        start_date: dataop0,
-        end_date: dataop1,
-      },{
+      axios
+        .post(
+          `http://35.197.196.50:8000/api/manager/orders/?page=${this.currentPage}`,
+          {
+            statuses: this.checkList,
+            start_date: this.value1 ? this.value1[0] : null,
+            end_date: this.value1 ? this.value1[1] : null,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Token ${localStorage.getItem("token")}`,
+            },
+          }
+        )
+        .then((response) => {
+          this.orders = response.data.results;
+          this.total = response.data.count;
+        })
+        .catch((error) => {
+          console.log("Error:", error);
+        });
+    },
+
+    handleDelivery() {
+      const orderId = this.currentDetails.id; // 从当前订单详情获取id
+      fetch("http://35.197.196.50:8000/api/manager/orders/", {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Token ${localStorage.getItem("token")}`,
           // Include any other headers your API requires
-        }
+        },
+        body: JSON.stringify({ id: orderId }), // 发送订单id作为请求体
       })
-          .then(response => {
-            this.orders = response.data.results;
-
-          })
-          .catch(error => {
-            console.log("Error:", error);
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then(() => {
+          this.$message({
+            message: "Delivery Successful",
+            type: "success",
           });
+        })
+        .catch((error) => {
+          this.$message.error(`Error: ${error.message}`);
+        });
     },
-
-
-
-
-    handleDelivery() {
-    const orderId = this.currentDetails.id;// 从当前订单详情获取id
-    fetch("http://35.197.196.50:8000/api/manager/orders/", {
-      method: "PUT",
-      headers: {
-          "Content-Type": "application/json",
-          Authorization: `Token ${localStorage.getItem("token")}`,
-          // Include any other headers your API requires
-      },
-      body: JSON.stringify({ id: orderId }), // 发送订单id作为请求体
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
-    })
-    .then(() => {
-      this.$message({
-        message: 'Delivery Successful',
-        type: 'success'
-      });
-    })
-    .catch(error => {
-      this.$message.error(`Error: ${error.message}`);
-    });
   },
-}
-
 };
 </script>
 
@@ -392,212 +348,208 @@ export default {
 .address-content {
   padding: 15px;
 }
-  .carList {
-    flex: 1;
-    overflow-y: scroll;
+.carList {
+  flex: 1;
+  overflow-y: scroll;
 
-    &::-webkit-scrollbar {
-      display: none !important;
-      width: 0 !important;
-      height: 0 !important;
+  &::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  .item {
+    border-bottom: 1px solid rgb(230, 230, 230);
+    padding: 12px 0;
+    cursor: pointer;
+
+    &:last-child {
+      border: none;
     }
 
-    .item {
-      border-bottom: 1px solid rgb(230, 230, 230);
-      padding: 12px 0;
-      cursor: pointer;
+    img {
+      width: 120px;
+      height: 100px;
+      object-fit: contain;
+    }
 
-      &:last-child {
-        border: none;
+    .goods {
+      width: calc(100% - 120px);
+
+      .goodsName {
+        font-size: 14px;
+        font-weight: 400;
       }
 
-      img {
-        width: 120px;
-        height: 100px;
-        object-fit: contain;
-      }
+      .num {
+        color: rgb(128, 128, 128);
+        font-size: 14px;
+        font-weight: 400;
 
-      .goods {
-        width: calc(100% - 120px);
-
-        .goodsName {
+        .big {
+          color: rgb(26, 26, 26);
           font-size: 14px;
-          font-weight: 400;
-        }
-
-        .num {
-          color: rgb(128, 128, 128);
-          font-size: 14px;
-          font-weight: 400;
-
-          .big {
-            color: rgb(26, 26, 26);
-            font-size: 14px;
-            font-weight: 600;
-          }
-
-        }
-
-        .left {
-          flex: 1;
+          font-weight: 600;
         }
       }
 
-      .close {
-        font-size: 30px;
-        color: rgb(204, 204, 204);
+      .left {
+        flex: 1;
       }
+    }
 
-
+    .close {
+      font-size: 30px;
+      color: rgb(204, 204, 204);
     }
   }
+}
 .card-con {
-        width: 100%;
-        border: 1.15px solid rgb(230, 230, 230);
-        border-radius: 10px;
-        margin-bottom: 39px;
-      }
+  width: 100%;
+  border: 1.15px solid rgb(230, 230, 230);
+  border-radius: 10px;
+  margin-bottom: 39px;
+}
 
-      .code-con {
-        border: 1.15px solid rgb(230, 230, 230);
-        border-radius: 10px;
-        padding: 23px;
+.code-con {
+  border: 1.15px solid rgb(230, 230, 230);
+  border-radius: 10px;
+  padding: 23px;
+  display: flex;
+  align-items: center;
+
+  .code-left {
+    color: rgb(26, 26, 26);
+    font-size: 23px;
+    font-weight: 500;
+    margin-right: 27.6px;
+  }
+
+  .code-right {
+    flex: 1;
+    position: relative;
+
+    .code-input {
+      width: 100%;
+      height: 70px;
+      border-radius: 80px;
+      border: 1px solid rgb(230, 230, 230);
+      font-size: 18px;
+      padding: 23px 240px 23px 23px;
+      box-sizing: border-box;
+    }
+
+    .input-btn {
+      position: absolute;
+      width: 226px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgb(51, 51, 51);
+      color: #ffffff;
+      font-size: 18.4px;
+      font-weight: 600;
+      border-radius: 70px;
+      right: 0;
+      top: 0;
+      cursor: pointer;
+    }
+  }
+}
+
+.Cart-title {
+  color: rgb(128, 128, 128);
+  font-size: 16px;
+  font-weight: 500;
+  height: 34px;
+  border-bottom: 1px solid rgb(230, 230, 230);
+  padding-left: 23px;
+  display: flex;
+  align-items: center;
+}
+
+.title-item {
+  text-align: center;
+}
+
+.cart-list {
+  padding: 0 23px;
+
+  .cart-list-item {
+    padding: 14px 0;
+    display: flex;
+    align-items: center;
+    border-bottom: 1.15px solid rgb(230, 230, 230);
+
+    &:last-child {
+      border-bottom: unset;
+    }
+
+    img {
+      width: 115px;
+      height: 115px;
+      margin-right: 14px;
+    }
+
+    .product-name,
+    .product-price {
+      color: rgb(26, 26, 26);
+      font-size: 18.4px;
+      width: calc(100% - 689px);
+    }
+
+    .product-price {
+      width: 90px;
+      text-align: center;
+    }
+
+    .all-price {
+      margin-right: 70px;
+    }
+
+    .counter-container {
+      width: 142px;
+      height: 58px;
+      border: 1.15px solid rgb(230, 230, 230);
+      border-radius: 195.5px;
+      padding: 9.2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 70px;
+
+      .counter-item {
+        width: 40px;
+        height: 40px;
+        background: rgb(242, 242, 242);
+        border-radius: 100%;
+        cursor: pointer;
         display: flex;
         align-items: center;
-
-        .code-left {
-          color: rgb(26, 26, 26);
-          font-size: 23px;
-          font-weight: 500;
-          margin-right: 27.6px;
-        }
-
-        .code-right {
-          flex: 1;
-          position: relative;
-
-          .code-input {
-            width: 100%;
-            height: 70px;
-            border-radius: 80px;
-            border: 1px solid rgb(230, 230, 230);
-            font-size: 18px;
-            padding: 23px 240px 23px 23px;
-            box-sizing: border-box;
-          }
-
-          .input-btn {
-            position: absolute;
-            width: 226px;
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgb(51, 51, 51);
-            color: #ffffff;
-            font-size: 18.4px;
-            font-weight: 600;
-            border-radius: 70px;
-            right: 0;
-            top: 0;
-            cursor: pointer;
-          }
-        }
+        justify-content: center;
       }
 
-      .Cart-title {
-        color: rgb(128, 128, 128);
-        font-size: 16px;
-        font-weight: 500;
-        height: 34px;
-        border-bottom: 1px solid rgb(230, 230, 230);
-        padding-left: 23px;
-        display: flex;
-        align-items: center;
-
+      .counter-center {
+        background-color: unset;
+        color: rgb(26, 26, 26);
+        font-size: 18.4px;
       }
+    }
 
-      .title-item {
-        text-align: center;
-      }
+    .del-produce {
+      width: 28px;
+      height: 28px;
+      border: 1px solid rgb(230, 230, 230);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 100%;
 
-      .cart-list {
-        padding: 0 23px;
-
-        .cart-list-item {
-          padding: 14px 0;
-          display: flex;
-          align-items: center;
-          border-bottom: 1.15px solid rgb(230, 230, 230);
-
-          &:last-child {
-            border-bottom: unset;
-          }
-
-          img {
-            width: 115px;
-            height: 115px;
-            margin-right: 14px;
-          }
-
-          .product-name, .product-price {
-            color: rgb(26, 26, 26);
-            font-size: 18.4px;
-            width: calc(100% - 689px);
-          }
-
-          .product-price {
-            width: 90px;
-            text-align: center;
-          }
-
-          .all-price {
-            margin-right: 70px;
-          }
-
-          .counter-container {
-            width: 142px;
-            height: 58px;
-            border: 1.15px solid rgb(230, 230, 230);
-            border-radius: 195.5px;
-            padding: 9.2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 70px;
-
-            .counter-item {
-              width: 40px;
-              height: 40px;
-              background: rgb(242, 242, 242);
-              border-radius: 100%;
-              cursor: pointer;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-            }
-
-            .counter-center {
-              background-color: unset;
-              color: rgb(26, 26, 26);
-              font-size: 18.4px;
-            }
-          }
-
-
-          .del-produce {
-            width: 28px;
-            height: 28px;
-            border: 1px solid rgb(230, 230, 230);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 100%;
-
-            background-color: white;
-          }
-        }
-      }
+      background-color: white;
+    }
+  }
+}
 .page-container {
   display: flex;
   box-sizing: border-box;
