@@ -55,7 +55,6 @@ export default {
           localStorage.setItem('id', loginResponse.data.id);
           localStorage.setItem('username', loginResponse.data.username);
           localStorage.setItem('type', loginResponse.data.user_type);
-          console.log(localStorage.getItem('type'))
 
           // 在跳转前获取 shoppingCartID
           try {
@@ -91,7 +90,7 @@ export default {
         }
       } catch (error) {
         // 使用 Element UI 的 Message 组件显示错误消息
-        Message.error('Unsuccessful：' + error.response.data.detail);
+        Message.error('Unsuccessful：Please check the password, email and login type.' );
       }
     }
   }

@@ -8,8 +8,8 @@
           <div style="font-size: 23px; font-weight: 700">Welcome page</div>
         </div>
         <div>
-          <h1>Welcome</h1>
-          <h2></h2>
+          <h1>Welcome {{ username }} !</h1>
+          <h2>Hope everything goes well.</h2>
         </div>
       </div>
     </div>
@@ -68,7 +68,12 @@ import managerNavigation from "@/components/managerNavigation.vue";
 import myHeader from "@/components/header.vue";
 
 export default defineComponent({
-  components: {myHeader, managerNavigation}
+  components: {myHeader, managerNavigation},
+  data(){
+    return {
+       username:localStorage.getItem("username"),
+    }
+  }
 })
 </script>
 
