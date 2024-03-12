@@ -12,7 +12,7 @@
 
 
     </div>
-    <div class="hi">    <address-component> </address-component>   </div>
+    <div class="hi"> <address-component> </address-component>   </div>
   </div>
 </template>
 

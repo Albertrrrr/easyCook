@@ -10,13 +10,16 @@
             <el-col :span="8" v-for="address in addresses" :key="address.id">
               <address-card :address="address" :isSelected="selectedAddressId === address.id" @click.native="selectAddress(address.id)"></address-card>
             </el-col>
-            <el-col :span="8">
-            <el-card class="add-new-card">
+             <el-col :span="8">
+            <el-card class="add-new-card" style="margin-top: 20px">
               <i class="el-icon-plus add-icon"  @click="showAddModal"></i>
             </el-card>
           </el-col>
           </el-row>
-          <add-address-modal :visible.sync="showModal" @add="addNewAddress"></add-address-modal>
+
+
+          <add-address-modal :visible.sync="showModalT" @add="addNewAddress"></add-address-modal>
+          <UDAddressModal :visible.sync="showModal" :selectedAddress="selectedAddressId" @refreshAddresses="fetchAddresses" ></UDAddressModal>
         </div>
     </div>
   </div>
@@ -28,14 +31,16 @@
 <script>
 import SecondaryMenu from '@/components/SecondaryMenu.vue'
 import AddressCard from '@/components/AddressCard.vue';
-import AddAddressModal from '@/components/AddAddressModal.vue';
 import axios from "axios";
+import UDAddressModal from "@/components/UDAddressModal.vue";
+import AddAddressModal from "@/components/AddAddressModal.vue";
 
 export default {
   data() {
     return{
       addresses: [],
       showModal: false,
+      showModalT: false,
       showModalOrder: false,
       selectedAddressId: null, // 新增
       radio:null,
@@ -52,10 +57,9 @@ export default {
   methods: {
     selectAddress(id) {
     this.selectedAddressId = id;
-    },
-    showAddModal() {
     this.showModal = true;
     },
+
     async fetchAddresses() {
       const userId = localStorage.getItem('id');
       const token = localStorage.getItem('token');
@@ -70,6 +74,7 @@ export default {
         console.error('There was an error fetching the addresses:', error);
       }
     },
+
     async addNewAddress(newAddress) {
         const userId = localStorage.getItem('id');
         const token = localStorage.getItem('token');
@@ -91,108 +96,19 @@ export default {
           console.error('There was an error adding the address:', error);
         }
     }, // close
-    async fetchShoppingCartItems() {
-      const shoppingCartID = localStorage.getItem('shoppingCartID');
-      if (!shoppingCartID) {
-        console.error('Shopping Cart ID not found');
-        return;
-      }
+    showAddModal() {
+    this.showModalT = true;
+    },
 
-      try {
-        const response = await axios.get(`http://35.197.196.50:8000/api/shopping-cart-items/cart/${shoppingCartID}/`, {
-          headers: { 'Authorization': `Token ${localStorage.getItem('token')}` },
-        });
-        this.items = response.data.items;
-        this.totalFinalPrice = response.data.total_final_price;
-      } catch (error) {
-        console.error('Error fetching shopping cart items:', error);
-      }
-    },// close
-    async createOrder() {
-    try {
-      const response = await axios.post(`http://35.197.196.50:8000/api/users/create/${this.userId}/orders/`, {
-        address_id: this.selectedAddressId
-      }, {
-        headers: {
-          Authorization: `Token ${this.token}`,
-        }
-      });
-
-      if (response.status === 201) {
-        this.orderCreated = true;
-        this.payID = response.data.id; // 假设返回的数据中包含 payID
-        this.showModalOrder = true; // 显示模态框
-
-      } else {
-        this.$message.error('Failed to generate order，Please check address options');
-      }
-    } catch (error) {
-      console.error('Error creating order:', error);
-      this.$message.error('Failed to generate order，Please check address options');
-    }
-  },
-  async payOrder() {
-    if (!this.payID) return;
-
-    try {
-      const response = await axios.get(`http://35.197.196.50:8000/api/alipay/${this.userId}/${this.payID}/`, {
-         headers: {
-          Authorization: `Token ${this.token}`,
-        }
-      });
-      if (response.status === 200) {
-        this.paymentUrl = response.data.pay_url;
-        window.open(this.paymentUrl, '_blank'); // 打开支付页面
-        this.checkPaymentStatus();
-      }
-    } catch (error) {
-      console.error('Error initiating payment:', error);
-    }
-  },// close
-      async checkPaymentStatus() {
-      let attempts = 0; // 初始化尝试次数
-      const maxAttempts = 30; // 最大尝试次数
-
-      const checkInterval = setInterval(async () => {
-        attempts++; // 每次检查时尝试次数加1
-
-        // 如果达到最大尝试次数，清除定时器并停止检查
-        if (attempts > maxAttempts) {
-          clearInterval(checkInterval);
-          this.$message.error('Check payment status timeout, please confirm payment result manually.');
-          return;
-        }
-
-        try {
-          const response = await axios.get(`http://35.197.196.50:8000/api/users/${this.userId}/orders/${this.payID}/`, {
-            headers: {
-              Authorization: `Token ${this.token}`,
-            }
-          });
-
-          // 如果支付成功
-          if (response.data.isPaid) {
-            clearInterval(checkInterval); // 停止检查
-            this.$message.success('Payment Successful');
-            this.showModalOrder = false; // 关闭模态框
-          }
-          // 如果还未支付成功，定时器将继续，直到达到最大尝试次数
-        } catch (error) {
-          console.error('Error checking payment status:', error);
-          clearInterval(checkInterval);
-          this.$message.error('Error checking payment status.');
-        }
-      }, 3000); // 设置为每3秒检查一次
-    },// close
 
   },
   components: {
-    AddressCard,
     AddAddressModal,
+    AddressCard,
+    UDAddressModal,
   },
   created() {
     this.fetchAddresses();
-    this.fetchShoppingCartItems();
   },
 
 }
