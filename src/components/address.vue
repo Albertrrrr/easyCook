@@ -98,6 +98,7 @@ export default {
     }, // close
     showAddModal() {
     this.showModalT = true;
+    this.showModal = false;
     },
 
 

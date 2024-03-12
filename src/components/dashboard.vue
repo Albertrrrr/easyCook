@@ -3,7 +3,8 @@
   <section class="customer-welcome">
     <h3>Customer</h3>
     <p>Welcome!</p>
-    <p>"This is the welcome page, you can see the list on the left side, hope you have a good experience with our shop."</p>
+    <p>Hope you have a good experience with our shop!</p>
+
   </section>
 
 </main>

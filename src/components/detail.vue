@@ -1,9 +1,9 @@
 <template>
   <div class="order-details-container">
-  <header class="title">
-      <h1>Order Details </h1>
-      <p class="back-to-list" ><router-link to="/orderpage" tag="a">Back to List</router-link></p>
-  </header>
+    <div class="header-container">
+    <h1>Order Details</h1>
+    <p class="back-to-list"><router-link to="/orderpage" tag="a">Back to List</router-link></p>
+  </div>
 
   <div class="cards-container">
        <div class="card billing-address">
@@ -206,6 +206,12 @@ cancel() {
 </script>
 
 <style scoped lang="scss">
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .cards-container {
     display: flex;
     flex-wrap: wrap;
