@@ -7,14 +7,14 @@
     <div class="main-content">
       <!-- Navigation Sidebar -->
 
-   <navigation-component></navigation-component>
+    <navigation-component></navigation-component>
       <!-- Dashboard Content -->
-      <detail-component></detail-component>
 
+
+      <detail-component></detail-component>
     </div>
     <div class="main2">
-
-            <detail2-component> </detail2-component>
+          <detail2-component style="margin-left: 250px"> </detail2-component>
     </div>
 
   </div>
@@ -32,7 +32,7 @@ export default {
     'header-component': HeaderComponent,
     'navigation-component':NavigationComponent,
     'detail-component': DetailComponent,
-        'detail2-component': Detail2Component
+    'detail2-component': Detail2Component
   }
 }
 </script>

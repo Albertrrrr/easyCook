@@ -1,27 +1,29 @@
 <template>
-    <div class="product-list">
-      <h1 class="hh">Product</h1>
-      <table class="order-history">
-            <tr class="table">
-              <th class="product">Product</th>
-                <th class="name">Name</th>
-                <th class="price1">Price</th>
-                <th class="price2">Quantity</th>
-                <th>Final_price</th>
-            </tr>
-      </table>
-      <tbody>
-            <!-- 使用 v-for 来循环 orders 数组中的每个订单对象 -->
-            <tr class="product-item" v-for="item in orders" :key="item.id">
-        <!-- Use item properties, make sure these are present in the objects -->
-        <img :src="item.url" alt="Product Image" class="imgg"> <!-- 添加图片 -->
-        <th class="productname">{{ item.name }}</th>
-        <th class="price">{{ item.price }}</th>
-        <th class="qua">{{ item.quantity }}</th>
-        <th class="last">{{ item.final_price }}</th>
-              </tr>
-       </tbody>
-    </div>
+   <div class="card-con">
+            <ul class="Cart-title" style="margin-left: 100px">
+              <li class="title-item t1">NAME</li>
+              <li class="title-item t2">PRICE</li>
+              <li class="title-item t3">QUANTITY</li>
+              <li class="title-item t4">SUBTOTAL</li>
+              <li class="t2"></li>
+            </ul>
+            <div class="item" v-for="item in orders" :key="item.id">
+            <ul class="cart-list">
+              <li class="cart-list-item">
+                    <img :src="item.url" alt="">
+                    <p class="product-name">{{ item.name }}</p>
+                    <p class="product-price">${{ item.price }}</p>
+                      <div class="counter-container">
+                        <div class="counter-item counter-center">
+                          {{ item.quantity }}
+                        </div>
+                      </div>
+                    <p class="product-price all-price" style="font-weight: 500;">${{ item.final_price }}</p>
+
+              </li>
+            </ul>
+            </div>
+   </div>
 </template>
 
 <script>
@@ -66,92 +68,81 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
-.hh{
-  padding-left: 10px;
-  padding-bottom: 10px;
-  text-align: center;
+.card-con {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.productname{
-  margin-left: 107px;
-}
-.price{
-margin-left: 100px;
-}
-
-.qua{
-margin-left: 160px;
+.Cart-title {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
 }
 
-.product-list {
-    border: 1px solid #ddd;
-  padding-top: 15px;
-    margin-top: 30px;
-    width: 1000px;
-    height: 500px
-}
-.product{
-      margin-left: 30px;
-}
-.price1{
-      padding: 30px 0px 17px 0px;
+.title-item {
+  font-weight: bold;
+  padding-left: 15px; /* 添加左边距对齐 */
 }
 
-.product-item {
-    display: flex;
-    align-items: center ;
-    //justify-content: space-between;
-    margin-bottom: 10px;
-   border-bottom: 1px solid #ddd;
-    text-align: center;
-  font-size: 16px;
-  width: 1000px;
+/* 设置每个title-item的基础宽度，以便与cart-list-item对应的子元素宽度相匹配 */
+.t1 { width: 50%; text-align: left; } /* 产品名称占据更多的空间 */
+.t2 { width: 12%; } /*  价格 */
+.t3 { width: 15%; } /* 数量 */
+.t4 { width: 14%; } /* 小计 */
+.t2:last-child { flex-grow: 1; } /* 如果有额外的元素，则让它填充剩余空间 */
+
+.cart-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-
-.product-item img {
-               width: 100px;
-            height: 100px;
-
+.cart-list-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
 }
 
-
-.tr{
-
-;  text-align: center;
-    align-items: center;
-  font-size: 13px;
+.cart-list-item img {
+  width: 80px;
+  height: auto;
+  margin-right: 15px;
+  flex: none; /* 确保图片不伸缩，固定大小 */
 }
 
-
-
-.span{
-  text-align: center;
-    align-items: center;
-  font-size: 13px;
-}
-
-.order-history th,
-{
+.product-name {
+  width: 50%; /* 和.t1宽度相同 */
   text-align: left;
-    padding: 30px 10px 17px 0px;
-  border-bottom: 1px solid #eaeaea;
-  vertical-align: middle;
-  background-color: #f9f9f9;
-  color: #666;
-  font-weight: normal;
-  font-size: 20px;
-  width: 950px;
-
 }
 
-.last{
-  margin-left: 195px;
+.product-price {
+  width: 15%; /* 和.t2宽度相同 */
 }
 
-.order-history td {
-
+.counter-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* 计数器左对齐 */
+  width: 15%; /* 和.t3宽度相同 */
 }
+
+.counter-item {
+  /* 样式保持不变，可能需要调整宽度来适配counter-container */
+}
+
+.all-price {
+  width: 20%; /* 和.t4宽度相同 */
+  text-align: left;
+  font-weight: 500;
+}
+
+
 
 </style>
