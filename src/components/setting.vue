@@ -46,7 +46,7 @@ export default {
     updateUser() {
         const token = localStorage.getItem('token');
       // Make sure to use `http://` and include the port if necessary
-      axios.patch("http://35.197.196.50:8000/api/user/update/", {
+      axios.patch("http://34.147.186.30:8000/api/user/update/", {
 
         username: this.username,
         email: this.email
@@ -69,7 +69,7 @@ export default {
       const token = localStorage.getItem('token');
       console.log("pass",this.old_password)
         console.log("pass",this.new_password)
-         axios.put(`35.197.196.50:8000/api/user/${userId}/change-password`, {
+         axios.put(`34.147.186.30:8000/api/user/${userId}/change-password`, {
            old_password: this.old_password,
           new_password: this.new_password
         },{headers: {

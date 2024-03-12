@@ -124,7 +124,7 @@
       },
       saveChanges(id) {
         if (id) {
-          fetch("http://35.197.196.50:8000/api/categories/" + `${id}/`, {
+          fetch("http://34.147.186.30:8000/api/categories/" + `${id}/`, {
             method: "Put",
             headers: {
               Authorization: `Token ${localStorage.getItem("token")}`,
@@ -146,7 +146,7 @@
               this.fetchcategory();
             });
         } else {
-          fetch("http://35.197.196.50:8000/api/categories/", {
+          fetch("http://34.147.186.30:8000/api/categories/", {
             method: "Post",
             headers: {
               Authorization: `Token ${localStorage.getItem("token")}`,
@@ -173,7 +173,7 @@
         this.showModal = false; // 关闭弹出窗口
       },
       deleteCategory(id) {
-        fetch("http://35.197.196.50:8000/api/categories/" + `${id}/`, {
+        fetch("http://34.147.186.30:8000/api/categories/" + `${id}/`, {
           method: "Delete",
           headers: {
             Authorization: `Token ${localStorage.getItem("token")}`
@@ -203,7 +203,7 @@
         // alert(id)
         const numericId = parseInt(id);
         if (!isNaN(numericId) || id === null || id === undefined || id === "") {
-          let url = "http://35.197.196.50:8000/api/categories/";
+          let url = "http://34.147.186.30:8000/api/categories/";
           if (id) {
             url += `${id}`;
           }
@@ -234,7 +234,7 @@
         } else {
           try {
             const categoryData = axios.post(
-              `http://35.197.196.50:8000/api/search/categories/`,
+              `http://34.147.186.30:8000/api/search/categories/`,
               {
                 name: id
               },

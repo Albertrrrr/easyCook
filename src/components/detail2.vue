@@ -44,7 +44,7 @@ export default {
         const userId = localStorage.getItem('id');
         const token = localStorage.getItem('token');
         // Replace with actual API URL
-        axios.get(`http://35.197.196.50:8000/api/users/${userId}/orders/${this.ID}`,{
+        axios.get(`http://34.147.186.30:8000/api/users/${userId}/orders/${this.ID}`,{
           headers: {
                 Authorization: `Token ${token}`,
               },

@@ -188,7 +188,7 @@ export default {
     },
     fetchOrders() {
       axios
-        .get("http://35.197.196.50:8000/api/manager/orders/", {
+        .get("http://34.147.186.30:8000/api/manager/orders/", {
           params: {
             page: this.currentPage,
           },
@@ -210,7 +210,7 @@ export default {
       const orderId = row.id;
 
       // Adjust the URL to include the actual userId and orderId
-      fetch(`http://35.197.196.50:8000/api/users/${userId}/orders/${orderId}/`, {
+      fetch(`http://34.147.186.30:8000/api/users/${userId}/orders/${orderId}/`, {
         method: "GET",
         headers: {
           Authorization: `Token ${localStorage.getItem("token")}`,
@@ -248,7 +248,7 @@ export default {
     submitSearch() {
       axios
         .post(
-          `http://35.197.196.50:8000/api/manager/orders/?page=${this.currentPage}`,
+          `http://34.147.186.30:8000/api/manager/orders/?page=${this.currentPage}`,
           {
             statuses: this.checkList,
             start_date: this.value1 ? this.value1[0] : null,
@@ -272,7 +272,7 @@ export default {
 
     handleDelivery() {
       const orderId = this.currentDetails.id; // 从当前订单详情获取id
-      fetch("http://35.197.196.50:8000/api/manager/orders/", {
+      fetch("http://34.147.186.30:8000/api/manager/orders/", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

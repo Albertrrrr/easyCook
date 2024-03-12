@@ -117,7 +117,7 @@
       async changeEmail() {
         try {
           const response = await axios.patch(
-            `http://35.197.196.50:8000/api/user/update/`,
+            `http://34.147.186.30:8000/api/user/update/`,
             {
               email: this.Email,
               user: this.newUsername
@@ -141,7 +141,7 @@
         try {
           const response = await axios
             .put(
-              `http://35.197.196.50:8000/api/user/${localStorage.getItem("id")}/change-password/`,
+              `http://34.147.186.30:8000/api/user/${localStorage.getItem("id")}/change-password/`,
               {
                 old_password: this.currentPassword,
                 new_password: this.newPassword

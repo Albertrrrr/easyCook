@@ -64,7 +64,7 @@ export default {
       }
 
       try {
-        const response = await axios.get(`http://35.197.196.50:8000/api/shopping-cart-items/cart/${shoppingCartID}/`, {
+        const response = await axios.get(`http://34.147.186.30:8000/api/shopping-cart-items/cart/${shoppingCartID}/`, {
           headers: { 'Authorization': `Token ${localStorage.getItem('token')}` },
         });
         this.items = response.data.items;
@@ -83,7 +83,7 @@ export default {
     },
     async deleteItem(id) {
       try {
-        const response = await axios.delete(`http://35.197.196.50:8000/api/shopping-cart-items/item/${id}/`, {
+        const response = await axios.delete(`http://34.147.186.30:8000/api/shopping-cart-items/item/${id}/`, {
           headers: { 'Authorization': `Token ${localStorage.getItem('token')}` },
         });
 

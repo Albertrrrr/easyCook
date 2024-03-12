@@ -79,7 +79,7 @@ export default {
         }
         try {
           // 使用currentPage进行分页请求
-          const response = await axios.get('http://35.197.196.50:8000/api/search/products/', {
+          const response = await axios.get('http://34.147.186.30:8000/api/search/products/', {
             params: { category: this.CategoryID, page: this.currentPage },
             headers: { 'Authorization': `Token ${token}` },
           });

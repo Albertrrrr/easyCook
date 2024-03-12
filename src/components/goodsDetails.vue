@@ -65,7 +65,7 @@ export default {
                 return;
             }
             try {
-                const response = await axios.get(`http://35.197.196.50:8000/api/products/${productId}/`, {
+                const response = await axios.get(`http://34.147.186.30:8000/api/products/${productId}/`, {
                     headers: { 'Authorization': `Token ${token}` },
                 });
                 this.productDetails = response.data;
@@ -87,7 +87,7 @@ export default {
               return;
           }
           try {
-              const response = await axios.post(`http://35.197.196.50:8000/api/shopping-cart-items/cart/${cartID}/`, {
+              const response = await axios.post(`http://34.147.186.30:8000/api/shopping-cart-items/cart/${cartID}/`, {
                   cartID: cartID,
                   productID: this.selectedProductId.toString(),
                   quantity: this.quantity.toString()

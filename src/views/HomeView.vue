@@ -86,7 +86,7 @@ export default {
         return;
       }
       try {
-        const response = await axios.get('http://35.197.196.50:8000/api/products/', {
+        const response = await axios.get('http://34.147.186.30:8000/api/products/', {
           headers: { 'Authorization': `Token ${token}` },
         });
         this.products = response.data.results;
@@ -111,7 +111,7 @@ export default {
         return;
       }
       try {
-        const response = await axios.get('http://35.197.196.50:8000/api/categories/', {
+        const response = await axios.get('http://34.147.186.30:8000/api/categories/', {
           headers: { 'Authorization': `Token ${token}` },
         });
         this.categories = response.data;

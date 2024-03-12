@@ -92,7 +92,7 @@ export default {
     // 根据地址ID从API获取地址详情
     async fetchAddressDetails(addressId) {
       try {
-        const response = await axios.get(`http://35.197.196.50:8000/api/users/${this.userId}/addresses/${addressId}`, {
+        const response = await axios.get(`http://34.147.186.30:8000/api/users/${this.userId}/addresses/${addressId}`, {
           headers: {
             Authorization: `Token ${this.token}`,
           },
@@ -110,7 +110,7 @@ export default {
       const userId = localStorage.getItem('id'); // 或其他方式获取userId
       const addressId = this.selectedAddress; // 从prop获取地址ID
       try {
-        const response = await axios.put(`http://35.197.196.50:8000/api/users/${userId}/addresses/${addressId}/`, this.newAddress, {
+        const response = await axios.put(`http://34.147.186.30:8000/api/users/${userId}/addresses/${addressId}/`, this.newAddress, {
           headers: {
             Authorization: `Token ${this.token}`, // 确保这里的token是有效的
             'Content-Type': 'application/json',
@@ -140,7 +140,7 @@ export default {
       const userId = localStorage.getItem('id'); // 或其他方式获取userId
       const addressId = this.selectedAddress; // 从prop获取地址ID
       try {
-        const response = await axios.delete(`http://35.197.196.50:8000/api/users/${userId}/addresses/${addressId}/`, {
+        const response = await axios.delete(`http://34.147.186.30:8000/api/users/${userId}/addresses/${addressId}/`, {
           headers: {
             Authorization: `Token ${this.token}`, // 确保这里的token是有效的
             'Content-Type': 'application/json',

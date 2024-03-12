@@ -75,7 +75,7 @@ export default {
         const userId = localStorage.getItem('id');
         const token = localStorage.getItem('token');
         // Replace with actual API URL
-        axios.get(`http://35.197.196.50:8000/api/users/${userId}/orders/${this.ID}`,{
+        axios.get(`http://34.147.186.30:8000/api/users/${userId}/orders/${this.ID}`,{
           headers: {
                 Authorization: `Token ${token}`,
               },
@@ -105,7 +105,7 @@ export default {
   try {
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('id');
-    axios.post(`http://35.197.196.50:8000/api/users/${userId}/orders/${this.ID}/`,{}, {
+    axios.post(`http://34.147.186.30:8000/api/users/${userId}/orders/${this.ID}/`,{}, {
       headers: {
             Authorization: `Token ${token}`,
           },
@@ -127,7 +127,7 @@ cancel() {
   try {
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('id');
-    axios.put(`http://35.197.196.50:8000/api/users/${userId}/orders/${this.ID}/`, {},{
+    axios.put(`http://34.147.186.30:8000/api/users/${userId}/orders/${this.ID}/`, {},{
       headers: {
             Authorization: `Token ${token}`,
           },
@@ -150,7 +150,7 @@ cancel() {
 
     try {
       const userId = localStorage.getItem('id');
-      const response = await axios.get(`http://35.197.196.50:8000/api/alipay/${userId}/${this.ID}/`, {
+      const response = await axios.get(`http://34.147.186.30:8000/api/alipay/${userId}/${this.ID}/`, {
          headers: {
           Authorization: `Token ${this.token}`,
         }
@@ -179,7 +179,7 @@ cancel() {
         }
 
         try {
-          const response = await axios.get(`http://35.197.196.50:8000/api/users/${userId}/orders/${this.ID}/`, {
+          const response = await axios.get(`http://34.147.186.30:8000/api/users/${userId}/orders/${this.ID}/`, {
             headers: {
               Authorization: `Token ${this.token}`,
             }

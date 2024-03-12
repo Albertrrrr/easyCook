@@ -137,7 +137,7 @@ export default {
     },
     saveChanges(id) {
       if (id) {
-        fetch("http://35.197.196.50:8000/api/products/" + `${id}/`, {
+        fetch("http://34.147.186.30:8000/api/products/" + `${id}/`, {
           method: "Put",
           headers: {
             Authorization: `Token ${localStorage.getItem("token")}`,
@@ -160,7 +160,7 @@ export default {
             this.displayedOrders;
           });
       } else {
-        fetch("http://35.197.196.50:8000/api/products/", {
+        fetch("http://34.147.186.30:8000/api/products/", {
           method: "Post",
           headers: {
             Authorization: `Token ${localStorage.getItem("token")}`,
@@ -187,7 +187,7 @@ export default {
       this.showModal = false; // 关闭弹出窗口
     },
     deleteOrder(id) {
-      fetch("http://35.197.196.50:8000/api/products/" + `${id}/`, {
+      fetch("http://34.147.186.30:8000/api/products/" + `${id}/`, {
         method: "Delete",
         headers: {
           Authorization: `Token ${localStorage.getItem("token")}`,
@@ -220,9 +220,9 @@ export default {
     fetchOrders() {
       let url = "";
       if (this.searchValue) {
-        url = `http://35.197.196.50:8000/api/search/products/?page=${this.currentPage}`;
+        url = `http://34.147.186.30:8000/api/search/products/?page=${this.currentPage}`;
       } else {
-        url = `http://35.197.196.50:8000/api/products/?page=${this.currentPage}`;
+        url = `http://34.147.186.30:8000/api/products/?page=${this.currentPage}`;
       }
       if (this.searchValue) {
         url += `&category=${this.searchValue}`;

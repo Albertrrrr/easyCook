@@ -74,7 +74,7 @@ export default {
       } else {
         // 如果用户类型为 manager，发送 POST 请求
         try {
-          const response = await axios.post('http://35.197.196.50:8000/api/generateVCode/', {
+          const response = await axios.post('http://34.147.186.30:8000/api/generateVCode/', {
             email: this.form.email // 确保此处绑定了表单中的邮箱输入数据
           });
           // 如果请求成功
@@ -96,7 +96,7 @@ export default {
     },
       async registerAccount() {
         try {
-          const response = await axios.post('http://35.197.196.50:8000/api/register/', {
+          const response = await axios.post('http://34.147.186.30:8000/api/register/', {
             user_type: this.form.userType,
             v_code: this.form.code,
             email: this.form.email,

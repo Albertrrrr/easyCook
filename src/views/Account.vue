@@ -122,7 +122,7 @@ export default {
       const userId = localStorage.getItem('id');
       const token = localStorage.getItem('token');
       try {
-        const response = await axios.get(`http://35.197.196.50:8000/api/users/${userId}/addresses/`, {
+        const response = await axios.get(`http://34.147.186.30:8000/api/users/${userId}/addresses/`, {
           headers: {
             Authorization: `Token ${token}`,
           },
@@ -141,7 +141,7 @@ export default {
         };
 
         try {
-          const response = await axios.post(`http://35.197.196.50:8000/api/users/${userId}/addresses/`, addressWithUserId, {
+          const response = await axios.post(`http://34.147.186.30:8000/api/users/${userId}/addresses/`, addressWithUserId, {
             headers: {
               Authorization: `Token ${token}`,
             },
@@ -161,7 +161,7 @@ export default {
       }
 
       try {
-        const response = await axios.get(`http://35.197.196.50:8000/api/shopping-cart-items/cart/${shoppingCartID}/`, {
+        const response = await axios.get(`http://34.147.186.30:8000/api/shopping-cart-items/cart/${shoppingCartID}/`, {
           headers: { 'Authorization': `Token ${localStorage.getItem('token')}` },
         });
         this.items = response.data.items;
@@ -172,7 +172,7 @@ export default {
     },// close
     async createOrder() {
     try {
-      const response = await axios.post(`http://35.197.196.50:8000/api/users/create/${this.userId}/orders/`, {
+      const response = await axios.post(`http://34.147.186.30:8000/api/users/create/${this.userId}/orders/`, {
         address_id: this.selectedAddressId
       }, {
         headers: {
@@ -197,7 +197,7 @@ export default {
     if (!this.payID) return;
 
     try {
-      const response = await axios.get(`http://35.197.196.50:8000/api/alipay/${this.userId}/${this.payID}/`, {
+      const response = await axios.get(`http://34.147.186.30:8000/api/alipay/${this.userId}/${this.payID}/`, {
          headers: {
           Authorization: `Token ${this.token}`,
         }
@@ -226,7 +226,7 @@ export default {
         }
 
         try {
-          const response = await axios.get(`http://35.197.196.50:8000/api/users/${this.userId}/orders/${this.payID}/`, {
+          const response = await axios.get(`http://34.147.186.30:8000/api/users/${this.userId}/orders/${this.payID}/`, {
             headers: {
               Authorization: `Token ${this.token}`,
             }

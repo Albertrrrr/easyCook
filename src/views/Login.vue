@@ -44,7 +44,7 @@ export default {
   methods: {
     async login() {
       try {
-        const loginResponse = await axios.post('http://35.197.196.50:8000/api/login/', {
+        const loginResponse = await axios.post('http://34.147.186.30:8000/api/login/', {
           email: this.email,
           password: this.password,
           user_type: this.role,
@@ -58,7 +58,7 @@ export default {
 
           // 在跳转前获取 shoppingCartID
           try {
-            const shoppingCartResponse = await axios.get(`http://35.197.196.50:8000/api/shopping-cart/${loginResponse.data.id}/`, {
+            const shoppingCartResponse = await axios.get(`http://34.147.186.30:8000/api/shopping-cart/${loginResponse.data.id}/`, {
               headers: {
                 'Authorization': `Token ${loginResponse.data.token}` // 假设需要登录令牌进行认证
               }

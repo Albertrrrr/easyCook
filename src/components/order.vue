@@ -49,7 +49,7 @@ export default {
       const userId = localStorage.getItem('id');
       const token = localStorage.getItem('token');
       // 发送 POST 请求到 API
-        axios.get(`http://35.197.196.50:8000/api/users/${userId}/orders/`,{
+        axios.get(`http://34.147.186.30:8000/api/users/${userId}/orders/`,{
           headers: {
                 Authorization: `Token ${token}`,
               },

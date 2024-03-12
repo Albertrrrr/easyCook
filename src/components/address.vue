@@ -64,7 +64,7 @@ export default {
       const userId = localStorage.getItem('id');
       const token = localStorage.getItem('token');
       try {
-        const response = await axios.get(`http://35.197.196.50:8000/api/users/${userId}/addresses/`, {
+        const response = await axios.get(`http://34.147.186.30:8000/api/users/${userId}/addresses/`, {
           headers: {
             Authorization: `Token ${token}`,
           },
@@ -84,7 +84,7 @@ export default {
         };
 
         try {
-          const response = await axios.post(`http://35.197.196.50:8000/api/users/${userId}/addresses/`, addressWithUserId, {
+          const response = await axios.post(`http://34.147.186.30:8000/api/users/${userId}/addresses/`, addressWithUserId, {
             headers: {
               Authorization: `Token ${token}`,
             },

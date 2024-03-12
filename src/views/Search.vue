@@ -86,7 +86,7 @@ export default {
 
         try {
           // 判断是否为初始加载或分页请求
-          let url = 'http://35.197.196.50:8000/api/search/products/';
+          let url = 'http://34.147.186.30:8000/api/search/products/';
           let method = 'post';
           let data = {
             name: this.query,
