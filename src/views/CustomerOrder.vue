@@ -79,6 +79,7 @@
             <div class="order-item-description">
               <h3>{{ item.product_detail.name }}</h3>
               <p>Price: {{ item.product_detail.price }}</p>
+               <p>Quantity: {{ item.quantity }}</p>
               <p>Subtotal: {{ item.final_price }}</p>
             </div>
           </div>
