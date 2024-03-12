@@ -4,8 +4,10 @@
         <div class="right">
             <div class="nameBox flex">
                 <div class="name">{{ productDetails.name }}</div>
-                <div class="nameTag" v-if="productDetails.stock > 0"> Stock: {{productDetails.stock}} </div>
-                <div class="nameTag" v-else>Out of Stock</div>
+            </div>
+            <div class="nameBox flex">
+              <div class="nameTag" v-if="productDetails.stock > 0"> Stock: {{productDetails.stock}} </div>
+              <div class="nameTag" v-else>Out of Stock</div>
             </div>
             <div class="priceBox flex">
                 <div class="price"> ${{ productDetails.price }}</div>

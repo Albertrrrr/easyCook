@@ -32,14 +32,12 @@
           </div>
         </div>
           <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page.sync="currentPage"
-            :page-sizes="[10, 20, 30, 50]"
-            :page-size="pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="totalItems">
-          </el-pagination>
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-size="pageSize"
+          layout="total, prev, pager, next, jumper"
+          :total="totalItems">
+        </el-pagination>
       </div>
 
       <el-dialog :visible.sync="goodsDetails" width="1200px" custom-class="goodsDetailsDialog">
@@ -49,7 +47,6 @@
 
 
 </template>
-
 <script>
 import goodsDetails from "@/components/goodsDetails.vue";
 import axios from "axios";
@@ -63,9 +60,10 @@ export default {
       value: 4,
       products: [],
       selectedProductId: null,
-      totalItems: 0, // 后端返回的总商品数
-      currentPage: 1, // 当前页码
-      pageSize: 10, // 每页显示的商品数量
+      totalItems: 0, // Backend's total product count
+      currentPage: 1, // Current page number
+      pageSize: 10, // Number of products per page
+      nextPageUrl: '', // URL for the next page of products
     };
   },
   created() {
@@ -80,41 +78,67 @@ export default {
   },
   methods: {
     async fetchProducts() {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.error('Token not found');
-        return;
-      }
-      try {
-        const response = await axios.post('http://35.197.196.50:8000/api/search/products/', {
-          name: this.query
-        }, {
-          headers: { 'Authorization': `Token ${token}` },
-        });
-        this.products = response.data.results;
-        this.totalItems = response.data.count;
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
-    },
+        const token = localStorage.getItem('token');
+        if (!token) {
+          console.error('Token not found');
+          return;
+        }
+
+        try {
+          // 判断是否为初始加载或分页请求
+          let url = 'http://35.197.196.50:8000/api/search/products/';
+          let method = 'post';
+          let data = {
+            name: this.query,
+          };
+          let params = {};
+
+          // 如果是分页请求，则调整请求参数和方法
+          if (this.currentPage > 1) {
+            method = 'get'; // 假设分页请求使用GET方法
+            params = { page: this.currentPage }; // 添加分页参数
+            // 对于分页请求，如果有额外的查询参数（如categoryID），也应该在这里添加
+          }
+
+          let response;
+          if (method === 'post') {
+            response = await axios.post(url, data, {
+              headers: { 'Authorization': `Token ${token}` },
+            });
+          } else {
+            response = await axios.post(url, data,{
+              params: params, // 包含分页参数
+              headers: { 'Authorization': `Token ${token}` },
+            });
+          }
+
+          this.products = response.data.results;
+          this.totalItems = response.data.count;
+          // 注意：这里不再直接使用nextPageUrl，而是依赖于currentPage和API的响应来管理分页
+        } catch (error) {
+          console.error('Error fetching products:', error);
+        }
+      },
     selectProduct(productId) {
       this.selectedProductId = productId;
-      this.goodsDetails = true; // 显示详情对话框
+      this.goodsDetails = true;
     },
     handleCurrentChange(newPage) {
       this.currentPage = newPage;
-      this.fetchProducts();
+      this.fetchProducts(true); // Indicate this is a pagination request
     },
     handleSizeChange(newSize) {
       this.pageSize = newSize;
-      this.fetchProducts();
+      this.currentPage = 1; // Reset to the first page
+      this.fetchProducts(); // Fetch the first page with the new page size
     },
-    goback(){
-      this.$router.push('/index')
+    goback() {
+      this.$router.push('/index');
     }
   },
 }
 </script>
+
 
 <style>
 .el-pagination {

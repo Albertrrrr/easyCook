@@ -63,51 +63,55 @@ export default {
       value: 4,
       products: [],
       selectedProductId: null,
-      totalItems: 0, // 后端返回的总商品数
-      currentPage: 1, // 当前页码
-      pageSize: 10, // 每页显示的商品数量
+      totalItems: 0,
+      currentPage: 1,
+      pageSize: 10,
+      nextPageUrl: '', // URL for the next page of products
     };
   },
   created() {
-    console.log(this.CategoryID);
     this.fetchProducts();
   },
   methods: {
     async fetchProducts() {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.error('Token not found');
-        return;
-      }
-      try {
-        const response = await axios.get('http://35.197.196.50:8000/api/search/products/', {
-          params: { category: this.CategoryID },
-          headers: { 'Authorization': `Token ${token}` },
-        });
-        this.products = response.data.results;
-        this.totalItems = response.data.count;
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
-    },
+        const token = localStorage.getItem('token');
+        if (!token) {
+          console.error('Token not found');
+          return;
+        }
+        try {
+          // 使用currentPage进行分页请求
+          const response = await axios.get('http://35.197.196.50:8000/api/search/products/', {
+            params: { category: this.CategoryID, page: this.currentPage },
+            headers: { 'Authorization': `Token ${token}` },
+          });
+
+          this.products = response.data.results;
+          this.totalItems = response.data.count;
+        } catch (error) {
+          console.error('Error fetching products:', error);
+        }
+      },
     selectProduct(productId) {
       this.selectedProductId = productId;
-      this.goodsDetails = true; // 显示详情对话框
+      this.goodsDetails = true; // Display the details dialog
     },
     handleCurrentChange(newPage) {
       this.currentPage = newPage;
-      this.fetchProducts();
+      this.fetchProducts(true); // Indicate this is a pagination request
     },
     handleSizeChange(newSize) {
       this.pageSize = newSize;
-      this.fetchProducts();
+      this.currentPage = 1; // 重置到第一页
+      this.fetchProducts(); // 根据新的pageSize和重置后的currentPage重新获取数据
     },
-    goback(){
-      this.$router.push('/index')
+    goback() {
+      this.$router.push('/index');
     }
   },
 }
 </script>
+
 
 <style>
 .el-pagination {
