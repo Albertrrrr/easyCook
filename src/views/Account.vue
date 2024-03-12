@@ -73,8 +73,8 @@
             </div>
           </div>
 
-           <el-dialog :visible.sync="showModalOrder" title="订单状态">
-            <p v-if="orderCreated">订单已生成</p>
+           <el-dialog :visible.sync="showModalOrder" title="Order Status..">
+            <p v-if="orderCreated">Order has been generated..</p>
             <div>
               <el-button @click="showModalOrder = false">Return</el-button>
               <el-button type="primary" @click="payOrder" v-if="orderCreated">Pay</el-button>
