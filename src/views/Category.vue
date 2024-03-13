@@ -179,10 +179,7 @@
           }
         })
           .then((response) => {
-            // if (!response.ok) {
-            //   throw new Error('Network response Error'); //如果请求失败，抛出错误
-            // }
-            // return response.json();
+
           })
           .then((data) => {})
           .catch((error) => {
@@ -214,7 +211,7 @@
           })
             .then((response) => {
               if (!response.ok) {
-                throw new Error("Network response Error"); //如果请求失败，抛出错误
+                throw new Error("Network response Error");
               }
               return response.json();
             })

@@ -18,7 +18,6 @@
 
 
 <script>
-// 引入子組件
 import HeaderComponent from '../components/header.vue';
 import NavigationComponent from "../components/navigation.vue";
 import SettingComponent from '../components/setting.vue'

@@ -3,7 +3,6 @@
     <myHeader :isShowCar="false" :isShowSearch="false"></myHeader>
     <el-carousel class="swiper" arrow="never" @change="swiperchage">
       <el-carousel-item v-for="(item, index) in swiperData" :key="index" class="swiperItem">
-        <!-- <img :src="item" alt="" style="width: 100%; height: 100%" /> -->
         <div :style="{ background: `url(${item}) no-repeat center center`, width: '100%', height: '100%', backgroundSize: 'cover' }"></div>
       </el-carousel-item>
       <div class="btns flex">

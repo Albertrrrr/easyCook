@@ -5,18 +5,14 @@
       <el-button style="margin-bottom: 50px; color: green" @click="goback">back</el-button>
       <div class="categoriesBoxList">
         <div class="productsList categoriesList">
-          <!-- 修改 v-for 来遍历 products 数组 -->
           <div v-for="(product, index) in products" :key="index" @click="selectProduct(product.id)" class="productsItem categoriesItem">
             <div class="imgBox">
-              <!-- 使用 product.url 作为图片源，如果没有则使用默认图片 -->
               <img :src="product.url || 'https://via.placeholder.com/300'" class="cover">
             </div>
             <div class="content">
-              <!-- 使用 product.name 作为标题 -->
               <div class="title">{{ product.name }}</div>
               <div class="center flex row-between">
                 <div class="priceBox flex">
-                  <!-- 显示产品价格 -->
                   <div class="price">${{ product.price }}</div>
                 </div>
                 <div class="shopping row-col-center">
@@ -85,7 +81,6 @@ export default {
         }
 
         try {
-          // 判断是否为初始加载或分页请求
           let url = 'http://34.147.186.30:8000/api/search/products/';
           let method = 'post';
           let data = {
@@ -107,7 +102,7 @@ export default {
             });
           } else {
             response = await axios.post(url, data,{
-              params: params, // 包含分页参数
+              params: params,
               headers: { 'Authorization': `Token ${token}` },
             });
           }

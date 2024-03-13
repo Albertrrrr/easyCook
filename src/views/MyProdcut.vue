@@ -82,13 +82,12 @@ export default {
   components: { myHeader, managerNavigation },
   data() {
     return {
-      showModal: false, // 控制弹出窗口显示和隐藏
-      // displayedOrders1: [], // 订单数据数组
-      selectedOrder: {}, // 选中的订单数据
+      showModal: false,
+      selectedOrder: {},
       searchValue: "",
-      orders: [], // 原始订单数据
-      currentPage: 1, // 当前页码
-      pageSize: 10, // 每页显示的订单数量
+      orders: [],
+      currentPage: 1,
+      pageSize: 10,
       total: 0,
     };
   },
@@ -96,21 +95,7 @@ export default {
     this.fetchOrders();
   },
   computed: {
-    // displayedOrders() {
-    //   if (Array.isArray(this.orders)) {
-    //     const startIndex = (this.currentPage - 1) * this.pageSize;
-    //     const endIndex = startIndex + this.pageSize;
-    //     return this.orders.slice(startIndex, endIndex);
-    //   } else {
-    //     // 如果订单数组未定义或不是数组，返回一个空数组或执行其他逻辑
-    //     return [];
-    //   }
-    // },
-    // totalPages() {
-    //   // 计算总页数
-    //   return Math.ceil(this.orders.length / this.pageSize);
-    // },
-  },
+   },
   filters: {
     formatDate: function (value) {
       // Formatting Date Time

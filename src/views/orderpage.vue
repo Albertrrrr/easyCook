@@ -15,7 +15,6 @@
 </template>
 
 <script>
-// 引入子組件
 import HeaderComponent from '../components/header.vue';
 
 import OrderComponent from '../components/order.vue';

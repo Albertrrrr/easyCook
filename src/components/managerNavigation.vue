@@ -50,7 +50,6 @@
        logOut() {
       localStorage.removeItem('token');
       localStorage.removeItem('type');
-
       // use Vue Router complies navigation to log in page
       this.$router.push('/login');
     },

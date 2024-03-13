@@ -13,10 +13,10 @@
       <div class="categoriesBox" >
         <div class="categories products"> Popular Products </div>
         <div class="productsList categoriesList">
-          <!-- Modify v-for to iterate through the products array -->
+
           <div v-for="(product, index) in products" :key="index" @click="selectProduct(product.id)" class="productsItem categoriesItem">
             <div class="imgBox">
-              <!-- Use product.url as the image source, or use the default image if it's not available -->
+
               <img :src="product.url || 'https://via.placeholder.com/300'" class="cover">
             </div>
             <div class="content">
@@ -55,9 +55,7 @@
 <script>
 // bottom
 import indexFooter from '@/components/indexFooter.vue';
-// shopping cart
 import shopCar from '@/components/shopCar.vue';
-// 商品详情
 import goodsDetails from '@/components/goodsDetails.vue';
 
 import axios from "axios";
@@ -280,11 +278,6 @@ export default {
         .title {
           color: rgb(44, 116, 47) !important;
         }
-
-        // .shopping {
-        //   background: rgb(44, 116, 47);
-        //   color: #fff;
-        // }
 
         .heart {
           opacity: 1;
