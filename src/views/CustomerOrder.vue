@@ -28,7 +28,7 @@
           <el-button style="color: green; margin-bottom: 30px" @click="submitSearch">Search</el-button>
         </div>
         <div>
-          <!--这个表能够直接调用API接口从服务器接受数据，然后通过See More 前往发货页面-->
+
           <el-table :data="orders" border stripe style="margin-top: 10px">
             <el-table-column label="Order ID" align="center" width="120" prop="id"></el-table-column>
             <el-table-column label="User ID" align="center" min-width="120" prop="user">
@@ -150,9 +150,9 @@ export default {
       value2: "",
       checkList: ["unpaid", "cancel", "processing", "delivered", "done"],
       searchId: "",
-      orders: [], // 原始订单数据
-      currentPage: 1, // 当前页码
-      pageSize: 10, // 每页显示的订单数量
+      orders: [], // Original Order Data
+      currentPage: 1, // Current page number
+      pageSize: 10, // Number of orders displayed per page
       currentRow: {},
       show: false,
       currentDetails: {},
@@ -164,7 +164,7 @@ export default {
   },
   filters: {
     formatDate: function (value) {
-      // 格式化日期时间
+      // Formatting Date Time
       const date = new Date(value);
       const year = date.getFullYear();
       const month = ("0" + (date.getMonth() + 1)).slice(-2);
@@ -272,7 +272,7 @@ export default {
     },
 
     handleDelivery() {
-      const orderId = this.currentDetails.id; // 从当前订单详情获取id
+      const orderId = this.currentDetails.id; // Get id from current order details
       fetch("http://34.147.186.30:8000/api/manager/orders/", {
         method: "PUT",
         headers: {
@@ -280,7 +280,7 @@ export default {
           Authorization: `Token ${localStorage.getItem("token")}`,
           // Include any other headers your API requires
         },
-        body: JSON.stringify({ id: orderId }), // 发送订单id作为请求体
+        body: JSON.stringify({ id: orderId }), // Send order id as request body
       })
         .then((response) => {
           if (!response.ok) {
@@ -333,7 +333,7 @@ export default {
   padding-bottom: 10px;
 }
 .order-item-image {
-  width: 100px; /* 调整为适当的大小 */
+  width: 100px;
   height: auto;
   margin-right: 20px;
 }

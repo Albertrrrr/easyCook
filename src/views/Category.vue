@@ -8,7 +8,6 @@
           <div style="font-size: 23px; font-weight: 700">Category</div>
         </div>
 
-        <!--     这个表单：1. 搜索功能；2. 增删改（增加需要上传到服务器进行更新数据库，删除删除服务器中的数据）       -->
         <div style="padding-top: 10px; display: flex; align-items: center">
           <el-input v-model="searchId" placeholder="search" style="width: 200px; margin-right: 10px"></el-input>
           <el-button type="primary" @click="fetchcategory(searchId)">search</el-button>
@@ -70,13 +69,13 @@
     components: {managerNavigation, myHeader},
     data() {
       return {
-        showModal: false, // 控制弹出窗口显示和隐藏
-        // displayedOrders1: [], // 订单数据数组
-        selectedCategory: {}, // 选中的订单数据
+        showModal: false, // Control pop-up windows to show and hide
+        // displayedOrders1: [], // Order Data Array
+        selectedCategory: {}, // Selected order data
         searchId: "",
-        category: [], // 原始订单数据
-        currentPage: 1, // 当前页码
-        pageSize: 5 // 每页显示的订单数量
+        category: [], // Original Order Data
+        currentPage: 1, // Current page number
+        pageSize: 5 // Number of orders displayed per page
       };
     },
     mounted() {
@@ -89,18 +88,18 @@
           const endIndex = startIndex + this.pageSize;
           return this.category.slice(startIndex, endIndex);
         } else {
-          // 如果订单数组未定义或不是数组，返回一个空数组或执行其他逻辑
+          // If the order array is undefined or not an array, returns an empty array or performs other logic
           return [];
         }
       },
       totalPages() {
-        // 计算总页数
+        // Calculate the total number of pages
         return Math.ceil(this.category.length / this.pageSize);
       }
     },
     filters: {
       formatDate: function (value) {
-        // 格式化日期时间
+        // Formatting Date Time
         const date = new Date(value);
         const year = date.getFullYear();
         const month = ("0" + (date.getMonth() + 1)).slice(-2);
@@ -116,11 +115,11 @@
         this.showModal = true;
       },
       editCategory(ctegory) {
-        this.selectedCategory = { ...ctegory }; // 复制选中订单的数据以便回显
-        this.showModal = true; // 显示弹出窗口
+        this.selectedCategory = { ...ctegory }; // Copy the data of the selected order for displaying back
+        this.showModal = true; // Show pop-up window
       },
       closeModal() {
-        this.showModal = false; // 关闭弹出窗口
+        this.showModal = false; // Close pop-up window
       },
       saveChanges(id) {
         if (id) {
@@ -134,7 +133,7 @@
           })
             .then((response) => {
               if (!response.ok) {
-                throw new Error("Network response Error"); //如果请求失败，抛出错误
+                throw new Error("Network response Error");
               }
               return response.json();
             })
@@ -156,7 +155,7 @@
           })
             .then((response) => {
               if (!response.ok) {
-                throw new Error("Network response Error"); //如果请求失败，抛出错误
+                throw new Error("Network response Error");
               }
               return response.json();
             })
@@ -170,7 +169,7 @@
             });
         }
 
-        this.showModal = false; // 关闭弹出窗口
+        this.showModal = false;
       },
       deleteCategory(id) {
         fetch("http://34.147.186.30:8000/api/categories/" + `${id}/`, {
@@ -195,9 +194,9 @@
           });
       },
       changePage(page, event) {
-      event.preventDefault(); // 阻止链接默认跳转行为
+      event.preventDefault(); // Blocking Link Default Jump Behavior
       this.currentPage = page;
-      this.fetchOrders(); // 可能需要重新获取当前页的订单
+      this.fetchOrders(); // May need to recapture the current page of orders
     },
       fetchcategory(id) {
         // alert(id)
@@ -240,7 +239,7 @@
               },
               {
                 headers: {
-                  Authorization: `Token ${localStorage.getItem("token")}` // 假设需要登录令牌进行认证
+                  Authorization: `Token ${localStorage.getItem("token")}`
                 }
               }
             );
@@ -252,12 +251,12 @@
                 this.displayedcategory;
               })
               .catch((error) => {
-                // 在这里处理错误
+
                 console.error(error);
               });
           } catch (Error) {
             console.error("Failed to fetch shoppingCartID:", Error);
-            // 这里可以根据需要处理错误，例如显示消息给用户
+
           }
         }
       }

@@ -21,9 +21,9 @@
 </template>
 
 <script>
-  // 头部
+  // Header
   import myHeader from "@/components/header.vue";
-  // 面包屑
+  // hamburger
   import hamburger from "@/components/hamburger.vue";
   export default {
     components: { myHeader, hamburger },

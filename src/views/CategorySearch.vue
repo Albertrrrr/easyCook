@@ -5,18 +5,18 @@
       <el-button style="margin-bottom: 50px; color: green" @click="goback">back</el-button>
       <div class="categoriesBoxList">
         <div class="productsList categoriesList">
-          <!-- 修改 v-for 来遍历 products 数组 -->
+          <!-- Modify v-for to iterate through the products array -->
           <div v-for="(product, index) in products" :key="index" @click="selectProduct(product.id)" class="productsItem categoriesItem">
             <div class="imgBox">
-              <!-- 使用 product.url 作为图片源，如果没有则使用默认图片 -->
+              <!-- Use product.url as the image source, or use the default image if it's not available -->
               <img :src="product.url || 'https://via.placeholder.com/300'" class="cover">
             </div>
             <div class="content">
-              <!-- 使用 product.name 作为标题 -->
+              <!-- Use product.name as title -->
               <div class="title">{{ product.name }}</div>
               <div class="center flex row-between">
                 <div class="priceBox flex">
-                  <!-- 显示产品价格 -->
+                  <!-- show product price -->
                   <div class="price">${{ product.price }}</div>
                 </div>
                 <div class="shopping row-col-center">
@@ -78,7 +78,7 @@ export default {
           return;
         }
         try {
-          // 使用currentPage进行分页请求
+          // Pagination request using currentPage
           const response = await axios.get('http://34.147.186.30:8000/api/search/products/', {
             params: { category: this.CategoryID, page: this.currentPage },
             headers: { 'Authorization': `Token ${token}` },
@@ -100,8 +100,8 @@ export default {
     },
     handleSizeChange(newSize) {
       this.pageSize = newSize;
-      this.currentPage = 1; // 重置到第一页
-      this.fetchProducts(); // 根据新的pageSize和重置后的currentPage重新获取数据
+      this.currentPage = 1; // reset page to first page
+      this.fetchProducts(); // Retrieve the data based on the new pageSize and reset currentPage
     },
     goback() {
       this.$router.push('/index');
@@ -113,7 +113,7 @@ export default {
 
 <style>
 .el-pagination {
-  margin-top: 50px; /* 与上方元素保持20px的距离 */
+  margin-top: 50px;
 }
 
 .categoriesBoxList {

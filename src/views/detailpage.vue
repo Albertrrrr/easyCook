@@ -21,7 +21,7 @@
 </template>
 
 <script>
-// 引入子組件
+// Importing subcomponents
 import HeaderComponent from '../components/header.vue';
 import NavigationComponent from '../components/navigation.vue'
 import DetailComponent from '../components/detail.vue';

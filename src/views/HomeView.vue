@@ -13,18 +13,18 @@
       <div class="categoriesBox" >
         <div class="categories products"> Popular Products </div>
         <div class="productsList categoriesList">
-          <!-- 修改 v-for 来遍历 products 数组 -->
+          <!-- Modify v-for to iterate through the products array -->
           <div v-for="(product, index) in products" :key="index" @click="selectProduct(product.id)" class="productsItem categoriesItem">
             <div class="imgBox">
-              <!-- 使用 product.url 作为图片源，如果没有则使用默认图片 -->
+              <!-- Use product.url as the image source, or use the default image if it's not available -->
               <img :src="product.url || 'https://via.placeholder.com/300'" class="cover">
             </div>
             <div class="content">
-              <!-- 使用 product.name 作为标题 -->
+              <!-- Use product.name as title -->
               <div class="title">{{ product.name }}</div>
               <div class="center flex row-between">
                 <div class="priceBox flex">
-                  <!-- 显示产品价格 -->
+                  <!-- Show product price -->
                   <div class="price">${{ product.price }}</div>
                 </div>
                 <div class="shopping row-col-center">
@@ -45,7 +45,7 @@
       <indexFooter></indexFooter>
     </div>
 
-    <!-- 详情 -->
+    <!-- details -->
     <el-dialog :visible.sync="goodsDetails" width="1200px" custom-class="goodsDetailsDialog">
       <goodsDetails :selectedProductId="selectedProductId"></goodsDetails>
     </el-dialog>
@@ -53,9 +53,9 @@
 </template>
 
 <script>
-// 底部
+// bottom
 import indexFooter from '@/components/indexFooter.vue';
-// 购物车
+// shopping cart
 import shopCar from '@/components/shopCar.vue';
 // 商品详情
 import goodsDetails from '@/components/goodsDetails.vue';
@@ -66,10 +66,10 @@ export default {
   data() {
     return {
       value: 4,
-      goodsDetails: false, // 商品详情对话框显示控制
+      goodsDetails: false, // Product Details dialog box display control
       products: [],
-      selectedProductId: null, // 选中的商品ID
-      categories: [], // 分类
+      selectedProductId: null, // Selected Product ID
+      categories: [], // categories
       selectedCategoryId:null,
 
     }
@@ -96,7 +96,7 @@ export default {
     },
     selectProduct(productId) {
       this.selectedProductId = productId;
-      this.goodsDetails = true; // 显示详情对话框
+      this.goodsDetails = true; // Show details dialog
     },
 
     selectCategory(CategoryId) {

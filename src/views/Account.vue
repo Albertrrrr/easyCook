@@ -99,7 +99,7 @@ export default {
       addresses: [],
       showModal: false,
       showModalOrder: false,
-      selectedAddressId: null, // 新增
+      selectedAddressId: null,
       radio:null,
       items: [], // Stores individual cart items
       totalFinalPrice: 0, // Stores total final price
@@ -136,8 +136,8 @@ export default {
         const userId = localStorage.getItem('id');
         const token = localStorage.getItem('token');
         const addressWithUserId = {
-          ...newAddress, // 展开原有的 newAddress 对象
-          user: userId, // 添加 userID 字段
+          ...newAddress, // Expand the original newAddress object
+          user: userId, // Add userID field
         };
 
         try {
@@ -146,7 +146,7 @@ export default {
               Authorization: `Token ${token}`,
             },
           });
-          // 假设响应中包含了新添加的地址对象，你可以直接将其添加到列表中
+          // Assuming the response contains the newly added address object, you can add it directly to the list
           this.addresses.push(response.data);
           this.showModal = false;
         } catch (error) {
@@ -182,8 +182,8 @@ export default {
 
       if (response.status === 201) {
         this.orderCreated = true;
-        this.payID = response.data.id; // 假设返回的数据中包含 payID
-        this.showModalOrder = true; // 显示模态框
+        this.payID = response.data.id; // Assuming the returned data contains the payID
+        this.showModalOrder = true; // Show modal box
 
       } else {
         this.$message.error('Failed to generate order，Please check address options');
@@ -204,7 +204,7 @@ export default {
       });
       if (response.status === 200) {
         this.paymentUrl = response.data.pay_url;
-        window.open(this.paymentUrl, '_blank'); // 打开支付页面
+        window.open(this.paymentUrl, '_blank'); // Open the payment page
         this.checkPaymentStatus();
       }
     } catch (error) {
@@ -212,13 +212,13 @@ export default {
     }
   },// close
       async checkPaymentStatus() {
-      let attempts = 0; // 初始化尝试次数
-      const maxAttempts = 30; // 最大尝试次数
+      let attempts = 0; // Number of initialization attempts
+      const maxAttempts = 30; // Maximum number of attempts
 
       const checkInterval = setInterval(async () => {
-        attempts++; // 每次检查时尝试次数加1
+        attempts++; // Add 1 to the number of attempts per check
 
-        // 如果达到最大尝试次数，清除定时器并停止检查
+        // If the maximum number of attempts is reached, the timer is cleared and the check is stopped
         if (attempts > maxAttempts) {
           clearInterval(checkInterval);
           this.$message.error('Check payment status timeout, please confirm payment result manually.');
@@ -232,19 +232,19 @@ export default {
             }
           });
 
-          // 如果支付成功
+          // If successfully
           if (response.data.isPaid) {
-            clearInterval(checkInterval); // 停止检查
+            clearInterval(checkInterval); // Stop checking
             this.$message.success('Payment Successful');
-            this.showModalOrder = false; // 关闭模态框
+            this.showModalOrder = false; // Close modal box
           }
-          // 如果还未支付成功，定时器将继续，直到达到最大尝试次数
+          // If the payment is not yet successful, the timer will continue until the maximum number of attempts is reached
         } catch (error) {
           console.error('Error checking payment status:', error);
           clearInterval(checkInterval);
           this.$message.error('Error checking payment status.');
         }
-      }, 3000); // 设置为每3秒检查一次
+      }, 3000); // Set to check every 3 seconds
     },// close
 
   },
@@ -271,12 +271,12 @@ export default {
 }
 
 .add-new-card:hover {
-  background-color: #f2f2f2; /* 鼠标悬停时的背景色变化 */
+  background-color: #f2f2f2;
 }
 
 .add-icon {
-  font-size: 24px; /* 调整图标大小 */
-  color: #409EFF; /* 图标颜色 */
+  font-size: 24px;
+  color: #409EFF;
 }
 .account-container {
   padding: 60px 0 40px calc((100% - 1520px) / 8 * 5);

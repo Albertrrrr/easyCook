@@ -9,7 +9,7 @@
           <div style="font-size: 23px; font-weight: 700">My Product</div>
         </div>
 
-        <!--     这个表单：1. 搜索功能；2. 增删改（增加需要上传到服务器进行更新数据库，删除删除服务器中的数据）       -->
+
         <div style="padding-top: 10px; display: flex; align-items: center">
           <el-input v-model="searchValue" placeholder="search" style="width: 200px; margin-right: 10px" />
           <el-button @click="handleSearch">search</el-button>
@@ -113,7 +113,7 @@ export default {
   },
   filters: {
     formatDate: function (value) {
-      // 格式化日期时间
+      // Formatting Date Time
       const date = new Date(value);
       const year = date.getFullYear();
       const month = ("0" + (date.getMonth() + 1)).slice(-2);
@@ -129,11 +129,11 @@ export default {
       this.showModal = true;
     },
     editOrder(order) {
-      this.selectedOrder = { ...order }; // 复制选中订单的数据以便回显
-      this.showModal = true; // 显示弹出窗口
+      this.selectedOrder = { ...order }; // Copy the data of the selected order for displaying back
+      this.showModal = true; // Show pop-up window
     },
     closeModal() {
-      this.showModal = false; // 关闭弹出窗口
+      this.showModal = false; // Close pop-up window
     },
     saveChanges(id) {
       if (id) {
@@ -147,7 +147,7 @@ export default {
         })
           .then((response) => {
             if (!response.ok) {
-              throw new Error("Network response Error"); //如果请求失败，抛出错误
+              throw new Error("Network response Error");
             }
             return response.json();
           })
@@ -156,7 +156,7 @@ export default {
             console.error(error);
           })
           .finally(() => {
-            this.fetchOrders(); // 无论成功或失败，都执行fetchOrders()方法
+            this.fetchOrders(); // Execute the fetchOrders() method regardless of success or failure
             this.displayedOrders;
           });
       } else {
@@ -170,7 +170,7 @@ export default {
         })
           .then((response) => {
             if (!response.ok) {
-              throw new Error("Network response Error"); //如果请求失败，抛出错误
+              throw new Error("Network response Error");
             }
             return response.json();
           })
@@ -179,12 +179,12 @@ export default {
             console.error(error);
           })
           .finally(() => {
-            this.fetchOrders(); // 无论成功或失败，都执行fetchOrders()方法
+            this.fetchOrders();
             this.displayedOrders;
           });
       }
 
-      this.showModal = false; // 关闭弹出窗口
+      this.showModal = false; // Close pop-up window
     },
     deleteOrder(id) {
       fetch("http://34.147.186.30:8000/api/products/" + `${id}/`, {
@@ -195,7 +195,7 @@ export default {
       })
         .then((response) => {
           if (!response.ok) {
-            throw new Error("Network response Error"); //如果请求失败，抛出错误
+            throw new Error("Network response Error");
           }
           return response.json();
         })
@@ -204,14 +204,14 @@ export default {
           console.error(error);
         })
         .finally(() => {
-          this.fetchOrders(); // 无论成功或失败，都执行fetchOrders()方法
+          this.fetchOrders();
           this.displayedOrders;
         });
     },
     changePage(page, event) {
-      event.preventDefault(); // 阻止链接默认跳转行为
+      event.preventDefault(); // Blocking Link Default Jump Behavior
       this.currentPage = page;
-      this.fetchOrders(); // 可能需要重新获取当前页的订单
+      this.fetchOrders(); // May need to recapture the current page of orders
     },
     handleSearch() {
       this.currentPage = 1;
@@ -235,7 +235,7 @@ export default {
       })
         .then((response) => {
           if (!response.ok) {
-            throw new Error("Network response Error"); //如果请求失败，抛出错误
+            throw new Error("Network response Error");
           }
           return response.json();
         })

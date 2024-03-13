@@ -59,25 +59,25 @@ export default {
         username: '',
         password: '',
         code: '',
-        userType: 'user', // 默认选中的用户类型
+        userType: 'user', // User type selected by default
       }
     };
   },
    methods: {
     async generateVCode() {
       if (this.form.userType === 'user') {
-        // 如果用户类型为 user，显示提示消息
+        // If the user type is user, display a prompt message
         Message({
           message: 'Users do not need to enter a verification code',
           type: 'info'
         });
       } else {
-        // 如果用户类型为 manager，发送 POST 请求
+        // If the user type is manager, send a POST request
         try {
           const response = await axios.post('http://34.147.186.30:8000/api/generateVCode/', {
-            email: this.form.email // 确保此处绑定了表单中的邮箱输入数据
+            email: this.form.email // Ensure that the mailbox input data from the form is bound here
           });
-          // 如果请求成功
+          // If the request is successful
           if (response.status === 200) {
             Message({
               message: 'Verification code has been generated, please contact the administrator to get this.',
@@ -85,7 +85,7 @@ export default {
             });
           }
         } catch (error) {
-          // 如果请求失败
+          // If the request fails
           Message({
             message: 'An error has occurred while generating the verification code, please try again later.\n',
             type: 'error'
@@ -104,14 +104,14 @@ export default {
             username: this.form.username
           });
 
-          // 如果注册成功
+          // If registration is successful
           if (response.status === 201) {
             Message({
               message: 'Successful',
               type: 'success'
             });
 
-            // 等待2秒后跳转
+            // Wait 2 seconds and jump
             setTimeout(() => {
               this.$router.push('/login');
             }, 2000);
@@ -119,7 +119,7 @@ export default {
         } catch (error) {
           let errorMessage = 'Unsuccessful';
           if (error.response && error.response.data) {
-            // 提取后端返回的错误消息
+            // Extract the error messages returned by the backend
             for (let key in error.response.data) {
               if (error.response.data[key].length > 0) {
                 errorMessage = error.response.data[key][0];
@@ -127,10 +127,10 @@ export default {
               }
             }
           } else {
-            // 如果没有详细的错误信息，则显示通用错误
+            // If there is no detailed error message, a generic error is displayed
             errorMessage += `: ${error.message}`;
           }
-          // 显示错误消息
+          // Displaying Error Messages
           Message({
             message: errorMessage,
             type: 'error'
@@ -165,7 +165,7 @@ export default {
   margin-bottom: 20px;
 }
 
-/* 根据您的颜色需求进行调整 */
+
 .el-radio__inner {
   border-color: green;
 }
@@ -184,7 +184,7 @@ export default {
   border-color: green;
 }
 
-/* 调整 Generate 按钮的大小以适应列宽 */
+
 .el-col {
   display: flex;
   align-items: center;
@@ -195,7 +195,7 @@ export default {
   width: 100%;
 }
 
-/* 修正边距 */
+
 .el-row {
   margin-right: -10px;
   margin-left: -10px;

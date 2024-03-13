@@ -124,7 +124,7 @@
             },
             {
               headers: {
-                Authorization: `Token ${localStorage.getItem("token")}` // 假设需要登录令牌进行认证
+                Authorization: `Token ${localStorage.getItem("token")}`
               }
             }
           );
@@ -148,7 +148,7 @@
               },
               {
                 headers: {
-                  Authorization: `Token ${localStorage.getItem("token")}` // 假设需要登录令牌进行认证
+                  Authorization: `Token ${localStorage.getItem("token")}`
                 }
               }
             )

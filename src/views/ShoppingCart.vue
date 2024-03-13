@@ -145,13 +145,13 @@ export default {
         });
 
         if (response.status === 204 || response.data.message === 'Deleted successfully!') {
-          // 删除成功后重新获取购物车数据以更新界面
+          // Retrieve cart data after successful deletion to update the interface
           this.$message.success('Delete Successful!');
           await this.fetchShoppingCartItems();
         }
       } catch (error) {
         console.error('error:', error);
-        // 可以选择处理错误，例如向用户显示错误信息
+        // Optionally, errors can be handled, for example by displaying an error message to the user
       }
     }, // close
   },

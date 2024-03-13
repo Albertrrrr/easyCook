@@ -93,11 +93,11 @@ export default {
           };
           let params = {};
 
-          // 如果是分页请求，则调整请求参数和方法
+          // If it is a paging request, adjust the request parameters and methods
           if (this.currentPage > 1) {
-            method = 'get'; // 假设分页请求使用GET方法
-            params = { page: this.currentPage }; // 添加分页参数
-            // 对于分页请求，如果有额外的查询参数（如categoryID），也应该在这里添加
+            method = 'get'; // Assuming that the paging request uses the GET method
+            params = { page: this.currentPage }; // Adding Paging Parameters
+            // For paging requests, if there are additional query parameters (e.g., categoryID), you should also add here
           }
 
           let response;
@@ -114,7 +114,7 @@ export default {
 
           this.products = response.data.results;
           this.totalItems = response.data.count;
-          // 注意：这里不再直接使用nextPageUrl，而是依赖于currentPage和API的响应来管理分页
+          // Note: Instead of using nextPageUrl directly, it relies on the currentPage and API response to manage paging
         } catch (error) {
           console.error('Error fetching products:', error);
         }
@@ -142,7 +142,7 @@ export default {
 
 <style>
 .el-pagination {
-  margin-top: 50px; /* 与上方元素保持20px的距离 */
+  margin-top: 50px;
 }
 
 .categoriesBoxList {

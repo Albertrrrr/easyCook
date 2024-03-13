@@ -56,32 +56,32 @@ export default {
           localStorage.setItem('username', loginResponse.data.username);
           localStorage.setItem('type', loginResponse.data.user_type);
 
-          // 在跳转前获取 shoppingCartID
+          // Get shoppingCartID before the jump
           try {
             const shoppingCartResponse = await axios.get(`http://34.147.186.30:8000/api/shopping-cart/${loginResponse.data.id}/`, {
               headers: {
                 'Authorization': `Token ${loginResponse.data.token}` // 假设需要登录令牌进行认证
               }
             });
-            // 假设API返回了一个JSON对象，其中包含shoppingCartID
+            // Suppose the API returns a JSON object containing the shoppingCartID
             if (shoppingCartResponse.status === 200) {
               localStorage.setItem('shoppingCartID', shoppingCartResponse.data.shoppingCartID);
             }
           } catch (shoppingCartError) {
             console.error('Failed to fetch shoppingCartID:', shoppingCartError);
-            // 这里可以根据需要处理错误，例如显示消息给用户
+            // Errors can be handled here as needed, such as displaying a message to the user
           }
 
           MessageBox.alert('Successful login, 2 seconds to jump...', 'Successful', {
             confirmButtonText: 'ok',
             callback: () => {
-              // 设置一个 2 秒的倒计时后跳转
+              // Set a 2-second countdown before jumping
               setTimeout(() => {
                 if (this.role === 'user') {
                   this.$router.push('/index');
                 } else {
-                  // 管理员后台主页
-                  // 这里需要添加相应的路由跳转逻辑
+                  // Manager's homepage
+                  // Add the appropriate route hopping logic
                   this.$router.push('/Welcome');
                 }
               }, 2000);
@@ -89,7 +89,7 @@ export default {
           });
         }
       } catch (error) {
-        // 使用 Element UI 的 Message 组件显示错误消息
+        // Displaying Error Messages with Element UI's Message Component
         Message.error('Unsuccessful：Please check the password, email and login type.' );
       }
     }
