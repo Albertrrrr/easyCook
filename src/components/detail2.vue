@@ -31,7 +31,7 @@ import axios from 'axios';
 export default {
     data() {
       return {
-        orders: [], // Assuming this will be the structure based on your JSON
+        orders: [],
         ID:null
       };
     },
@@ -57,7 +57,7 @@ export default {
               url: order.product_detail.url,
               final_price: order.final_price,
               quantity: order.quantity
-            })); // make sure that the API returns the expected structure
+            }));
           })
           .catch(error => {
             console.error("There was an error fetching the order details:", error);
@@ -87,15 +87,14 @@ export default {
 
 .title-item {
   font-weight: bold;
-  padding-left: 15px; /* 添加左边距对齐 */
+  padding-left: 15px;
 }
 
-/* 设置每个title-item的基础宽度，以便与cart-list-item对应的子元素宽度相匹配 */
-.t1 { width: 50%; text-align: left; } /* 产品名称占据更多的空间 */
-.t2 { width: 12%; } /*  价格 */
-.t3 { width: 15%; } /* 数量 */
-.t4 { width: 14%; } /* 小计 */
-.t2:last-child { flex-grow: 1; } /* 如果有额外的元素，则让它填充剩余空间 */
+.t1 { width: 50%; text-align: left; }
+.t2 { width: 12%; }
+.t3 { width: 15%; }
+.t4 { width: 14%; }
+.t2:last-child { flex-grow: 1; }
 
 .cart-list {
   list-style: none;
@@ -114,31 +113,27 @@ export default {
   width: 80px;
   height: auto;
   margin-right: 15px;
-  flex: none; /* 确保图片不伸缩，固定大小 */
+  flex: none;
 }
 
 .product-name {
-  width: 50%; /* 和.t1宽度相同 */
+  width: 50%;
   text-align: left;
 }
 
 .product-price {
-  width: 15%; /* 和.t2宽度相同 */
+  width: 15%;
 }
 
 .counter-container {
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* 计数器左对齐 */
-  width: 15%; /* 和.t3宽度相同 */
-}
-
-.counter-item {
-  /* 样式保持不变，可能需要调整宽度来适配counter-container */
+  justify-content: flex-start;
+  width: 15%;
 }
 
 .all-price {
-  width: 20%; /* 和.t4宽度相同 */
+  width: 20%;
   text-align: left;
   font-weight: 500;
 }

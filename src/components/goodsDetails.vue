@@ -29,7 +29,7 @@
 
             <div class="cell">
                 <div class="label">Category:</div>
-                <div class="value">{{ productDetails.category_name }}</div> <!-- Assuming the API response includes category_name -->
+                <div class="value">{{ productDetails.category_name }}</div>
             </div>
 
         </div>
@@ -107,7 +107,7 @@ export default {
                   this.$message.error('An unexpected error occurred.');
                   return;
               }
-              // 根据不同的状态码显示不同的错误消息
+              // according different errors to different message
               const { status, data } = error.response;
               let errorMessage = 'Failed to add the product to the cart.';
               if (status === 400 && data.quantity) {
@@ -115,12 +115,10 @@ export default {
               } else if (status === 404) {
                   errorMessage = 'Product not found.';
               } else if (status === 400 && data.non_field_errors) {
-                  errorMessage = data.non_field_errors.join(' '); // 假设这是序列化错误的一种情况
+                  errorMessage = data.non_field_errors.join(' ');
               } else if (status === 400) {
-                  // 处理其他400错误情况，假设后端返回的错误信息格式是固定的
                   errorMessage = Object.values(data).join(' ');
               }
-
               this.$message.error(errorMessage);
           }
       }

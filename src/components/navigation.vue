@@ -106,7 +106,7 @@ list-style: none;
 
 
   button {
-  background-color: #4CAF50; /* Green */
+  background-color: #4CAF50;
   border: none;
   color: white;
   padding: 10px 20px;
@@ -119,6 +119,6 @@ list-style: none;
   }
 
   .navigation li:hover {
-  background-color: #009c0e; /* 把 #绿色代码 替换成你想要的绿色色码 */
+  background-color: #009c0e;
 }
 </style>

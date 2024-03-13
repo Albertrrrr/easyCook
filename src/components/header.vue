@@ -47,7 +47,7 @@ export default {
     return {
       keyWords: '',
       cartItemCount: 0,
-      shopDrawer: false,// 购物车弹窗
+      shopDrawer: false,
 
     }
   },
@@ -56,7 +56,7 @@ export default {
  },
   watch: {
   shopDrawer(newVal) {
-    if (!newVal) { // 当shopDrawer变为false，即el-drawer关闭时
+    if (!newVal) {
       this.updateCartCountFromLocalStorage();
     }
   }
@@ -91,7 +91,6 @@ export default {
     searchProduct() {
             const trimmedKeyWords = this.keyWords.trim();
             if (trimmedKeyWords === '') {
-              // 如果搜索关键词为空，显示提示消息
               Message({
                 type: 'warning',
                 message: 'Please enter a search term.'
@@ -100,18 +99,16 @@ export default {
             }
 
             if (this.lastSearch === trimmedKeyWords) {
-              // 如果搜索关键词与上一次相同，而且已经在搜索结果页，则不需要重新导航
+              // if searching value is same as last time, then no need to reload
               if (this.$route.path === `/search/${trimmedKeyWords}`) {
-                // 可以选择刷新数据或其他逻辑
                 this.refreshData();
                 return;
               }
             }
 
             this.lastSearch = trimmedKeyWords;
-
-            // 如果当前已经在该搜索页面，使用replace来避免报错和无效的历史记录堆栈
-            // 否则，正常使用push进行导航
+            // If already on the search page, use 'replace' to avoid errors and an invalid history stack.
+            // othwise, use 'push' for normal navigation.
             if (this.$route.path === `/search/${trimmedKeyWords}`) {
               this.$router.replace({ path: `/search/${trimmedKeyWords}` });
             } else {
@@ -134,7 +131,6 @@ export default {
   width: 100%;
   display: flex;
   align-items: center;
-  // justify-content: space-between;
   box-sizing: border-box;
   position: relative;
   position: fixed;
@@ -220,9 +216,6 @@ export default {
       top: 6px;
       right: 19px;
     }
-
   }
-
-
 }
 </style>

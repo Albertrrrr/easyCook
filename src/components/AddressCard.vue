@@ -24,7 +24,7 @@ export default {
   },
   methods: {
     selectCard() {
-    this.$emit('selected', this.address.id); // 确保事件名称匹配
+    this.$emit('selected', this.address.id);
   },
   },
 };
@@ -37,12 +37,12 @@ export default {
 .is-selected {
   border-color: #409EFF;
   box-shadow: 0 0 8px 0 rgba(64, 158, 255, 0.5);
-  animation: selected-animation 1s ease-out infinite; /* 使用定义的动画 */
+  animation: selected-animation 1s ease-out infinite;
 }
 .address-card {
   cursor: pointer;
   transition: transform 0.3s ease;
-  border: 2px solid transparent; /* 确保卡片有一个默认的边框，避免布局因为边框变化而跳动 */
+  border: 2px solid transparent;
 }
 
 .address-card:hover {

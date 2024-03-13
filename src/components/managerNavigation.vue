@@ -48,14 +48,12 @@
   },
     methods:{
        logOut() {
-      // 清除用户信息和token
       localStorage.removeItem('token');
       localStorage.removeItem('type');
-      // 可能还有其他清理工作...
 
-      // 使用Vue Router进行编程式导航到登录页
+      // use Vue Router complies navigation to log in page
       this.$router.push('/login');
-    },// close
+    },
 
     },
 
@@ -67,7 +65,7 @@
 .navigation-container {
   display: flex;
   flex-direction: column;
-  width: 250px; /* Adjust width as needed */
+  width: 250px;
   background-color: #fff;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   border-radius: 8px;
@@ -107,8 +105,8 @@
 
 .nav-icon {
   margin-right: 12px;
-  width: 24px; /* Adjust icon size as needed */
-  height: 24px; /* Adjust icon size as needed */
+  width: 24px;
+  height: 24px;
 }
 
 .nav-link span {

@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <div class="account-container">
       <div class="account-area">
         <div class="account-left">
@@ -16,16 +15,13 @@
             </el-card>
           </el-col>
           </el-row>
-
-
           <add-address-modal :visible.sync="showModalT" @add="addNewAddress"></add-address-modal>
           <UDAddressModal :visible.sync="showModal" :selectedAddress="selectedAddressId" @refreshAddresses="fetchAddresses" ></UDAddressModal>
         </div>
+      </div>
+    </div>
     </div>
   </div>
-      </div>
-  </div>
-
 </template>
 
 <script>
@@ -34,7 +30,6 @@ import AddressCard from '@/components/AddressCard.vue';
 import axios from "axios";
 import UDAddressModal from "@/components/UDAddressModal.vue";
 import AddAddressModal from "@/components/AddAddressModal.vue";
-
 export default {
   data() {
     return{
@@ -42,10 +37,10 @@ export default {
       showModal: false,
       showModalT: false,
       showModalOrder: false,
-      selectedAddressId: null, // 新增
+      selectedAddressId: null,
       radio:null,
-      items: [], // Stores individual cart items
-      totalFinalPrice: 0, // Stores total final price
+      items: [],
+      totalFinalPrice: 0,
 
       userId: localStorage.getItem('id'),
       token: localStorage.getItem('token'),
@@ -79,8 +74,8 @@ export default {
         const userId = localStorage.getItem('id');
         const token = localStorage.getItem('token');
         const addressWithUserId = {
-          ...newAddress, // 展开原有的 newAddress 对象
-          user: userId, // 添加 userID 字段
+          ...newAddress,
+          user: userId,
         };
 
         try {
@@ -89,7 +84,6 @@ export default {
               Authorization: `Token ${token}`,
             },
           });
-          // 假设响应中包含了新添加的地址对象，你可以直接将其添加到列表中
           this.addresses.push(response.data);
           this.showModal = false;
         } catch (error) {
@@ -100,7 +94,6 @@ export default {
     this.showModalT = true;
     this.showModal = false;
     },
-
 
   },
   components: {
@@ -125,12 +118,12 @@ export default {
 }
 
 .add-new-card:hover {
-  background-color: #f2f2f2; /* 鼠标悬停时的背景色变化 */
+  background-color: #f2f2f2;
 }
 
 .add-icon {
-  font-size: 24px; /* 调整图标大小 */
-  color: #409EFF; /* 图标颜色 */
+  font-size: 24px;
+  color: #409EFF;
 }
 .account-container {
   padding: 60px 0 40px calc((100% - 1520px) / 8 * 5);
@@ -139,7 +132,6 @@ export default {
     width: 1520px;
     display: flex;
     justify-content: space-between;
-
 
     .account-left {
       width: 65.8%;

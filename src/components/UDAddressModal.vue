@@ -1,15 +1,13 @@
 <template>
   <el-dialog :visible.sync="visible" title="Edit Address" @close="resetForm">
-    <div class="form-container"> <!-- 包裹表单的容器 -->
+    <div class="form-container">
   <el-form ref="addAddressForm" :model="newAddress" label-position="top">
-    <!-- Street Line 占据一整行 -->
     <el-form-item label="Street Line">
       <el-input v-model="newAddress.house_number_and_street"></el-input>
     </el-form-item>
 
-    <el-row :gutter="20"> <!-- 使用 gutter 属性添加列之间的间距 -->
-      <!-- 左侧列：Area 和 Town，调整 span 值缩小列宽 -->
-      <el-col :span="10">
+    <el-row :gutter="20">
+       <el-col :span="10">
         <el-form-item label="Area">
           <el-input v-model="newAddress.area"></el-input>
         </el-form-item>
@@ -21,8 +19,7 @@
       </el-col>
     </el-row>
 
-    <el-row :gutter="20"> <!-- 同样为右侧列添加间距 -->
-      <!-- 右侧列：County 和 Postcode，同样调整 span 值以控制宽度 -->
+    <el-row :gutter="20">
       <el-col :span="10">
         <el-form-item label="County">
           <el-input v-model="newAddress.county"></el-input>
@@ -35,7 +32,6 @@
       </el-col>
     </el-row>
 
-    <!-- Country 单独一行，根据需要可以调整布局 -->
     <el-form-item label="Country">
       <el-input v-model="newAddress.country" readonly value="United Kingdom"></el-input>
     </el-form-item>
@@ -81,7 +77,6 @@ export default {
     };
   },
   watch: {
-    // 监听selectedAddress prop的变化
     selectedAddress(newVal) {
       if (newVal) {
         this.fetchAddressDetails(newVal);
@@ -89,7 +84,6 @@ export default {
     }
   },
   methods: {
-    // 根据地址ID从API获取地址详情
     async fetchAddressDetails(addressId) {
       try {
         const response = await axios.get(`http://34.147.186.30:8000/api/users/${this.userId}/addresses/${addressId}`, {
@@ -97,22 +91,20 @@ export default {
             Authorization: `Token ${this.token}`,
           },
         });
-        // 填充表单数据
         this.newAddress = response.data;
       } catch (error) {
         console.error('There was an error fetching the address details:', error);
       }
     },
     resetForm() {
-      // 重置表单的方法，按需实现
-    }, //close
+    },
     async updateAddress() {
-      const userId = localStorage.getItem('id'); // 或其他方式获取userId
-      const addressId = this.selectedAddress; // 从prop获取地址ID
+      const userId = localStorage.getItem('id');
+      const addressId = this.selectedAddress;
       try {
         const response = await axios.put(`http://34.147.186.30:8000/api/users/${userId}/addresses/${addressId}/`, this.newAddress, {
           headers: {
-            Authorization: `Token ${this.token}`, // 确保这里的token是有效的
+            Authorization: `Token ${this.token}`,
             'Content-Type': 'application/json',
           },
         });
@@ -120,10 +112,10 @@ export default {
         Message({
           message: 'Address updated successfully',
           type: 'success',
-          duration: 5000, // 可以根据需要调整显示时间
+          duration: 5000,
         });
-        this.$emit('update:visible', false); // 关闭模态框
-        // 调用方法来刷新页面的部分数据，例如重新获取地址列表
+        this.$emit('update:visible', false);
+
         this.$emit('refreshAddresses');
       } catch (error) {
         console.error('Error updating the address:', error);
@@ -137,28 +129,26 @@ export default {
     },
 
     async deleteAddress() {
-      const userId = localStorage.getItem('id'); // 或其他方式获取userId
-      const addressId = this.selectedAddress; // 从prop获取地址ID
+      const userId = localStorage.getItem('id');
+      const addressId = this.selectedAddress;
       try {
         const response = await axios.delete(`http://34.147.186.30:8000/api/users/${userId}/addresses/${addressId}/`, {
           headers: {
-            Authorization: `Token ${this.token}`, // 确保这里的token是有效的
+            Authorization: `Token ${this.token}`,
             'Content-Type': 'application/json',
           },
         });
-        // 显示成功消息
+
         Message({
           message: 'Address updated successfully',
           type: 'success',
-          duration: 5000, // 可以根据需要调整显示时间
+          duration: 5000,
         });
-        this.$emit('update:visible', false); // 关闭模态框
-        // 调用方法来刷新页面的部分数据，例如重新获取地址列表
+        this.$emit('update:visible', false);
         this.$emit('refreshAddresses');
       } catch (error) {
         console.error('Error updating the address:', error);
-        // 显示错误消息
-        Message({
+          Message({
           message: 'Failed to update address',
           type: 'error',
           duration: 5000,
@@ -166,8 +156,6 @@ export default {
       }
     },
   },
-
-  // 如果你想在模态框第一次显示时就加载数据，可以使用mounted生命周期钩子
   mounted() {
     if (this.selectedAddress) {
       this.fetchAddressDetails(this.selectedAddress);
@@ -178,7 +166,7 @@ export default {
 
 <style scoped>
 .form-container {
-  width: 90%; /* 设置容器宽度为 80% */
-  margin: 0 auto; /* 居中显示 */
+  width: 90%;
+  margin: 0 auto;
 }
 </style>

@@ -8,11 +8,10 @@
                 <th>DATE</th>
                 <th>TOTAL</th>
                 <th>STATUS</th>
-                <th></th> <!-- Empty for the "View Details" column -->
+                <th></th>
             </tr>
         </thead>
         <tbody>
-            <!-- 使用 v-for 来循环 orders 数组中的每个订单对象 -->
             <tr v-for="order in orders" :key="order.id" @click="selectOrderId(order.id)">
               <td>{{ order.id }}</td>
               <td>{{ order.createTime }}</td>
@@ -31,7 +30,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      orders: [], // 存储从 API 获取的订单数据
+      orders: [],
       orderId: null
     };
   },
@@ -55,7 +54,6 @@ export default {
               },
         })
           .then(response => {
-            // 假设返回的数据是一个对象，其中包含一个名为 "results" 的数组
             const results = response.data.results;
             this.orders = results.map(order => ({
               id: order.id,
@@ -86,28 +84,24 @@ export default {
   }
  .main-content .customer-welcome{
     width: 895px;
-
-height: 224px;
-
-left: 673px;
-
-top: 268px;
+    height: 224px;
+    left: 673px;
+    top: 268px;
 }
 
 .main-content .billing-address{
- /* BG */
-width: 895px;
-height: 306px;
-left: 673px;
-top: 529px;
+
+    width: 895px;
+    height: 306px;
+    left: 673px;
+    top: 529px;
 }
   .main-content section {
-  background: #fff;
-  padding: 20px;
-  margin-bottom: 20px;
-/* Gray Scale/Gray – 100 */
+    background: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
     border: 1px solid rgb(230, 230, 230);
-	border-radius: 8px;
+    border-radius: 8px;
     background: rgb(255, 255, 255);
   }
   p{
@@ -121,22 +115,20 @@ top: 529px;
 
   .customer-welcome h3,
   .billing-address h3 {
-  color: #626262;
-  margin-bottom: 5px;
-  font-size: 12px;
+
   }
 
   button {
-  background-color: #4CAF50; /* Green */
-  border: none;
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
   }
 
   button:hover {
@@ -164,7 +156,7 @@ top: 529px;
 .order-history table {
     width: 100%;
     border-collapse: collapse;
-    padding-top: 20px; /* 添加上空间 */
+    padding-top: 20px;
 }
 
 .order-history th,
@@ -172,7 +164,7 @@ top: 529px;
     text-align: left;
     padding: 10px 75px 17px 17px;
     border-bottom: 1px solid #eaeaea;
-    vertical-align: middle; /* 垂直居中 */
+    vertical-align: middle;
 }
 
 .order-history th {

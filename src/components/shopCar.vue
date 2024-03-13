@@ -9,16 +9,12 @@
           </div>
       </div>
         <div class="carList">
-            <!-- 使用 v-for 循环遍历 items 数组，并使用 item 作为每次循环的变量 -->
             <div class="item flex" v-for="(item, index) in items" :key="index">
-              <!-- 使用 item.product_detail.url 作为图片源 -->
               <img :src="item.product_detail.url" alt="">
               <div class="goods flex">
                 <div class="left">
-                  <!-- 显示商品名称 item.product_detail.name -->
                   <div class="goodsName">{{ item.product_detail.name }}</div>
                   <div class="num">
-                    <!-- 显示数量 item.quantity 以及价格 item.product_detail.price -->
                     <span>{{ item.quantity }} x </span>
                     <span class="big">{{ item.product_detail.price }}</span>
                     <span class="big"> = $ {{ item.final_price }} </span>
@@ -48,8 +44,8 @@ export default {
   name: 'shopCar',
   data() {
     return {
-      items: [], // Stores individual cart items
-      totalFinalPrice: 0, // Stores total final price
+      items: [],
+      totalFinalPrice: 0,
     }
   },
   created() {
@@ -88,16 +84,14 @@ export default {
         });
 
         if (response.status === 204 || response.data.message === 'Deleted successfully!') {
-          // 删除成功后重新获取购物车数据以更新界面
           this.$message.success('Delete Successful!');
           localStorage.setItem('cartItemCount', this.items.length);
           await this.fetchShoppingCartItems();
         }
       } catch (error) {
         console.error('error:', error);
-        // 可以选择处理错误，例如向用户显示错误信息
       }
-    }, // close
+    },
 
   }
 }
@@ -120,12 +114,10 @@ export default {
   font-family: Poppins;
   color: rgb(26, 26, 26);
 
-
   .carList {
     flex: 1;
     overflow-y: scroll;
-
-    &::-webkit-scrollbar {
+      &::-webkit-scrollbar {
       display: none !important;
       width: 0 !important;
       height: 0 !important;
@@ -208,16 +200,16 @@ export default {
     }
   }
   .icons-container {
-  display: flex; /* 设置父容器为flex布局 */
-  align-items: center; /* 垂直居中图标 */
+  display: flex;
+  align-items: center;
 }
 
 .icons-container .btn {
-  margin-right: 5px; /* 控制图标之间的间距 */
+  margin-right: 5px;
 }
 
 .icons-container .btn:last-child {
-  margin-right: 0; /* 最后一个图标不需要右边距 */
+  margin-right: 0;
 }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
 <div class="container">
-    <!-- Account Settings -->
+
     <div class="account-settings">
         <h2>Account Settings</h2>
         <label for="username">User name</label>
@@ -14,7 +14,7 @@
 
     </div>
 
-    <!-- Change Password -->
+
   <div class="change-password">
         <h2>Change Password</h2>
         <label for="current-password">Current Password</label>
@@ -45,7 +45,6 @@ export default {
   methods: {
     updateUser() {
         const token = localStorage.getItem('token');
-      // Make sure to use `http://` and include the port if necessary
       axios.patch("http://34.147.186.30:8000/api/user/update/", {
 
         username: this.username,
@@ -76,22 +75,17 @@ export default {
                 Authorization: `Token ${token}`,
               },})
         .then(response => {
-          // 密码更新成功后的操作
           alert("Password changed successfully!");
         })
         .catch(error => {
-          // 密码更新失败后的操作
           console.error("Error changing password:", error);
           alert("Failed to change password.");
         });
-
-        // 日志记录，用于调试
         console.log("New password submitted:", this.new_password);
       }
     }
 }
 </script>
-
 
 <style scoped lang="scss">
 
@@ -167,17 +161,13 @@ input[type=address]{
     border-radius: 5px;
 }
 
-
-/* Specific styles for the 'Change Password' section */
 .container .change-password {
   background-color: #ffffff;
   border: 1px solid rgb(230, 230, 230);
   border-radius: 8px;
   padding-left : 20px;
   margin-top: 20px;
-
 }
-
 
 input[type="password"] {
   width: 50%;

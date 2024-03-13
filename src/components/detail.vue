@@ -112,7 +112,7 @@ export default {
     }).then(response => {
       console.log('Order processed successfully on the server.');
       Message.success("successful");
-      location.reload(); // 刷新页面
+      location.reload(); // reload page
     }).catch(error => {
       console.error('Failed to process the order on the server.', error);
       Message.error("fails");
@@ -134,7 +134,7 @@ cancel() {
     }).then(response => {
       console.log('Order cancelled successfully on the server.');
       Message.success("successful");
-      location.reload(); // 刷新页面
+      location.reload();
     }).catch(error => {
       console.error('Failed to cancel the order on the server.', error);
       Message.error("fails");
@@ -157,7 +157,7 @@ cancel() {
       });
       if (response.status === 200) {
         this.paymentUrl = response.data.pay_url;
-        window.open(this.paymentUrl, '_blank'); // 打开支付页面
+        window.open(this.paymentUrl, '_blank'); // open the payment page
         this.checkPaymentStatus();
       }
     } catch (error) {
@@ -165,13 +165,13 @@ cancel() {
     }
   },// close
       async checkPaymentStatus() {
-      let attempts = 0; // 初始化尝试次数
-      const maxAttempts = 30; // 最大尝试次数
+      let attempts = 0; // initiate payment attempts
+      const maxAttempts = 30;
        const userId = localStorage.getItem('id');
       const checkInterval = setInterval(async () => {
-        attempts++; // 每次检查时尝试次数加1
+        attempts++;
 
-        // 如果达到最大尝试次数，清除定时器并停止检查
+        // payment reach the max
         if (attempts > maxAttempts) {
           clearInterval(checkInterval);
           this.$message.error('Check payment status timeout, please confirm payment result manually.');
@@ -185,20 +185,20 @@ cancel() {
             }
           });
 
-          // 如果支付成功
+          // if payment successful, stop checking
           if (response.data.isPaid) {
-            clearInterval(checkInterval); // 停止检查
+            clearInterval(checkInterval);
             this.$message.success('Payment Successful');
-            this.showModalOrder = false; // 关闭模态框
+            this.showModalOrder = false;
           }
-          // 如果还未支付成功，定时器将继续，直到达到最大尝试次数
+          // payment unsuccessful
         } catch (error) {
           console.error('Error checking payment status:', error);
           clearInterval(checkInterval);
           this.$message.error('Error checking payment status.');
         }
-      }, 3000); // 设置为每3秒检查一次
-    },// close
+      }, 3000); // check every 3 seconds
+    },
 
 
     }
@@ -215,9 +215,9 @@ cancel() {
 .cards-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px; /* 设置间隙 */
-    justify-content: space-around; /* 分布方式 */
-    padding: 20px; /* 容器内边距 */
+    gap: 20px;
+    justify-content: space-around;
+    padding: 20px;
 }
 
 .card {
@@ -225,28 +225,25 @@ cancel() {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     padding: 20px;
-    margin-bottom: 20px; /* 卡片之间的间距 */
-    flex: 0 0 auto; /* 防止卡片伸缩 */
+    margin-bottom: 20px;
+    flex: 0 0 auto;
 }
 
-/* 大屏幕设备 */
 @media (min-width: 1024px) {
     .card {
-        width: calc(350px - 40px); /* 减去的值是为了计算间隙 */
+        width: calc(350px - 40px);
     }
 }
 
-/* 中等屏幕设备，如平板 */
 @media (max-width: 1023px) {
     .card {
-        width: calc(50% - 40px); /* 两列布局 */
+        width: calc(50% - 40px);
     }
 }
 
-/* 小屏幕设备，如手机 */
 @media (max-width: 767px) {
     .card {
-        width: calc(100% - 40px); /* 单列布局 */
+        width: calc(100% - 40px);
     }
 }
 
@@ -256,7 +253,7 @@ cancel() {
     color: white;
     border: none;
     padding: 10px 20px;
-    margin-right: 10px; /* 按钮之间的间距 */
+    margin-right: 10px;
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s ease;
@@ -266,7 +263,6 @@ cancel() {
     background-color: #40a9ff;
 }
 
-/* 特定按钮的样式调整，如需要 */
 #cancelOrder {
     background-color: #ff4d4f;
 }
@@ -275,9 +271,6 @@ cancel() {
     background-color: #ff7875;
 }
 
-#payOrder {
-    /* 根据需要添加特定样式 */
-}
 
 #doneOrder {
     background-color: #52c41a;

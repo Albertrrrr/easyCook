@@ -5,15 +5,6 @@
 <template>
   <div class="menu-container">
     <div class="menu-item">
-      菜单
-      <!--      <el-dropdown>-->
-      <!--    <span class="el-dropdown-link">-->
-      <!--      Home<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
-      <!--    </span>-->
-      <!--        <el-dropdown-menu slot="dropdown">-->
-      <!--          <el-dropdown-item>黄金糕</el-dropdown-item>-->
-      <!--        </el-dropdown-menu>-->
-      <!--      </el-dropdown>-->
     </div>
   </div>
 </template>
