@@ -56,7 +56,7 @@ const routes = [
   },
   {
     path: '/category/:CategoryID',
-    name: 'categorySearch', // 注意这里的命名要保持唯一性
+    name: 'categorySearch',
     component: CategorySearch,
     props: true,
     meta: { requiredType: 'user' },
@@ -74,7 +74,7 @@ const routes = [
     meta: { requiredType: 'manager' },
   },
   {
-    path: '/myProduct', // 路径小写，保持一致性
+    path: '/myProduct',
     name: 'MyProduct',
     component: MyProdcut,
     meta: { requiredType: 'manager' },
@@ -85,7 +85,7 @@ const routes = [
     component: Category,
     meta: { requiredType: 'manager' },
   },
-  // 登录和注册路由不需要限制
+
   {
     path: "/login",
     name: "Login",
@@ -135,7 +135,7 @@ const routes = [
     meta: { requiredType: 'user' },
     props: true
 }
-  // 添加任何其他不需要身份验证的路由
+
 ];
 
 const router = new VueRouter({
@@ -145,15 +145,15 @@ const router = new VueRouter({
   },
 });
 
-// 添加全局前置守卫进行身份验证
+
 router.beforeEach((to, from, next) => {
   const requiredType = to.meta.requiredType;
-  const userType = localStorage.getItem('type'); // 从localStorage获取用户类型
+  const userType = localStorage.getItem('type');
   if (requiredType && userType !== requiredType) {
-    next('/login'); // 如果用户类型不匹配，重定向到登录页面
+    next('/login');
     Message.error('Unsuccessful：' + "Users have not yet logged in, please log in first and then operate.");
   } else {
-    next(); // 用户类型匹配，允许访问
+    next();
   }
 });
 
