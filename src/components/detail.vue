@@ -92,9 +92,9 @@ export default {
           country: response.data.address.country,
           cardID: firstItem.cartID,
           createTime: response.data.createTime,
-           endTime: response.data.finishTime,
+          endTime: response.data.finishTime,
           status: response.data.status,
-          totalCost: firstItem.final_price,
+          totalCost: response.data.totalCost,
         };
       })
           .catch(error => {
